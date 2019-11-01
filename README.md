@@ -1,6 +1,6 @@
 Soknadsfillager
 ================
-Applikasjonen tilbyr tjeneste for å lagre filer og sede filer for søknader til innsendingsapplikasjoner.
+Applikasjonen tilbyr tjeneste for å lagre filer og sende filer for søknader til soknadarkiverer.
 
 ## Komme i gang
 * `clone repo`
