@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class HentFilerServcie(private val filRepository: FilRepository){
 
-	fun hentMotatteFiler(hentFilerDto: HentFilerDto){
+	fun hentFiler(hentFilerDto: HentFilerDto){
 		val mongoDatabaseObjekt = FilDbData(hentFilerDto.uuid, hentFilerDto.melding)
 		filRepository.findByUuid(mongoDatabaseObjekt)
 	}

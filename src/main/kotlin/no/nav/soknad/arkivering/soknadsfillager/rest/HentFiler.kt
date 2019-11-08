@@ -15,7 +15,7 @@ class HentFiler(private val hentFilerServcie: HentFilerServcie) {
 	fun hentDokumenter(@RequestBody hentFiler: HentFilerDto){
 		logger.info(("Melding er levert ${hentFiler.uuid}, ${hentFiler.melding}"))
 
-		hentFilerServcie.hentMotatteFiler(hentFiler)
+		hentFilerServcie.hentFiler(hentFiler)
 		hentFilerServcie.slettLeverteFiler(hentFiler)
 	}
 
