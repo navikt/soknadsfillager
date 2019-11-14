@@ -1,7 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import no.nav.soknad.arkivering.soknadsfillager.dto.MottaFilerDto
-import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -17,16 +16,16 @@ class MottaFilerTest {
 	@Autowired
 	private lateinit var mittRepository: FilRepository
 
-/*	@Test
+	@Test
 	fun enkelTestAvTjenste() {
 		val uuid= UUID.randomUUID().toString()
 		val blob = "Dette er min andre streng"  //TODO bytte ut med blob
 
 		mottaFiler.mottaFiler( MottaFilerDto(uuid, blob))
 
-		assertTrue(this.mittRepository.findByUuid(FilDbData(uuid, blob)).isNotEmpty())
+		assertTrue(this.mittRepository.findByUuid(uuid).isNotEmpty())
 
-	}*/
+	}
 
 
 

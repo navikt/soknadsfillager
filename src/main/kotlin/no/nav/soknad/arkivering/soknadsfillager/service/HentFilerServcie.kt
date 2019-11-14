@@ -10,7 +10,7 @@ class HentFilerServcie(private val filRepository: FilRepository){
 
 	fun hentFiler(hentFilerDto: HentFilerDto){
 		val mongoDatabaseObjekt = FilDbData(hentFilerDto.uuid, hentFilerDto.melding)
-		filRepository.findByUuid(mongoDatabaseObjekt)
+		filRepository.findByUuid(mongoDatabaseObjekt.toString())
 	}
 
 	fun slettLeverteFiler (hentFilerDto: HentFilerDto){
