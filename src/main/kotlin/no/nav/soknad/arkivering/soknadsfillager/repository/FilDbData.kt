@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 class FilDbData (
 	@Id
 	val uuid: String,
-	val melding: String
+	val data: String
 ){
 
 }
