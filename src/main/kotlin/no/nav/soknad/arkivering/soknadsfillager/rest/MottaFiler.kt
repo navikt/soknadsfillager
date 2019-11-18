@@ -14,7 +14,8 @@ private val lagreFilerService: LagreFilerService) {
 
     @PostMapping("/lagre")
     fun mottaFiler(@RequestBody mottaFiler: List<FilElementDto>) {
-
+			logger.info("mottatt filer '${mottaFiler
+				.map { it.uuid }}'")
 			lagreFilerService.lagreFiler(mottaFiler)
     }
 

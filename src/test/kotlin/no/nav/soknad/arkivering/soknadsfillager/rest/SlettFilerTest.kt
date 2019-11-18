@@ -22,11 +22,11 @@ class SlettFilerTest {
 	@Autowired
 	private lateinit var mottaFiler: MottaFiler
 
-
 	@AfterEach
 	fun ryddOpp(){
 		mittRepository.deleteAll()
 	}
+
 	@Test
 	fun slettFiler(){
 
