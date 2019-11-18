@@ -1,18 +1,23 @@
 package no.nav.soknad.arkivering.soknadsfillager.service
 
-import no.nav.soknad.arkivering.soknadsfillager.dto.MottateFilerDto
+import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class LagreFilerService(private val filRepository: FilRepository) {
 
-	fun lagreMottatteFiler(mottateFilerDto: MottateFilerDto){
+	fun lagreFiler(filListe: List<FilElementDto>) = filListe
+			.forEach { e-> this.lagreFil(e) }
 
-		val mongoDatabaseObjekt = FilDbData(mottateFilerDto.uuid, mottateFilerDto.melding)
-		filRepository.save(mongoDatabaseObjekt)
+	fun lagreFil(mottaFilDto: FilElementDto){
 
+		if (mottaFilDto.fil == null || mottaFilDto.uuid == null ) {
+			return
+		} else {
+
+			filRepository.save(FilDbData(mottaFilDto.uuid, mottaFilDto.fil))
+		}
 	}
 }

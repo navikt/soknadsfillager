@@ -5,5 +5,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface FilRepository: MongoRepository<FilDbData, String> {
-	fun findByUuid(uuid: String): List<FilDbData>
+
+	fun findByUuid(uuid: String): MutableList<FilDbData>
+
+	fun deleteByUuid(uuid: String): MutableList<FilDbData>
+
 }
