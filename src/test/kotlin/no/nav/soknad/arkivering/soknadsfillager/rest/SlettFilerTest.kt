@@ -1,6 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
-import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,46 +25,36 @@ class SlettFilerTest {
 	}
 
 	@Test
-	fun slettFiler(){
+	fun slettFilerTest(){
 
-		val (uuid1, uuid2, uuid3) = OpprettRepoMedTreFiler()
-		val listeAvMineUuiderSomSkalSlettes = listOf<String>(uuid1, uuid2, uuid3)
+		val listeAvMineDokumenterSomSkalSlettes = opprettListeAv3FilDtoer()
+		lagreFiler.lagreFiler(listeAvMineDokumenterSomSkalSlettes)
+
+		val listeAvMineUuiderSomSkalSlettes =
+				hentUtenListeAvUuiderFraListeAvFilElementDtoer(listeAvMineDokumenterSomSkalSlettes)
 
 		assertEquals(3, mittRepository.count().toInt())
 
 		slettFiler.slettFiler(listeAvMineUuiderSomSkalSlettes)
 
 		assertEquals(0, mittRepository.count().toInt())
-
 	}
 
-	@Disabled
 	@Test
-	fun slettFilSomIkkeFinnes(){
-		val listeMedUuidSomIkkeFinnes = listOf<String>(UUID.randomUUID().toString())
-		val (uuid1, uuid2, uuid3) = OpprettRepoMedTreFiler()
+	fun slettFilSomIkkeFinnesTest(){
+		val minListeMedFilerSomErLagret = opprettListeAv3FilDtoer()
+		this.lagreFiler.lagreFiler(minListeMedFilerSomErLagret)
 
-		assertThrows<Exception> { slettFiler.slettFiler(listeMedUuidSomIkkeFinnes) }
+		assertEquals(3, mittRepository.count().toInt())
 
-	}
+		val listeAvUuiderSomSkalSlettes =
+				endreListtilMutableList(
+				hentUtenListeAvUuiderFraListeAvFilElementDtoer(minListeMedFilerSomErLagret))
 
+		val uuid1SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
 
-	private fun OpprettRepoMedTreFiler(): Triple<String, String, String> {
-		val uuid1 = UUID.randomUUID().toString()
-		val uuid2 = UUID.randomUUID().toString()
-		val uuid3 = UUID.randomUUID().toString()
-		val fil1 = "fil$uuid1"
-		val fil2 = "fil$uuid2"
-		val fil3 = "fil$uuid3"
+		listeAvUuiderSomSkalSlettes.add(uuid1SomIkkeErBlandtDokumentene)
 
-		val mottattFil1 = FilElementDto(uuid1, fil1)
-		val mottattFil2 = FilElementDto(uuid2, fil2)
-		val mottaFiler3 = FilElementDto(uuid3, fil3)
-
-		val minListeAvMottatteFiler = listOf<FilElementDto>(mottattFil1, mottattFil2, mottaFiler3)
-
-		lagreFiler.mottaFiler(minListeAvMottatteFiler)
-
-		return Triple(uuid1, uuid2, uuid3)
+		assertThrows<Exception> { slettFiler.slettFiler(listeAvUuiderSomSkalSlettes) }
 	}
 }

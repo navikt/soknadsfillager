@@ -32,7 +32,7 @@ class HentFilerTest {
 		val minMotattFilIListe =
 			opprettMottattFilListeMedBareEnFil(minUuid, minFil)
 
-		this.lagreFiler.mottaFiler(minMotattFilIListe)
+		this.lagreFiler.lagreFiler(minMotattFilIListe)
 
 			val mittDokumentSomSkalHentes =
 				listOf<String>(minUuid)
@@ -44,9 +44,9 @@ class HentFilerTest {
 
 	@Test
 	fun  hentEnListeAvDokumenterTest(){
-		val mineFilerListe = opprett3Filer()
+		val mineFilerListe = opprettListeAv3FilDtoer()
 
-		this.lagreFiler.mottaFiler(mineFilerListe)
+		this.lagreFiler.lagreFiler(mineFilerListe)
 
 		val minUuidListe=  hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 
@@ -56,9 +56,9 @@ class HentFilerTest {
 
 	@Test
 	fun hentEnListeavDokumenterHvorIkkeAlleUuiderErKnyttetDokument(){
-		val mineFilerListe = opprett3Filer()
+		val mineFilerListe = opprettListeAv3FilDtoer()
 
-		this.lagreFiler.mottaFiler(mineFilerListe)
+		this.lagreFiler.lagreFiler(mineFilerListe)
 
 		val minUuidListeSomHarDokumenter=  hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 

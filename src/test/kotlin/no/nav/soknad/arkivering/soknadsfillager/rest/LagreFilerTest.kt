@@ -30,16 +30,16 @@ class LagreFilerTest {
 		//val minFil = "src/test/resources/navlogo.pdf"
 		val minliste = opprettMottattFilListeMedBareEnFil(minUuid, minFil)
 
-		this.lagreFiler.mottaFiler(minliste)
+		this.lagreFiler.lagreFiler(minliste)
 
 		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
 	}
 
 	@Test
 	fun mottaEnListeAvFilerOgsjekkRitigAntallLagret(){
-		val minListe = opprett3Filer()
+		val minListe = opprettListeAv3FilDtoer()
 
-		this.lagreFiler.mottaFiler(minListe)
+		this.lagreFiler.lagreFiler(minListe)
 
 		assertEquals(3,mittRepository.count().toInt())
 	}

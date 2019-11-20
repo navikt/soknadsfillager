@@ -13,7 +13,7 @@ private val lagreFilerService: LagreFilerService) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping("/filer")
-    fun mottaFiler(@RequestBody mottaFiler: List<FilElementDto>) {
+    fun lagreFiler(@RequestBody mottaFiler: List<FilElementDto>) {
 			logger.info("mottatt filer '${mottaFiler
 				.map { it.uuid }}'")
 			lagreFilerService.lagreFiler(mottaFiler)
