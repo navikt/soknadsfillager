@@ -33,8 +33,8 @@ class LagreFilerTest {
 		this.lagreFiler.mottaFiler(minliste)
 
 		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
-
 	}
+
 	@Test
 	fun mottaEnListeAvFilerOgsjekkRitigAntallLagret(){
 		val minListe = opprett3Filer()

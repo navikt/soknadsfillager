@@ -37,7 +37,7 @@ class HentFilerTest {
 			val mittDokumentSomSkalHentes =
 				listOf<String>(minUuid)
 
-				hentFiler.hentDokumenter(mittDokumentSomSkalHentes)
+				hentFiler.hentFiler(mittDokumentSomSkalHentes)
 
 		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
     }
@@ -78,7 +78,7 @@ class HentFilerTest {
 
 		assertTrue(this.mittRepository.findByUuid(minUuidListeSomHarDokumenter.first()).isNotEmpty())
 		assertTrue(this.mittRepository.findByUuid(uuid1SomIkkeErBlandtDokumentene).isEmpty())
-		assertTrue(hentFiler.hentDokumenter(listeSomHarUuidErSomIkkeFinnes).size == 5)
+		assertTrue(hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes).size == 5)
 
 
 

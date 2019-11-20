@@ -18,5 +18,4 @@ private val lagreFilerService: LagreFilerService) {
 				.map { it.uuid }}'")
 			lagreFilerService.lagreFiler(mottaFiler)
     }
-
 }

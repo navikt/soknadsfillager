@@ -4,7 +4,6 @@ import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.service.HentFilerService
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
@@ -13,7 +12,7 @@ class HentFiler(private val hentFilerService: HentFilerService) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	@GetMapping ("/filer")
-	fun hentDokumenter(@RequestBody filListe: List<String>):
+	fun hentFiler(@RequestBody filListe: List<String>):
 		List<FilElementDto>{
 		logger.info("filler hentet ${filListe
 			.map {it}}")
