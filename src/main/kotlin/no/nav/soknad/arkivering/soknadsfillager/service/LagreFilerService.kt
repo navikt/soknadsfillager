@@ -11,13 +11,13 @@ class LagreFilerService(private val filRepository: FilRepository) {
 	fun lagreFiler(filListe: List<FilElementDto>) = filListe
 			.forEach { e-> this.lagreFil(e) }
 
-	fun lagreFil(mottaFilDto: FilElementDto){
+	fun lagreFil(filElementDto: FilElementDto){
 
-		if (mottaFilDto.fil == null || mottaFilDto.uuid == null ) {
+		if (filElementDto.fil == null) {
 			return
 		} else {
 
-			filRepository.save(FilDbData(mottaFilDto.uuid, mottaFilDto.fil))
+			filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil))
 		}
 	}
 }
