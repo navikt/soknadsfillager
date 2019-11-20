@@ -4,10 +4,11 @@ import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.util.*
 
 @SpringBootTest
 class HentFilerTest {
@@ -48,10 +49,40 @@ class HentFilerTest {
 
 		this.mottaFiler.mottaFiler(mineFilerListe)
 
-		val minUuidListe=  hentUtenListeAvUuiderFraListeAVFilElementDtoer(mineFilerListe)
+		val minUuidListe=  hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 
 		assertTrue(this.mittRepository.findByUuid(minUuidListe.first()).isNotEmpty())
 		assertTrue(this.mittRepository.findById(minUuidListe.last()).isPresent)
+	}
+
+	@Test
+	fun hentEnListeavDokumenterHvorIkkeAlleUuiderErKnyttetDokument(){
+		val mineFilerListe = opprett3Filer()
+
+		this.mottaFiler.mottaFiler(mineFilerListe)
+
+		val minUuidListeSomHarDokumenter=  hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
+
+		val uuid1SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
+		val uuid2SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
+
+		val listeSomHarUuidErSomIkkeFinnes: MutableList<String> = endreListtilMutableList(minUuidListeSomHarDokumenter)
+
+		assertEquals(3, listeSomHarUuidErSomIkkeFinnes.size)
+
+		listeSomHarUuidErSomIkkeFinnes.add(uuid1SomIkkeErBlandtDokumentene)
+		listeSomHarUuidErSomIkkeFinnes.add(uuid2SomIkkeErBlandtDokumentene)
+
+		assertEquals(5, listeSomHarUuidErSomIkkeFinnes.size)
+
+		listeSomHarUuidErSomIkkeFinnes.random()
+
+		assertTrue(this.mittRepository.findByUuid(minUuidListeSomHarDokumenter.first()).isNotEmpty())
+		assertTrue(this.mittRepository.findByUuid(uuid1SomIkkeErBlandtDokumentene).isEmpty())
+		assertTrue(hentFiler.hentDokumenter(listeSomHarUuidErSomIkkeFinnes).size == 5)
+
+
+
 
 	}
 }

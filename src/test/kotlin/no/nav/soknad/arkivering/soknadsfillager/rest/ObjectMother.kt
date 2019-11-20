@@ -33,6 +33,6 @@ internal fun opprett3Filer(): List<FilElementDto>{
 	return minListeAvMottatteFiler
 }
 
-internal fun hentUtenListeAvUuiderFraListeAVFilElementDtoer(list: List<FilElementDto>) = list.map(FilElementDto::uuid)
+internal fun hentUtenListeAvUuiderFraListeAvFilElementDtoer(list: List<FilElementDto>) = list.map(FilElementDto::uuid)
 
-
+internal fun endreListtilMutableList(list: List<String>) :MutableList<String> =list.toMutableList()
