@@ -17,7 +17,7 @@ class HentFilerService(private val filRepository: FilRepository){
 
 	fun hentFil( uuid: String): FilElementDto{
 		val filDbData = filRepository.findByUuid(uuid)
-		return FilElementDto(uuid, filDbData.getOrNull(0)?.data)
+		return FilElementDto(uuid, filDbData[0]?.data)
 	}
 
 
