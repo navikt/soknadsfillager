@@ -16,3 +16,20 @@ internal fun opprettMottattFilListeMedBareEnFil(minUuid: String, minFil: String)
 	return minMotattFilIListe
 }
 
+internal fun opprett3Filer(): List<FilElementDto>{
+	val uuid1 = UUID.randomUUID().toString()
+	val uuid2 = UUID.randomUUID().toString()
+	val uuid3 = UUID.randomUUID().toString()
+	val fil1 = "fil$uuid1"
+	val fil2 = "fil$uuid2"
+	val fil3 = "fil$uuid3"
+
+	val mottattFil1 = FilElementDto(uuid1, fil1)
+	val mottattFil2 = FilElementDto(uuid2, fil2)
+	val mottaFiler3 = FilElementDto(uuid3, fil3)
+
+	val minListeAvMottatteFiler = listOf<FilElementDto>(mottattFil1, mottattFil2, mottaFiler3)
+
+	return minListeAvMottatteFiler
+}
+
