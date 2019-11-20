@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 import kotlin.collections.ArrayList
 
 @Service
-class HentFilerServcie(private val filRepository: FilRepository){
+class HentFilerService(private val filRepository: FilRepository){
 
 	fun hentFiler(filListe:List<String>): List<FilElementDto>{
 		return filListe
