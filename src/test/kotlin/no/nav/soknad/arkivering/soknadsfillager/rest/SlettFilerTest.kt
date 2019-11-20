@@ -1,13 +1,11 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
-import com.mongodb.internal.connection.tlschannel.util.Util.assertTrue
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
 import java.util.*
 
 
@@ -20,7 +18,7 @@ class SlettFilerTest {
 	private lateinit var mittRepository: FilRepository
 
 	@Autowired
-	private lateinit var mottaFiler: MottaFiler
+	private lateinit var lagreFiler: LagreFiler
 
 	@AfterEach
 	fun ryddOpp(){
@@ -66,7 +64,7 @@ class SlettFilerTest {
 
 		val minListeAvMottatteFiler = listOf<FilElementDto>(mottattFil1, mottattFil2, mottaFiler3)
 
-		mottaFiler.mottaFiler(minListeAvMottatteFiler)
+		lagreFiler.mottaFiler(minListeAvMottatteFiler)
 
 		return Triple(uuid1, uuid2, uuid3)
 	}

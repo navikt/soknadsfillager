@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class MottaFiler (
+class LagreFiler (
 private val lagreFilerService: LagreFilerService) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
-    @PostMapping("/lagre")
+    @PostMapping("/filer")
     fun mottaFiler(@RequestBody mottaFiler: List<FilElementDto>) {
 			logger.info("mottatt filer '${mottaFiler
 				.map { it.uuid }}'")

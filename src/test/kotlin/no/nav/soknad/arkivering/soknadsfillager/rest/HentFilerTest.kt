@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.util.*
@@ -13,7 +12,7 @@ import java.util.*
 @SpringBootTest
 class HentFilerTest {
 	@Autowired
-	private lateinit var mottaFiler: MottaFiler
+	private lateinit var lagreFiler: LagreFiler
 
 	@Autowired
 	private lateinit var hentFiler: HentFiler
@@ -33,7 +32,7 @@ class HentFilerTest {
 		val minMotattFilIListe =
 			opprettMottattFilListeMedBareEnFil(minUuid, minFil)
 
-		this.mottaFiler.mottaFiler(minMotattFilIListe)
+		this.lagreFiler.mottaFiler(minMotattFilIListe)
 
 			val mittDokumentSomSkalHentes =
 				listOf<String>(minUuid)
@@ -47,7 +46,7 @@ class HentFilerTest {
 	fun  hentEnListeAvDokumenterTest(){
 		val mineFilerListe = opprett3Filer()
 
-		this.mottaFiler.mottaFiler(mineFilerListe)
+		this.lagreFiler.mottaFiler(mineFilerListe)
 
 		val minUuidListe=  hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 
@@ -59,7 +58,7 @@ class HentFilerTest {
 	fun hentEnListeavDokumenterHvorIkkeAlleUuiderErKnyttetDokument(){
 		val mineFilerListe = opprett3Filer()
 
-		this.mottaFiler.mottaFiler(mineFilerListe)
+		this.lagreFiler.mottaFiler(mineFilerListe)
 
 		val minUuidListeSomHarDokumenter=  hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 

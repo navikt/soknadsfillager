@@ -1,6 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
-import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -12,9 +11,9 @@ import java.util.*
 
 
 @SpringBootTest
-class MottaFilerTest {
+class LagreFilerTest {
 	@Autowired
-	private lateinit var mottaFiler: MottaFiler
+	private lateinit var lagreFiler: LagreFiler
 
 	@Autowired
 	private lateinit var mittRepository: FilRepository
@@ -31,7 +30,7 @@ class MottaFilerTest {
 		//val minFil = "src/test/resources/navlogo.pdf"
 		val minliste = opprettMottattFilListeMedBareEnFil(minUuid, minFil)
 
-		this.mottaFiler.mottaFiler(minliste)
+		this.lagreFiler.mottaFiler(minliste)
 
 		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
 
@@ -40,7 +39,7 @@ class MottaFilerTest {
 	fun mottaEnListeAvFilerOgsjekkRitigAntallLagret(){
 		val minListe = opprett3Filer()
 
-		this.mottaFiler.mottaFiler(minListe)
+		this.lagreFiler.mottaFiler(minListe)
 
 		assertEquals(3,mittRepository.count().toInt())
 	}
