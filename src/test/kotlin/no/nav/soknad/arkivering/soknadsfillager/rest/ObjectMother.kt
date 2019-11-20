@@ -33,3 +33,6 @@ internal fun opprett3Filer(): List<FilElementDto>{
 	return minListeAvMottatteFiler
 }
 
+internal fun hentUtenListeAvUuiderFraListeAVFilElementDtoer(list: List<FilElementDto>) = list.map(FilElementDto::uuid)
+
+

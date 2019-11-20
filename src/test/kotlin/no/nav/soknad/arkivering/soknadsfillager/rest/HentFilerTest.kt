@@ -20,8 +20,6 @@ class HentFilerTest {
 	@Autowired
 	private lateinit var mittRepository: FilRepository
 
-
-	@Disabled
 	@AfterEach
 	fun ryddOpp(){
 		mittRepository.deleteAll()
@@ -42,6 +40,18 @@ class HentFilerTest {
 				hentFiler.hentDokumenter(mittDokumentSomSkalHentes)
 
 		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
-
     }
+
+	@Test
+	fun  hentEnListeAvDokumenterTest(){
+		val mineFilerListe = opprett3Filer()
+
+		this.mottaFiler.mottaFiler(mineFilerListe)
+
+		val minUuidListe=  hentUtenListeAvUuiderFraListeAVFilElementDtoer(mineFilerListe)
+
+		assertTrue(this.mittRepository.findByUuid(minUuidListe.first()).isNotEmpty())
+		assertTrue(this.mittRepository.findById(minUuidListe.last()).isPresent)
+
+	}
 }
