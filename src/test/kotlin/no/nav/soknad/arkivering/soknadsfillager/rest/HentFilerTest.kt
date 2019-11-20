@@ -1,14 +1,16 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
-import com.mongodb.internal.connection.tlschannel.util.Util.assertTrue
-import no.nav.soknad.arkivering.soknadsfillager.dto.MottaFilerDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
+import org.springframework.boot.test.context.SpringBootTest
 
-internal class HentFilerTest {
+@SpringBootTest
+class HentFilerTest {
 	@Autowired
 	private lateinit var mottaFiler: MottaFiler
 
@@ -18,21 +20,28 @@ internal class HentFilerTest {
 	@Autowired
 	private lateinit var mittRepository: FilRepository
 
-	val uuid = UUID.randomUUID().toString()
 
-    @BeforeEach
-    fun setUp() {
-			val blob ="Dette er min andre streng"
+	@Disabled
+	@AfterEach
+	fun ryddOpp(){
+		mittRepository.deleteAll()
+	}
 
-			//mottaFiler.mottaFiler(MottaFilerDto(uuid, blob))
+	@Test
+    fun hentEtDokumentTest() {
+		val (minUuid, minFil) = opprettEnEnkelFil()
+
+		val minMotattFilIListe =
+			opprettMottattFilListeMedBareEnFil(minUuid, minFil)
+
+		this.mottaFiler.mottaFiler(minMotattFilIListe)
+
+			val mittDokumentSomSkalHentes =
+				listOf<String>(minUuid)
+
+				hentFiler.hentDokumenter(mittDokumentSomSkalHentes)
+
+		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
 
     }
-
- /*   @Test
-    fun hentDokumenterTest() {
-			 val other = uuid
-			hentFiler.hentDokumenter(this.uuid)
-
-			assertTrue(this.uuid == other)
-    }*/
 }

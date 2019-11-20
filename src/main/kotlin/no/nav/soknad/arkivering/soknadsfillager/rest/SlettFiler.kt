@@ -13,6 +13,8 @@ class SlettFiler(private val slettFilerService: SlettFilerService) {
 
 	@PostMapping ("/slett")
 	fun slettFiler(@RequestBody slettFiler: List<String>) {
+		logger.info("Filer slettet '${slettFiler
+			.map { it }}'")
 
 		slettFilerService.slettFiler(slettFiler)
 	}

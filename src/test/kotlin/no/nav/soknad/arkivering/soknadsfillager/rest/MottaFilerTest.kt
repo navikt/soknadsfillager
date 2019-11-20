@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
 import java.util.*
 
 
@@ -25,14 +24,14 @@ class MottaFilerTest {
 	}
 
 	@Test
-	fun enkelTestAvTjenste() {
+	fun enkelTestAvMottaFilerTjenste() {
 		val minUuid= UUID.randomUUID().toString()
 		val minFil = "Dette er min andre streng"  //TODO bytte ut med blob
-		//val fil = "src/test/resources/navlogo.pdf"
-		val mittFilElement = FilElementDto(minUuid, minFil)
-		val minliste = listOf<FilElementDto>(mittFilElement)
+		//val minFil = "src/test/resources/navlogo.pdf"
+		val minliste =
+			listOf<FilElementDto>(FilElementDto(minUuid, minFil))
 
-		mottaFiler.mottaFiler(minliste)
+		this.mottaFiler.mottaFiler(minliste)
 
 		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
 
