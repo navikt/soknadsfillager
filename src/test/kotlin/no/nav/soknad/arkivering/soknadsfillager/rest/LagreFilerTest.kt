@@ -31,7 +31,7 @@ class LagreFilerTest {
 
         this.lagreFiler.lagreFiler(minliste)
 
-        assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
+        assertTrue(this.mittRepository.findById(minUuid).isPresent)
     }
 
     @Test

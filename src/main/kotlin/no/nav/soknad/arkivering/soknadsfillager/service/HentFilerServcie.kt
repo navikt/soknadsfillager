@@ -18,17 +18,12 @@ class HentFilerService(private val filRepository: FilRepository) {
 
     fun hentFil(uuid: String): FilElementDto {
         try {
-            val filDbData = filRepository.findByUuid(uuid)
-            return if (filDbData.isEmpty()) {
+            val filDbData = filRepository.findById(uuid)
+            return if (!filDbData.isPresent) {
                 this.logger.info(" Fil med $uuid er finnes ikke i basen")
                 FilElementDto(uuid, null)
             } else {
-                if (filDbData.size == 1) {
-                    FilElementDto(uuid, filDbData[0].data)
-                } else {
-                    this.logger.warn("Det er flere innslag for $uuid")
-                    FilElementDto(uuid, filDbData[0].data)
-                }
+                    FilElementDto(uuid, filDbData.get().data)
             }
 
         } catch (e: Exception) {
