@@ -48,7 +48,7 @@ class HentFilerTest {
 
         this.lagreFiler.lagreFiler(mineFilerListe)
 
-        val minUuidListe = hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
+        val minUuidListe = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 
         assertTrue(this.mittRepository.findByUuid(minUuidListe.first()).isNotEmpty())
         assertTrue(this.mittRepository.findById(minUuidListe.last()).isPresent)
@@ -60,7 +60,7 @@ class HentFilerTest {
 
         this.lagreFiler.lagreFiler(mineFilerListe)
 
-        val minUuidListeSomHarDokumenter = hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
+        val minUuidListeSomHarDokumenter = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 
         val uuid1SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
         val uuid2SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()

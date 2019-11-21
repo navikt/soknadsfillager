@@ -9,6 +9,7 @@ internal fun opprettEnEnkelFil(): Pair<String, String> {
     return Pair(minUuid, minFil)
 }
 
+
 internal fun opprettMottattFilListeMedBareEnFil(minUuid: String, minFil: String): List<FilElementDto> {
     val minMotattFilIListe =
             listOf<FilElementDto>(FilElementDto(minUuid, minFil))
@@ -33,14 +34,7 @@ internal fun opprettListeAv3FilDtoer(): List<FilElementDto> {
     return minListeAvMottatteFiler
 }
 
-internal fun hentUtenListeAvUuiderFraListeAvFilElementDtoer(list: List<FilElementDto>) = list.map(FilElementDto::uuid)
+internal fun hentUtEnListeAvUuiderFraListeAvFilElementDtoer(list: List<FilElementDto>) = list.map(FilElementDto::uuid)
 
 internal fun endreListtilMutableList(list: List<String>): MutableList<String> = list.toMutableList()
 
-/*internal fun lagListeAvUUider(antall: int):List<String>{
-	val listeAvUuider: List<String>
-
-
-
-	return
-}*/

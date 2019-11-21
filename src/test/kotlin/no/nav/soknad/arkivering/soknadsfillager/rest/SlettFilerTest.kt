@@ -26,15 +26,14 @@ class SlettFilerTest {
     }
 
     @Test
-    fun slettFilerTest() {
+    fun slettFiler() {
 
-        val listeAvMineDokumenterSomSkalSlettes = opprettListeAv3FilDtoer()
-        lagreMineFiler(listeAvMineDokumenterSomSkalSlettes)
-
-        val listeAvMineUuiderSomSkalSlettes =
-                hentUtenListeAvUuiderFraListeAvFilElementDtoer(listeAvMineDokumenterSomSkalSlettes)
+        val listeAvMineDokumenterSomSkalSlettes =
+                lagreEnListeAvDokumenter()
 
         assertEquals(3, mittRepository.count().toInt())
+
+        val listeAvMineUuiderSomSkalSlettes = listeAvMineDokumenterSomSkalSlettes.map { it.uuid }
 
         slettFiler.slettFiler(listeAvMineUuiderSomSkalSlettes)
 
@@ -42,29 +41,37 @@ class SlettFilerTest {
     }
 
     @Test
-    fun slettFilSomIkkeFinnesTest() {
-        val minListeMedFilerSomErLagret = opprettListeAv3FilDtoer()
+    fun slettFilSomIkkeFinnes() {
+        val minListeMedFilerSomErLagret = lagreEnListeAvDokumenter() // A, B, C
+        val slettelisteMedEkstraUuid = minListeMedFilerSomErLagret.map { it.uuid }.toMutableList()
 
-        lagreMineFiler(minListeMedFilerSomErLagret)
+        slettelisteMedEkstraUuid.add(1, UUID.randomUUID().toString()) // A, B, C og D som ikke er i basen
 
-        assertEquals(3, mittRepository.count().toInt())
-
-        val listeAvUuiderSomSkalSlettes =
-                mutableListAvAlleUuider(minListeMedFilerSomErLagret)
-
-        listeAvUuiderSomSkalSlettes.add(1, UUID.randomUUID().toString())
-
-        slettFiler.slettFiler(listeAvUuiderSomSkalSlettes)
+        slettFiler.slettFiler(slettelisteMedEkstraUuid)
 
         assertEquals(0, mittRepository.count().toInt())
+    }
+
+
+    @Test
+    fun slettFilersomLiggerFlerGangerIListen(){
+
+        val list = lagreEnListeAvDokumenter() // A, B, C
+        val sletteListe = list.plus(list.first()) // A, B, C, A
+
+        slettFiler.slettFiler(sletteListe.map { it.uuid })
+
+        assertEquals(0, mittRepository.count().toInt())
+    }
+
+    private fun lagreEnListeAvDokumenter(): List<FilElementDto> {
+        val minListeMedFilerSomErLagret = opprettListeAv3FilDtoer().also {
+            lagreMineFiler(it)
+        }
+        return minListeMedFilerSomErLagret
     }
 
     private fun lagreMineFiler(minListeMedFilerSomErLagret: List<FilElementDto>) {
         this.lagreFiler.lagreFiler(minListeMedFilerSomErLagret)
     }
-
-    private fun mutableListAvAlleUuider(minListeMedFilerSomErLagret: List<FilElementDto>) =
-            endreListtilMutableList(
-                    hentUtenListeAvUuiderFraListeAvFilElementDtoer(minListeMedFilerSomErLagret))
-
 }
