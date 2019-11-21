@@ -8,6 +8,7 @@ internal fun opprettEnEnkelFil(): Pair<String, String> {
     val minFil = "Min fil som skal hentes $minUuid"
     return Pair(minUuid, minFil)
 }
+internal fun opprettListeMedEnFil(uuid: String, fil : String): List<FilElementDto> = listOf(FilElementDto(uuid, fil))
 
 
 internal fun opprettMottattFilListeMedBareEnFil(minUuid: String, minFil: String): List<FilElementDto> {
