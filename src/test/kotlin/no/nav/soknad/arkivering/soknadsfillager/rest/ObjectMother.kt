@@ -4,35 +4,43 @@ import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import java.util.*
 
 internal fun opprettEnEnkelFil(): Pair<String, String> {
-	val minUuid = UUID.randomUUID().toString()
-	val minFil = "Min fil som skal hentes $minUuid"
-	return Pair(minUuid, minFil)
+    val minUuid = UUID.randomUUID().toString()
+    val minFil = "Min fil som skal hentes $minUuid"
+    return Pair(minUuid, minFil)
 }
 
 internal fun opprettMottattFilListeMedBareEnFil(minUuid: String, minFil: String): List<FilElementDto> {
-	val minMotattFilIListe =
-		listOf<FilElementDto>(FilElementDto(minUuid, minFil))
+    val minMotattFilIListe =
+            listOf<FilElementDto>(FilElementDto(minUuid, minFil))
 
-	return minMotattFilIListe
+    return minMotattFilIListe
 }
 
-internal fun opprettListeAv3FilDtoer(): List<FilElementDto>{
-	val uuid1 = UUID.randomUUID().toString()
-	val uuid2 = UUID.randomUUID().toString()
-	val uuid3 = UUID.randomUUID().toString()
-	val fil1 = "fil$uuid1"
-	val fil2 = "fil$uuid2"
-	val fil3 = "fil$uuid3"
+internal fun opprettListeAv3FilDtoer(): List<FilElementDto> {
+    val uuid1 = UUID.randomUUID().toString()
+    val uuid2 = UUID.randomUUID().toString()
+    val uuid3 = UUID.randomUUID().toString()
+    val fil1 = "fil$uuid1"
+    val fil2 = "fil$uuid2"
+    val fil3 = "fil$uuid3"
 
-	val mottattFil1 = FilElementDto(uuid1, fil1)
-	val mottattFil2 = FilElementDto(uuid2, fil2)
-	val mottaFiler3 = FilElementDto(uuid3, fil3)
+    val mottattFil1 = FilElementDto(uuid1, fil1)
+    val mottattFil2 = FilElementDto(uuid2, fil2)
+    val mottaFiler3 = FilElementDto(uuid3, fil3)
 
-	val minListeAvMottatteFiler = listOf<FilElementDto>(mottattFil1, mottattFil2, mottaFiler3)
+    val minListeAvMottatteFiler = listOf<FilElementDto>(mottattFil1, mottattFil2, mottaFiler3)
 
-	return minListeAvMottatteFiler
+    return minListeAvMottatteFiler
 }
 
 internal fun hentUtenListeAvUuiderFraListeAvFilElementDtoer(list: List<FilElementDto>) = list.map(FilElementDto::uuid)
 
-internal fun endreListtilMutableList(list: List<String>) :MutableList<String> =list.toMutableList()
+internal fun endreListtilMutableList(list: List<String>): MutableList<String> = list.toMutableList()
+
+/*internal fun lagListeAvUUider(antall: int):List<String>{
+	val listeAvUuider: List<String>
+
+
+
+	return
+}*/

@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class HentFiler(private val hentFilerService: HentFilerService) {
-	private val logger = LoggerFactory.getLogger(javaClass)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
-	@GetMapping ("/filer")
-	fun hentFiler(@RequestBody filListe: List<String>):
-		List<FilElementDto>{
-		logger.info("filler hentet ${filListe
-			.map {it}}")
+    @GetMapping("/filer")
+    fun hentFiler(@RequestBody filListe: List<String>):
+            List<FilElementDto> {
+        logger.info("filler hentet ${filListe
+                .map { it }}")
 
-		return hentFilerService.hentFiler(filListe)
-	}
+        return hentFilerService.hentFiler(filListe)
+    }
 
 }

@@ -11,77 +11,75 @@ import java.util.*
 
 @SpringBootTest
 class HentFilerTest {
-	@Autowired
-	private lateinit var lagreFiler: LagreFiler
+    @Autowired
+    private lateinit var lagreFiler: LagreFiler
 
-	@Autowired
-	private lateinit var hentFiler: HentFiler
+    @Autowired
+    private lateinit var hentFiler: HentFiler
 
-	@Autowired
-	private lateinit var mittRepository: FilRepository
+    @Autowired
+    private lateinit var mittRepository: FilRepository
 
-	@AfterEach
-	fun ryddOpp(){
-		mittRepository.deleteAll()
-	}
-
-	@Test
-    fun hentEtDokumentTest() {
-		val (minUuid, minFil) = opprettEnEnkelFil()
-
-		val minMotattFilIListe =
-			opprettMottattFilListeMedBareEnFil(minUuid, minFil)
-
-		this.lagreFiler.lagreFiler(minMotattFilIListe)
-
-			val mittDokumentSomSkalHentes =
-				listOf<String>(minUuid)
-
-				hentFiler.hentFiler(mittDokumentSomSkalHentes)
-
-		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
+    @AfterEach
+    fun ryddOpp() {
+        mittRepository.deleteAll()
     }
 
-	@Test
-	fun  hentEnListeAvDokumenterTest(){
-		val mineFilerListe = opprettListeAv3FilDtoer()
+    @Test
+    fun hentEtDokumentTest() {
+        val (minUuid, minFil) = opprettEnEnkelFil()
 
-		this.lagreFiler.lagreFiler(mineFilerListe)
+        val minMotattFilIListe =
+                opprettMottattFilListeMedBareEnFil(minUuid, minFil)
 
-		val minUuidListe=  hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
+        this.lagreFiler.lagreFiler(minMotattFilIListe)
 
-		assertTrue(this.mittRepository.findByUuid(minUuidListe.first()).isNotEmpty())
-		assertTrue(this.mittRepository.findById(minUuidListe.last()).isPresent)
-	}
+        val mittDokumentSomSkalHentes =
+                listOf<String>(minUuid)
 
-	@Test
-	fun hentEnListeavDokumenterHvorIkkeAlleUuiderErKnyttetDokument(){
-		val mineFilerListe = opprettListeAv3FilDtoer()
+        hentFiler.hentFiler(mittDokumentSomSkalHentes)
 
-		this.lagreFiler.lagreFiler(mineFilerListe)
+        assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
+    }
 
-		val minUuidListeSomHarDokumenter=  hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
+    @Test
+    fun hentEnListeAvDokumenterTest() {
+        val mineFilerListe = opprettListeAv3FilDtoer()
 
-		val uuid1SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
-		val uuid2SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
+        this.lagreFiler.lagreFiler(mineFilerListe)
 
-		val listeSomHarUuidErSomIkkeFinnes: MutableList<String> = endreListtilMutableList(minUuidListeSomHarDokumenter)
+        val minUuidListe = hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 
-		assertEquals(3, listeSomHarUuidErSomIkkeFinnes.size)
+        assertTrue(this.mittRepository.findByUuid(minUuidListe.first()).isNotEmpty())
+        assertTrue(this.mittRepository.findById(minUuidListe.last()).isPresent)
+    }
 
-		listeSomHarUuidErSomIkkeFinnes.add(uuid1SomIkkeErBlandtDokumentene)
-		listeSomHarUuidErSomIkkeFinnes.add(uuid2SomIkkeErBlandtDokumentene)
+    @Test
+    fun hentEnListeavDokumenterHvorIkkeAlleUuiderErKnyttetDokument() {
+        val mineFilerListe = opprettListeAv3FilDtoer()
 
-		assertEquals(5, listeSomHarUuidErSomIkkeFinnes.size)
+        this.lagreFiler.lagreFiler(mineFilerListe)
 
-		listeSomHarUuidErSomIkkeFinnes.random()
+        val minUuidListeSomHarDokumenter = hentUtenListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 
-		assertTrue(this.mittRepository.findByUuid(minUuidListeSomHarDokumenter.first()).isNotEmpty())
-		assertTrue(this.mittRepository.findByUuid(uuid1SomIkkeErBlandtDokumentene).isEmpty())
-		assertTrue(hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes).size == 5)
+        val uuid1SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
+        val uuid2SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
+
+        val listeSomHarUuidErSomIkkeFinnes: MutableList<String> = endreListtilMutableList(minUuidListeSomHarDokumenter)
+
+        assertEquals(3, listeSomHarUuidErSomIkkeFinnes.size)
+
+        listeSomHarUuidErSomIkkeFinnes.add(uuid1SomIkkeErBlandtDokumentene)
+        listeSomHarUuidErSomIkkeFinnes.add(uuid2SomIkkeErBlandtDokumentene)
+
+        assertEquals(5, listeSomHarUuidErSomIkkeFinnes.size)
+
+        listeSomHarUuidErSomIkkeFinnes.random()
+
+        assertTrue(this.mittRepository.findByUuid(minUuidListeSomHarDokumenter.first()).isNotEmpty())
+        assertTrue(this.mittRepository.findByUuid(uuid1SomIkkeErBlandtDokumentene).isEmpty())
+        assertTrue(hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes).size == 5)
 
 
-
-
-	}
+    }
 }

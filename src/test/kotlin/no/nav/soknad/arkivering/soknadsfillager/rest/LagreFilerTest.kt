@@ -12,35 +12,35 @@ import java.util.*
 
 @SpringBootTest
 class LagreFilerTest {
-	@Autowired
-	private lateinit var lagreFiler: LagreFiler
+    @Autowired
+    private lateinit var lagreFiler: LagreFiler
 
-	@Autowired
-	private lateinit var mittRepository: FilRepository
+    @Autowired
+    private lateinit var mittRepository: FilRepository
 
-	@AfterEach
-	fun ryddOpp(){
-		mittRepository.deleteAll()
-	}
+    @AfterEach
+    fun ryddOpp() {
+        mittRepository.deleteAll()
+    }
 
-	@Test
-	fun enkelTestAvMottaFilerTjenste() {
-		val minUuid= UUID.randomUUID().toString()
-		val minFil = "Dette er min andre streng"  //TODO bytte ut med blob
-		//val minFil = "src/test/resources/navlogo.pdf"
-		val minliste = opprettMottattFilListeMedBareEnFil(minUuid, minFil)
+    @Test
+    fun enkelTestAvMottaFilerTjenste() {
+        val minUuid = UUID.randomUUID().toString()
+        val minFil = "Dette er min andre streng"  //TODO bytte ut med blob
+        //val minFil = "src/test/resources/navlogo.pdf"
+        val minliste = opprettMottattFilListeMedBareEnFil(minUuid, minFil)
 
-		this.lagreFiler.lagreFiler(minliste)
+        this.lagreFiler.lagreFiler(minliste)
 
-		assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
-	}
+        assertTrue(this.mittRepository.findByUuid(minUuid).isNotEmpty())
+    }
 
-	@Test
-	fun mottaEnListeAvFilerOgsjekkRitigAntallLagret(){
-		val minListe = opprettListeAv3FilDtoer()
+    @Test
+    fun mottaEnListeAvFilerOgsjekkRitigAntallLagret() {
+        val minListe = opprettListeAv3FilDtoer()
 
-		this.lagreFiler.lagreFiler(minListe)
+        this.lagreFiler.lagreFiler(minListe)
 
-		assertEquals(3,mittRepository.count().toInt())
-	}
+        assertEquals(3, mittRepository.count().toInt())
+    }
 }

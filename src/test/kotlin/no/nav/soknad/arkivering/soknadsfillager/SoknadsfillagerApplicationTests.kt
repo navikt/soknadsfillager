@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class SoknadsfillagerApplicationTests {
 
-	@Test
-	fun contextLoads() {
-		println("i´m working")
-	}
+    @Test
+    fun contextLoads() {
+        println("i´m working")
+    }
 
 }
