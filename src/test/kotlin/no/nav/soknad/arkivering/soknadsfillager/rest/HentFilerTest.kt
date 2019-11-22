@@ -1,16 +1,20 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
+import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.util.*
+import javax.validation.constraints.AssertTrue
 
 @SpringBootTest
 class HentFilerTest {
+    val mineFilerListe = opprettListeAv3FilDtoer()
+
     @Autowired
     private lateinit var lagreFiler: LagreFiler
 
@@ -20,70 +24,47 @@ class HentFilerTest {
     @Autowired
     private lateinit var mittRepository: FilRepository
 
+    @BeforeEach
+    private fun lagreListeAvFiler() {
+        this.lagreFiler.lagreFiler(mineFilerListe)
+    }
+
     @AfterEach
     fun ryddOpp() {
         mittRepository.deleteAll()
     }
 
-    @Test
-    fun hentEtDokumentTest() {
-        val (minUuid, minFil) = opprettEnEnkelFil()
 
-        val minMotattFilIListe =
-                opprettMottattFilListeMedBareEnFil(minUuid, minFil)
-
-        this.lagreFiler.lagreFiler(minMotattFilIListe)
-
-        val mittDokumentSomSkalHentes =
-                listOf<String>(minUuid)
-
-        hentFiler.hentFiler(mittDokumentSomSkalHentes)
-
-        assertTrue(this.mittRepository.findById(minUuid).isPresent)
+    private fun hentMineFiler(dokumenterSomSkalHentes: List<String>) {
+        hentFiler.hentFiler(dokumenterSomSkalHentes)
     }
 
     @Test
     fun hentEnListeAvDokumenterTest() {
-        val mineFilerListe = opprettListeAv3FilDtoer()
-
-        this.lagreFiler.lagreFiler(mineFilerListe)
 
         val minUuidListe = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
+        val hentedeFilerResultat = hentFiler.hentFiler(minUuidListe)
 
-        assertTrue(this.mittRepository.findById(minUuidListe.first()).isPresent)
-        assertTrue(this.mittRepository.findById(minUuidListe.last()).isPresent)
-
-        val listeAvHentedeFiler = hentFiler.hentFiler(minUuidListe)
-
-        assertEquals(minUuidListe, listeAvHentedeFiler.map { it.uuid })
+        assertEquals(minUuidListe, hentedeFilerResultat.map { it.uuid })
+        assertEquals(mineFilerListe.map { it.fil }, hentedeFilerResultat.map { it.fil })
     }
 
     @Test
     fun hentEnListeavDokumenterHvorIkkeAlleUuiderErKnyttetDokument() {
-        val mineFilerListe = opprettListeAv3FilDtoer()
-
-        this.lagreFiler.lagreFiler(mineFilerListe)
-
         val minUuidListeSomHarDokumenter = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
-
         val uuid1SomIkkeErBlandtDokumentene = opprettEnUUid()
         val uuid2SomIkkeErBlandtDokumentene = opprettEnUUid()
-
         val listeSomHarUuidErSomIkkeFinnes: MutableList<String> = endreListtilMutableList(minUuidListeSomHarDokumenter)
 
         assertEquals(3, listeSomHarUuidErSomIkkeFinnes.size)
 
         listeSomHarUuidErSomIkkeFinnes.add(uuid1SomIkkeErBlandtDokumentene)
         listeSomHarUuidErSomIkkeFinnes.add(uuid2SomIkkeErBlandtDokumentene)
-
         assertEquals(5, listeSomHarUuidErSomIkkeFinnes.size)
 
-        listeSomHarUuidErSomIkkeFinnes.shuffle()
-
-        assertTrue(this.mittRepository.findById(minUuidListeSomHarDokumenter.first()).isPresent)
-        assertTrue(this.mittRepository.findById(uuid1SomIkkeErBlandtDokumentene).isEmpty)
-        assertTrue(hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes).size == 5)
-
-
+        val hentedeFilerResultat = hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes)
+        assertTrue(hentedeFilerResultat.size == 5)
+        assertTrue(hentedeFilerResultat.find { it.uuid == uuid1SomIkkeErBlandtDokumentene}?.fil == null)
+        assertTrue(hentedeFilerResultat.find{ it.uuid == minUuidListeSomHarDokumenter.get(0)}?.fil != null)
     }
 }
