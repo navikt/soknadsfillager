@@ -14,7 +14,7 @@ class HentFiler(private val hentFilerService: HentFilerService) {
     @GetMapping("/filer")
     fun hentFiler(@RequestBody filListe: List<String>):
             List<FilElementDto> {
-        logger.info("filler hentet ${filListe
+        logger.info("Forsøker å hentet følgende filer:  ${filListe
                 .map { it }}")
 
         return hentFilerService.hentFiler(filListe)

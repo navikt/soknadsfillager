@@ -20,7 +20,7 @@ class HentFilerService(private val filRepository: FilRepository) {
         try {
             val filDbData = filRepository.findById(uuid)
             return if (!filDbData.isPresent) {
-                this.logger.info(" Fil med $uuid er finnes ikke i basen")
+                this.logger.info(" Fil med $uuid finnes ikke i basen")
                 FilElementDto(uuid, null)
             } else {
                     FilElementDto(uuid, filDbData.get().data)
