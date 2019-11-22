@@ -65,13 +65,9 @@ class SlettFilerTest {
     }
 
     private fun lagreEnListeAvDokumenter(): List<FilElementDto> {
-        val minListeMedFilerSomErLagret = opprettListeAv3FilDtoer().also {
-            lagreMineFiler(it)
-        }
-        return minListeMedFilerSomErLagret
+        return opprettListeAv3FilDtoer().also { lagreMineFiler(it) }
     }
 
-    private fun lagreMineFiler(minListeMedFilerSomErLagret: List<FilElementDto>) {
-        this.lagreFiler.lagreFiler(minListeMedFilerSomErLagret)
-    }
+    private fun lagreMineFiler(list: List<FilElementDto>) = this.lagreFiler.lagreFiler(list)
+
 }
