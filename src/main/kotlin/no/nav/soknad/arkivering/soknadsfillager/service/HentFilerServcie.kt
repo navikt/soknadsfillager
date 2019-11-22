@@ -16,7 +16,7 @@ class HentFilerService(private val filRepository: FilRepository) {
 
     }
 
-    fun hentFil(uuid: String): FilElementDto {
+    private fun hentFil(uuid: String): FilElementDto {
         try {
             val filDbData = filRepository.findById(uuid)
             return if (!filDbData.isPresent) {
