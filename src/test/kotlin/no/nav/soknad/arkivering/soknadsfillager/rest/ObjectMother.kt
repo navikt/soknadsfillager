@@ -2,21 +2,13 @@ package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import java.util.*
-import kotlin.random.Random
 
-internal fun opprettEnUUid(): String {
-    val uuid = UUID.randomUUID().toString()
+internal fun opprettEnUUid(): String = UUID.randomUUID().toString()
 
-    return uuid
-}
-internal fun opprettEnTeks(): String {
-    val tekst = "min tekst ${opprettEnUUid()}"
-    return tekst}
+internal fun opprettEnTekstFil(): String ="min tekst ${opprettEnUUid()}"
 
-
-
-internal fun opprettEnEnkelFil(): Pair<String, String> = Pair(opprettEnUUid(), opprettEnTeks())
-internal fun opprettEnFil():FilElementDto = FilElementDto(opprettEnUUid(), opprettEnTeks())
+internal fun opprettEnEnkelFil(): Pair<String, String> = Pair(opprettEnUUid(), opprettEnTekstFil())
+internal fun opprettEnFil():FilElementDto = FilElementDto(opprettEnUUid(), opprettEnTekstFil())
 
 internal fun opprettListeMedEnFil(uuid: String, fil : String): List<FilElementDto> = listOf(FilElementDto(uuid, fil))
 

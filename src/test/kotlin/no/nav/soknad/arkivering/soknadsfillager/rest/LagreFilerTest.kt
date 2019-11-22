@@ -24,18 +24,16 @@ class LagreFilerTest {
 
     @Test
     fun enkelTestAvMottaFilerTjenste() {
-        val minUuid = UUID.randomUUID().toString()
-        val minFil = "Dette er min andre streng"  //TODO bytte ut med blob
-        //val minFil = "src/test/resources/navlogo.pdf"
-        val minliste = opprettMottattFilListeMedBareEnFil(minUuid, minFil)
+        val minUuid = opprettEnUUid()
+        val liste = opprettListeMedEnFil(minUuid, opprettEnTekstFil())
 
-        this.lagreFiler.lagreFiler(minliste)
+        this.lagreFiler.lagreFiler(liste)
 
         assertTrue(this.mittRepository.findById(minUuid).isPresent)
     }
 
     @Test
-    fun mottaEnListeAvFilerOgsjekkRitigAntallLagret() {
+    fun lagreEnListeAvFilerOgsjekkRitigAntallLagret() {
         val minListe = opprettListeAv3FilDtoer()
 
         this.lagreFiler.lagreFiler(minListe)
@@ -45,15 +43,15 @@ class LagreFilerTest {
 
     @Test
     fun erstatterFilMedGittUuidMedNyFil(){
-        val minUuid = UUID.randomUUID().toString()
-        val forsteFilVersion = "FørsteFilVersjon"
+        val minUuid = opprettEnUUid()
+        val forsteFilVersion = opprettEnTekstFil()
 
         val minForsteFilVersjonIliste = opprettListeMedEnFil(minUuid, forsteFilVersion)
         this.lagreFiler.lagreFiler(minForsteFilVersjonIliste)
 
         assertEquals(forsteFilVersion, mittRepository.findById(minUuid).get().data)
 
-        val andeFilVersjon = "AndreFilversjon"
+        val andeFilVersjon = opprettEnTekstFil()
         val minAndreFilVersjonIListe = opprettListeMedEnFil(minUuid,andeFilVersjon)
         this.lagreFiler.lagreFiler(minAndreFilVersjonIListe)
 
