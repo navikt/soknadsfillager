@@ -52,6 +52,10 @@ class HentFilerTest {
 
         assertTrue(this.mittRepository.findById(minUuidListe.first()).isPresent)
         assertTrue(this.mittRepository.findById(minUuidListe.last()).isPresent)
+
+        val listeAvHentedeFiler = hentFiler.hentFiler(minUuidListe)
+
+        assertEquals(minUuidListe, listeAvHentedeFiler.map { it.uuid })
     }
 
     @Test
@@ -62,8 +66,8 @@ class HentFilerTest {
 
         val minUuidListeSomHarDokumenter = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
 
-        val uuid1SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
-        val uuid2SomIkkeErBlandtDokumentene = UUID.randomUUID().toString()
+        val uuid1SomIkkeErBlandtDokumentene = opprettEnUUid()
+        val uuid2SomIkkeErBlandtDokumentene = opprettEnUUid()
 
         val listeSomHarUuidErSomIkkeFinnes: MutableList<String> = endreListtilMutableList(minUuidListeSomHarDokumenter)
 
@@ -74,7 +78,7 @@ class HentFilerTest {
 
         assertEquals(5, listeSomHarUuidErSomIkkeFinnes.size)
 
-        listeSomHarUuidErSomIkkeFinnes.random()
+        listeSomHarUuidErSomIkkeFinnes.shuffle()
 
         assertTrue(this.mittRepository.findById(minUuidListeSomHarDokumenter.first()).isPresent)
         assertTrue(this.mittRepository.findById(uuid1SomIkkeErBlandtDokumentene).isEmpty)
