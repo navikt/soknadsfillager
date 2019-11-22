@@ -13,7 +13,7 @@ class LagreFilerService(private val filRepository: FilRepository) {
     fun lagreFiler(filListe: List<FilElementDto>) = filListe
             .forEach { e -> this.lagreFil(e) }
 
-    fun lagreFil(filElementDto: FilElementDto) {
+    private fun lagreFil(filElementDto: FilElementDto) {
 
         if (filElementDto.fil == null) {
             logger.warn("Forsøker å lagre ${filElementDto.uuid} uten at det er en fil å lagre")
