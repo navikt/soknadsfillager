@@ -27,7 +27,7 @@ class LagreFilerTest {
 
     @Test
     fun enkelTestAvMottaFilerTjenste() {
-        val liste = opprettListeMedEnFil(minUuid, opprettEnTekstFil())
+        val liste = opprettListeMedEnFil(minUuid, opprettEnEnkelPdf())
 
         this.lagreFiler.lagreFiler(liste)
 
@@ -36,18 +36,18 @@ class LagreFilerTest {
 
     @Test
     fun erstatterFilMedGittUuidMedNyFil(){
-        val forsteFilVersion = opprettEnTekstFil()
+        val forsteFilVersion = opprettEnEnkelPdf()
 
         val forsteFilVersjonIliste = opprettListeMedEnFil(minUuid, forsteFilVersion)
         this.lagreFiler.lagreFiler(forsteFilVersjonIliste)
 
-        assertEquals(forsteFilVersion, mittRepository.findById(minUuid).get().data)
+        assertEquals(forsteFilVersion.size, mittRepository.findById(minUuid).get().data?.size)
 
-        val andeFilVersjon = opprettEnTekstFil()
+        val andeFilVersjon = opprettEnEnkelPdf()
         val minAndreFilVersjonIListe = opprettListeMedEnFil(minUuid,andeFilVersjon)
         this.lagreFiler.lagreFiler(minAndreFilVersjonIListe)
 
-        assertEquals(andeFilVersjon, mittRepository.findById(minUuid).get().data)
+        assertEquals(andeFilVersjon.size, mittRepository.findById(minUuid).get().data?.size)
     }
 
     @Test

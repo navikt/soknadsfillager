@@ -38,7 +38,7 @@ class HentFilerTest {
         val hentedeFilerResultat = hentFiler.hentFiler(listeAvUuiderIBasen)
 
         assertEquals(listeAvUuiderIBasen, hentedeFilerResultat.map { it.uuid })
-        assertEquals(listeAvFilerIBasen.map { it.fil }, hentedeFilerResultat.map { it.fil })
+        assertEquals(listeAvFilerIBasen.map { it.fil?.size }, hentedeFilerResultat.map { it.fil?.size })
     }
 
     @Test
