@@ -4,5 +4,4 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface FilRepository : MongoRepository<FilDbData, String> {
-}
+interface FilRepository : MongoRepository<FilDbData, String>

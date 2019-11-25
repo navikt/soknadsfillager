@@ -16,7 +16,7 @@ class LagreFilerService(private val filRepository: FilRepository) {
     private fun lagreFil(filElementDto: FilElementDto) {
 
         if (filElementDto.fil == null) {
-            logger.warn("Forsøker å lagre ${filElementDto.uuid} uten at det er en fil å lagre")
+            logger.warn("Finnes ingen fil å lagre med Uuid ${filElementDto.uuid}")
             return
         } else {
             filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil))

@@ -14,5 +14,3 @@ internal fun opprettListeMedEnFil(uuid: String, fil : String?): List<FilElementD
 internal fun opprettListeAv3FilDtoer(): List<FilElementDto> = listOf<FilElementDto>(opprettEnFil(), opprettEnFil(), opprettEnFil())
 
 internal fun hentUtEnListeAvUuiderFraListeAvFilElementDtoer(list: List<FilElementDto>) = list.map(FilElementDto::uuid)
-
-internal fun endreListtilMutableList(list: List<String>): MutableList<String> = list.toMutableList()

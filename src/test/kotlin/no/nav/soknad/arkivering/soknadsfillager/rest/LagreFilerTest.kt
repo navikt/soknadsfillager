@@ -20,14 +20,10 @@ class LagreFilerTest {
     private lateinit var mittRepository: FilRepository
 
     @BeforeEach
-    private fun lagreListeAvFiler() {
-        this.lagreFiler.lagreFiler(mineFilerListe)
-    }
+    private fun lagreListeAvFiler()= lagreFiler.lagreFiler(mineFilerListe)
 
     @AfterEach
-    fun ryddOpp() {
-        mittRepository.deleteAll()
-    }
+    fun ryddOpp() = mittRepository.deleteAll()
 
     @Test
     fun enkelTestAvMottaFilerTjenste() {
@@ -39,18 +35,11 @@ class LagreFilerTest {
     }
 
     @Test
-    fun lagreEnListeAvFilerOgsjekkRitigAntallLagret() {
-        this.lagreFiler.lagreFiler(mineFilerListe)
-
-        assertEquals(3, mittRepository.count().toInt())
-    }
-
-    @Test
     fun erstatterFilMedGittUuidMedNyFil(){
         val forsteFilVersion = opprettEnTekstFil()
 
-        val minForsteFilVersjonIliste = opprettListeMedEnFil(minUuid, forsteFilVersion)
-        this.lagreFiler.lagreFiler(minForsteFilVersjonIliste)
+        val forsteFilVersjonIliste = opprettListeMedEnFil(minUuid, forsteFilVersion)
+        this.lagreFiler.lagreFiler(forsteFilVersjonIliste)
 
         assertEquals(forsteFilVersion, mittRepository.findById(minUuid).get().data)
 
@@ -63,9 +52,12 @@ class LagreFilerTest {
 
     @Test
     fun skalIkkeKunneLagreEnFilDtoSomManglerFil(){
+        val antallFilerVedStart = mittRepository.count()
         val listeMedFilElementDtoSomManglerFil = opprettListeMedEnFil(minUuid, null)
 
         this.lagreFiler.lagreFiler(listeMedFilElementDtoSomManglerFil)
-        assertEquals(3 ,this.mittRepository.count().toInt())
+
+        val filterEtterTest = mittRepository.count()
+        assertEquals(antallFilerVedStart, filterEtterTest)
     }
 }

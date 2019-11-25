@@ -9,12 +9,7 @@ import org.springframework.stereotype.Service
 class HentFilerService(private val filRepository: FilRepository) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun hentFiler(filListe: List<String>): List<FilElementDto> {
-        return filListe
-                .map { e -> hentFil(e) }
-                .toCollection(ArrayList())
-
-    }
+    fun hentFiler(filListe: List<String>) = filListe.map { e -> hentFil(e) }
 
     private fun hentFil(uuid: String): FilElementDto {
         try {
@@ -23,11 +18,11 @@ class HentFilerService(private val filRepository: FilRepository) {
                 this.logger.info(" Fil med $uuid finnes ikke i basen")
                 FilElementDto(uuid, null)
             } else {
-                    FilElementDto(uuid, filDbData.get().data)
+                FilElementDto(uuid, filDbData.get().data)
             }
 
         } catch (e: Exception) {
-            logger.error("$uuid er ikke i basen", e)
+            logger.error("Feil ved henting av $uuid", e)
             throw e
         }
     }

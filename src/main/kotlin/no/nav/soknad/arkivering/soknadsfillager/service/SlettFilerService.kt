@@ -10,7 +10,7 @@ class SlettFilerService(private val filRepository: FilRepository) {
 
     fun slettFiler(filListe: List<String>) {
 
-        filListe.forEach {
+        filListe.distinct().forEach {
             if (!sjekkOmFilenEksisterer(it)) {
                 loggAtFilenMangler(it)
             } else {
@@ -19,18 +19,12 @@ class SlettFilerService(private val filRepository: FilRepository) {
         }
     }
 
-    private fun sjekkOmFilenEksisterer(uuid: String): Boolean {
-        return filRepository.findById(uuid).isPresent
-    }
+    private fun sjekkOmFilenEksisterer(uuid: String)= filRepository.findById(uuid).isPresent
 
-    private fun loggAtFilenMangler(uuid: String) {
-        this.logger.error("$uuid er ikke i basen")
-    }
+    private fun loggAtFilenMangler(uuid: String) = logger.error("$uuid er ikke i basen")
 
     private fun slettFil(uuid: String) {
-
-        logger.info("Fil med $uuid er slettet fra basen")
         filRepository.deleteById(uuid)
+        logger.info("Fil med $uuid er slettet fra basen")
     }
-
 }

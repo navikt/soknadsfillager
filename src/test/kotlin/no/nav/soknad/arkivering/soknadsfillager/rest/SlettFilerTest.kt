@@ -15,59 +15,57 @@ class SlettFilerTest {
     private lateinit var slettFiler: SlettFiler
 
     @Autowired
-    private lateinit var mittRepository: FilRepository
+    private lateinit var filRepository: FilRepository
 
     @Autowired
     private lateinit var lagreFiler: LagreFiler
 
+    @BeforeEach
+
     @AfterEach
     fun ryddOpp() {
-        mittRepository.deleteAll()
+        filRepository.deleteAll()
     }
 
     @Test
     fun slettFiler() {
+        val listeAvMineDokumenterSomSkalSlettes = lagreEnListeAvDokumenter()
 
-        val listeAvMineDokumenterSomSkalSlettes =
-                lagreEnListeAvDokumenter()
+        assertEquals(3, filRepository.count())
 
-        assertEquals(3, mittRepository.count().toInt())
+        val listeAvUuiderSomSkalSlettes = listeAvMineDokumenterSomSkalSlettes.map { it.uuid }
 
-        val listeAvMineUuiderSomSkalSlettes = listeAvMineDokumenterSomSkalSlettes.map { it.uuid }
+        slettFiler.slettFiler(listeAvUuiderSomSkalSlettes)
 
-        slettFiler.slettFiler(listeAvMineUuiderSomSkalSlettes)
-
-        assertEquals(0, mittRepository.count().toInt())
+        assertEquals(0, filRepository.count())
     }
 
     @Test
     fun slettFilSomIkkeFinnes() {
-        val minListeMedFilerSomErLagret = lagreEnListeAvDokumenter() // A, B, C
-        val slettelisteMedEkstraUuid = minListeMedFilerSomErLagret.map { it.uuid }.toMutableList()
+        val listeMedFilerSomErLagret = lagreEnListeAvDokumenter()
+        val slettelisteMedEkstraUuid = listeMedFilerSomErLagret.map { it.uuid }.toMutableList()
 
-        slettelisteMedEkstraUuid.add(1, UUID.randomUUID().toString()) // A, B, C og D som ikke er i basen
+        slettelisteMedEkstraUuid.add(1, UUID.randomUUID().toString())
 
         slettFiler.slettFiler(slettelisteMedEkstraUuid)
 
-        assertEquals(0, mittRepository.count().toInt())
+        assertEquals(0, filRepository.count())
     }
 
 
     @Test
-    fun slettFilersomLiggerFlerGangerIListen(){
+    fun slettFilerSomLiggerFlerGangerIListen(){
 
-        val list = lagreEnListeAvDokumenter() // A, B, C
-        val sletteListe = list.plus(list.first()) // A, B, C, A
+        val listeMedFilerSomErLagret = lagreEnListeAvDokumenter() // A, B, C
+        val sletteListe = listeMedFilerSomErLagret.plus(listeMedFilerSomErLagret.first()) // A, B, C, A
 
         slettFiler.slettFiler(sletteListe.map { it.uuid })
 
-        assertEquals(0, mittRepository.count().toInt())
+        assertEquals(0, filRepository.count().toInt())
     }
 
-    private fun lagreEnListeAvDokumenter(): List<FilElementDto> {
-        return opprettListeAv3FilDtoer().also { lagreMineFiler(it) }
-    }
+    private fun lagreEnListeAvDokumenter()= opprettListeAv3FilDtoer().also { lagreFiler(it)}
 
-    private fun lagreMineFiler(list: List<FilElementDto>) = this.lagreFiler.lagreFiler(list)
+    private fun lagreFiler(list: List<FilElementDto>) = this.lagreFiler.lagreFiler(list)
 
 }

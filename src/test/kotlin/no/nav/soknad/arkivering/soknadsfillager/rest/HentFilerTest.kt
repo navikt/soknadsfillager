@@ -11,8 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class HentFilerTest {
-    val mineFilerListe = opprettListeAv3FilDtoer()
-    val minUuidListe = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(mineFilerListe)
+    val listeAvFilerIBasen = opprettListeAv3FilDtoer()
+    val listeAvUuiderIBasen = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(listeAvFilerIBasen)
 
     @Autowired
     private lateinit var lagreFiler: LagreFiler
@@ -21,31 +21,31 @@ class HentFilerTest {
     private lateinit var hentFiler: HentFiler
 
     @Autowired
-    private lateinit var mittRepository: FilRepository
+    private lateinit var filRepository: FilRepository
 
     @BeforeEach
     private fun lagreListeAvFiler() {
-        this.lagreFiler.lagreFiler(mineFilerListe)
+        this.lagreFiler.lagreFiler(listeAvFilerIBasen)
     }
 
     @AfterEach
     fun ryddOpp() {
-        mittRepository.deleteAll()
+        filRepository.deleteAll()
     }
 
     @Test
     fun hentEnListeAvDokumenterTest() {
-        val hentedeFilerResultat = hentFiler.hentFiler(minUuidListe)
+        val hentedeFilerResultat = hentFiler.hentFiler(listeAvUuiderIBasen)
 
-        assertEquals(minUuidListe, hentedeFilerResultat.map { it.uuid })
-        assertEquals(mineFilerListe.map { it.fil }, hentedeFilerResultat.map { it.fil })
+        assertEquals(listeAvUuiderIBasen, hentedeFilerResultat.map { it.uuid })
+        assertEquals(listeAvFilerIBasen.map { it.fil }, hentedeFilerResultat.map { it.fil })
     }
 
     @Test
-    fun hentEnListeavDokumenterHvorIkkeAlleUuiderErKnyttetDokument() {
+    fun hentEnListeAvDokumenterHvorIkkeAlleUuiderErKnyttetTilFil() {
         val uuid1SomIkkeErBlandtDokumentene = opprettEnUUid()
         val uuid2SomIkkeErBlandtDokumentene = opprettEnUUid()
-        val listeSomHarUuidErSomIkkeFinnes: MutableList<String> = endreListtilMutableList(minUuidListe)
+        val listeSomHarUuidErSomIkkeFinnes: MutableList<String> = listeAvUuiderIBasen.toMutableList()
 
         assertEquals(3, listeSomHarUuidErSomIkkeFinnes.size)
 
@@ -56,6 +56,6 @@ class HentFilerTest {
         val hentedeFilerResultat = hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes)
         assertTrue(hentedeFilerResultat.size == 5)
         assertTrue(hentedeFilerResultat.find { it.uuid == uuid1SomIkkeErBlandtDokumentene}?.fil == null)
-        assertTrue(hentedeFilerResultat.find{ it.uuid == minUuidListe.get(0)}?.fil != null)
+        assertTrue(hentedeFilerResultat.find{ it.uuid == listeAvUuiderIBasen[0] }?.fil != null)
     }
 }
