@@ -12,7 +12,7 @@ class SlettFiler(private val slettFilerService: SlettFilerService) {
 
     @DeleteMapping("/filer")
     fun slettFiler(@RequestBody slettFiler: List<String>) {
-        logger.info("Forsøker å slette fler '${slettFiler
+        logger.info("Forsøker å slette '${slettFiler
                 .map { it }}'")
 
         slettFilerService.slettFiler(slettFiler)
