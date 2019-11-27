@@ -1,0 +1,10 @@
+apiVersion: "nais.io/soknadsfillager"
+kind: "Application"
+metadata:
+  name: soknadsfillager
+  namespace: default
+  labels:
+    team: team-soknad
+spec:
+  image: navikt/docker-image:docker-tag
+  port: 9042
