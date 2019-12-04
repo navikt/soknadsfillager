@@ -1,0 +1,21 @@
+apiVersion: "nais.io/soknadsfillager"
+kind: "Application"
+metadata:
+  name: soknadsfillager
+  namespace: default
+  labels:
+    team: team-soknad
+spec:
+  image: repo.adeo.no
+  port: 9042
+  replicas:
+    min: 2
+    max: 4
+    cpuThresholdPersentage: 50
+  liveness:
+    path: soknadsfillager/internal/isAlive
+  rediness:
+    path: soknadsfillager/internal/isAlive
+  prometheus:
+    enable: true
+    path: soknadsfillager/internal/prometheus
