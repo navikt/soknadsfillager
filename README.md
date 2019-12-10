@@ -9,7 +9,7 @@ Benyttes av soknadarkiverer.
 
 ### Henvendelser
 Spørsmål knyttet til koden eller prosjektet kan rettes mot:
-* [mail@Team Søknad](DGNAVITTeamselvbetjening-Soknad@nav.no)
+* [mail@Team Søknad](team-soknad@nav.no)
 
 ### For NAV-ansatte
 Interne henvendelser kan sendes via Slack i kanalen #teamsoknad
