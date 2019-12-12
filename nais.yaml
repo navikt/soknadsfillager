@@ -1,4 +1,4 @@
-apiVersion: "nais.io/soknadsfillager"
+apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: soknadsfillager
@@ -8,3 +8,11 @@ metadata:
 spec:
   image: navikt/docker-image:docker-tag
   port: 9042
+  liveliness:
+    path: /soknadsfillager/internal/isAlive
+  readiness:
+    path: /soknadsfillager/internal/isReady
+  prometheus:
+    path: /soknadsfillager/internal/prometheus
+vault:
+  enable: true

@@ -1,6 +1,5 @@
-#FROM navikt/java:11
-FROM azul/zulu-openjdk-alpine:12
+FROM navikt/java:11
+#FROM azul/zulu-openjdk-alpine:12
 
-COPY target/soknadsfillager.jar /app.jar
-
-CMD java -jar /app.jar
+COPY target/soknadsfillager.jar /app/app.jar
+EXPOSE 9042
