@@ -10,9 +10,21 @@ spec:
   port: 9042
   liveliness:
     path: /soknadsfillager/internal/isAlive
+    initialDelay: 5
   readiness:
     path: /soknadsfillager/internal/isReady
+    initialDelay: 5
   prometheus:
     path: /soknadsfillager/internal/prometheus
-vault:
-  enable: true
+  replicas:
+    min: 2
+    max: 4
+  resource:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  vault:
+    enable: true
