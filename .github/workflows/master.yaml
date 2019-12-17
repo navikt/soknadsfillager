@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - master
-
+env:
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/soknadsfillager:${{ github.sha }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,3 +22,11 @@ jobs:
           java-version: '11.x'
       - name: unit test and build
         run: ./mvnw install
+      - name: Build docker image
+        run: docker build -t $IMAGE .
+      - name: Login to Github package registry
+        run: docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push docker image
+        run: docker push $IMAGE
