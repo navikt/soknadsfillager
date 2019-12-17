@@ -6,7 +6,7 @@ metadata:
   labels:
     team: team-soknad
 spec:
-  image: docker.adeo.no:5000/soknadsfillager
+  image: {{image}}
   port: 9042
   liveliness:
     path: /soknadsfillager/internal/isAlive

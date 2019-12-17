@@ -30,3 +30,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Push docker image
         run: docker push $IMAGE
+      - uses: nais/deploy/actions/deploy@master
+          env:
+            APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
+            CLUSTER: dev-fss
+            RESOURCE: nais.yaml
