@@ -6,7 +6,7 @@ metadata:
   labels:
     team: team-soknad
 spec:
-  image: navikt/docker-image:docker-tag
+  image: docker.adeo.no:5000/soknadsfillager
   port: 9042
   liveliness:
     path: /soknadsfillager/internal/isAlive
