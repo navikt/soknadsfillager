@@ -15,6 +15,7 @@ spec:
     path: /soknadsfillager/internal/isReady
     initialDelay: 5
   prometheus:
+    enable: true
     path: /soknadsfillager/internal/prometheus
   replicas:
     min: 2
