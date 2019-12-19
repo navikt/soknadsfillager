@@ -29,3 +29,5 @@ spec:
       memory: 256Mi
   vault:
     enable: true
+  ingress:
+    -"https://soknadsfillager.nais.preprod.local"
