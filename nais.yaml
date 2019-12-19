@@ -9,14 +9,16 @@ spec:
   image: {{image}}
   port: 9042
   liveliness:
-    path: /soknadsfillager/internal/isAlive
+    path: /internal/isAlive
+    port: 8080
     initialDelay: 5
   readiness:
-    path: /soknadsfillager/internal/isReady
+    path: /internal/isReady
+    port: 8080
     initialDelay: 5
   prometheus:
     enable: true
-    path: /soknadsfillager/internal/prometheus
+    path: /internal/prometheus
   replicas:
     min: 2
     max: 4
@@ -30,4 +32,5 @@ spec:
   vault:
     enable: true
   ingress:
-    -"https://soknadsfillager.nais.preprod.local"
+    - https://soknadsfillager.nais.preprod.local
+    - https://app-q0.adeo.no/soknadsfillager
