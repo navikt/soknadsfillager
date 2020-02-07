@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class LagreFiler(
-        private val lagreFilerService: LagreFilerService) {
-    private val logger = LoggerFactory.getLogger(javaClass)
+class LagreFiler(private val lagreFilerService: LagreFilerService) {
+	private val logger = LoggerFactory.getLogger(javaClass)
 
-    @PostMapping("/filer")
-    fun lagreFiler(@RequestBody LagreFiler: List<FilElementDto>) {
+	@PostMapping("/filer")
+	fun lagreFiler(@RequestBody filer: List<FilElementDto>) {
+		logger.info("mottatt filer '${filer.map { it.uuid }}'")
 
-        logger.info("mottatt filer '${LagreFiler
-                .map { it.uuid }}'")
-        lagreFilerService.lagreFiler(LagreFiler)
-    }
+		lagreFilerService.lagreFiler(filer)
+	}
 }

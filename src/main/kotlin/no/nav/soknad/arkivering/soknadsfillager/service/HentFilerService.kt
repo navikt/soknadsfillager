@@ -7,30 +7,23 @@ import org.springframework.stereotype.Service
 
 @Service
 class HentFilerService(private val filRepository: FilRepository) {
-    private val logger = LoggerFactory.getLogger(javaClass)
+	private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun hentFiler(filListe: List<String>) = filListe.map { e -> hentFil(e) }
+	fun hentFiler(filListe: List<String>) = filListe.map { hentFil(it) }
 
-    private fun hentFil(uuid: String): FilElementDto {
-        try {
-            val filDbData = filRepository.findById(uuid)
-            return if (!filDbData.isPresent) {
-                this.logger.info(" Fil med $uuid finnes ikke i basen")
-                FilElementDto(uuid, null)
-            } else {
-                FilElementDto(uuid, filDbData.get().data)
-            }
+	private fun hentFil(uuid: String): FilElementDto {
+		try {
+			val filDbData = filRepository.findById(uuid)
+			return if (!filDbData.isPresent) {
+				this.logger.info("Fil med id='$uuid' finnes ikke i basen")
+				FilElementDto(uuid, null)
+			} else {
+				FilElementDto(uuid, filDbData.get().data)
+			}
 
-        } catch (e: Exception) {
-            logger.error("Feil ved henting av $uuid", e)
-            throw e
-        }
-    }
-
-
+		} catch (e: Exception) {
+			logger.error("Feil ved henting av $uuid", e)
+			throw e
+		}
+	}
 }
-
-
-
-
-

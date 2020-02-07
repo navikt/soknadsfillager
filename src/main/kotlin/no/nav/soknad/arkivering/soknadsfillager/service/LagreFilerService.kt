@@ -8,18 +8,17 @@ import org.springframework.stereotype.Service
 
 @Service
 class LagreFilerService(private val filRepository: FilRepository) {
-    private val logger = LoggerFactory.getLogger(javaClass)
+	private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun lagreFiler(filListe: List<FilElementDto>) = filListe
-            .forEach { e -> this.lagreFil(e) }
+	fun lagreFiler(filListe: List<FilElementDto>) = filListe.forEach { this.lagreFil(it) }
 
-    private fun lagreFil(filElementDto: FilElementDto) {
+	private fun lagreFil(filElementDto: FilElementDto) {
 
-        if (filElementDto.fil == null) {
-            logger.warn("Finnes ingen fil å lagre med Uuid ${filElementDto.uuid}")
-            return
-        } else {
-            filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil))
-        }
-    }
+		if (filElementDto.fil == null) {
+			logger.warn("Finnes ingen fil å lagre med Uuid ${filElementDto.uuid}")
+			return
+		} else {
+			filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil))
+		}
+	}
 }

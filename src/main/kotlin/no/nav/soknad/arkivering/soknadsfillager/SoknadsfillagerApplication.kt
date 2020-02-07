@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class SoknadsfillagerApplication
 
 fun main(args: Array<String>) {
-    runApplication<SoknadsfillagerApplication>(*args)
+	runApplication<SoknadsfillagerApplication>(*args)
 }

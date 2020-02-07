@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class SlettFiler(private val slettFilerService: SlettFilerService) {
-    private val logger = LoggerFactory.getLogger(javaClass)
+	private val logger = LoggerFactory.getLogger(javaClass)
 
-    @DeleteMapping("/filer")
-    fun slettFiler(@RequestBody slettFiler: List<String>) {
-        logger.info("Forsøker å slette '$slettFiler'")
+	@DeleteMapping("/filer")
+	fun slettFiler(@RequestBody filer: List<String>) {
+		logger.info("Forsøker å slette '$filer'")
 
-        slettFilerService.slettFiler(slettFiler)
-    }
-
+		slettFilerService.slettFiler(filer)
+	}
 }
