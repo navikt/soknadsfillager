@@ -1,7 +1,7 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: soknadsmottaker
+  name: soknadsfillager
   namespace: default
   labels:
     team: team-soknad
@@ -28,8 +28,8 @@ spec:
       cpu: 200m
       memory: 256Mi
   ingress:
-    - "https://tjenester-default.nav.no/soknadsmottaker"
-    - "https://soknadsmottaker-default.nais.oera-q.local/"
+    - "https://tjenester-default.nav.no/soknadsfillager"
+    - "https://soknadsfillager-default.nais.oera-q.local/"
   vault:
     enabled: true
     paths:
