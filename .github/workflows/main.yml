@@ -55,7 +55,7 @@ jobs:
           path: .docker_tag
 
   deploy-preprod-default:
-    name: Deploy to preprod
+    name: Deploy to preprod default
     needs: bygg-app
     if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/q0-pipeline' && github.ref != 'refs/heads/q1-pipeline'
     runs-on: ubuntu-latest
