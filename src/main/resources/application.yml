@@ -3,14 +3,35 @@ server:
 
 management:
   endpoint:
-    health.show-details: always
+    health:
+      show-details: always
   endpoints.web:
-    exposure.include: info, health, metrics, prometheus
+    exposure:
+      include: info, health, metrics, prometheus
     base-path: "/internal"
     path-mapping:
       info: "/isAlive"
-  metrics.export.prometheus.enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 spring:
-  data:
-    mongodb:
-      uri: mongodb://mock-mongodb/joarkmock
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 5
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+
+
+---
+spring:
+  profiles: docker
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/postgres
