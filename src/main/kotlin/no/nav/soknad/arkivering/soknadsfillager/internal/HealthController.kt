@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(value = ["/internal"])
-class HealthController() {
-
+class HealthController {
 
 	@GetMapping(value = ["/isAlive"])
-	fun isAlive(): String ="OK"
+	fun isAlive(): String = "OK"
 
 	@GetMapping(value = ["/ping"])
 	fun ping(): String = "pong"
@@ -18,4 +17,3 @@ class HealthController() {
 	@GetMapping(value = ["/isReady"])
 	fun isReady(): String = "Holla, si Ready"
 }
-

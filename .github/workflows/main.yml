@@ -66,10 +66,10 @@ jobs:
           name: docker_tag
       - name: Unpack
         run: |
-         cp docker_tag/.docker_tag .
-         TAG=`cat .docker_tag`
-         echo $TAG
-         echo ::set-env name=TAG::`cat .docker_tag`
+          cp docker_tag/.docker_tag .
+          TAG=`cat .docker_tag`
+          echo $TAG
+          echo ::set-env name=TAG::`cat .docker_tag`
       - name: Checkout code
         uses: actions/checkout@v1
       - name: Login to Github Package Registry
