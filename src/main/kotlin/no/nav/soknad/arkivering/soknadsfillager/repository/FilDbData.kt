@@ -1,10 +1,13 @@
 package no.nav.soknad.arkivering.soknadsfillager.repository
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
 
-@Document(collection = "filData")
-data class FilDbData(@Id val uuid: String, val data: ByteArray?) {
+@Entity
+@Table(name = "documents")
+data class FilDbData(@Id @Column(name = "id") val uuid: String, @Column(name = "data", columnDefinition = "bytea") val data: ByteArray?) {
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
 		if (javaClass != other?.javaClass) return false

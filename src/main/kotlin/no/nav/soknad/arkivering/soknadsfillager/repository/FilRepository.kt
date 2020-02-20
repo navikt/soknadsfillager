@@ -1,7 +1,7 @@
 package no.nav.soknad.arkivering.soknadsfillager.repository
 
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface FilRepository : MongoRepository<FilDbData, String>
+interface FilRepository : JpaRepository<FilDbData, String>

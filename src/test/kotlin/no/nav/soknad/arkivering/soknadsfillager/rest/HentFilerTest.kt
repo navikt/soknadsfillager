@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class HentFilerTest {
-	val listeAvFilerIBasen = opprettListeAv3FilDtoer()
+	private final val listeAvFilerIBasen = opprettListeAv3FilDtoer()
 	val listeAvUuiderIBasen = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(listeAvFilerIBasen)
 
 	@Autowired
