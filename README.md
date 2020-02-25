@@ -8,9 +8,8 @@ Benyttes av soknadarkiverer.
 ### For lokal utvikling
 * Bygg med `mvn clean install`
 * Avhengig av at databasen kjører lokalt eller i docker
- Docker:`$ docker run -e POSTGRES_PASSWORD=password --name local_postgres -p 5432:5432 postgres`
-Den vil da kjøre i bakgrunnen dersom man skriver
-`$ docker run -d <-e....>`
+ Docker:`$ docker run -e POSTGRES_PASSWORD=postgres --name local_postgres -p 5432:5432 postgres`
+Legg til `-d` for å kjøre i bakgrunnen.
 
 ### For å kjøre lokalt i docker
 `$ docker run --name soknadsfillager 9042:9042`
@@ -23,7 +22,7 @@ For å rydde bort alle docker images som kjører lokalt:
 
 ### Henvendelser
 Spørsmål knyttet til koden eller prosjektet kan rettes mot:
-* [mail@Team Søknad](team-soknad@nav.no)
+* [team-soknad@nav.no](mailto:team-soknad@nav.no)
 
 ### For NAV-ansatte
 Interne henvendelser kan sendes via Slack i kanalen #teamsoknad
