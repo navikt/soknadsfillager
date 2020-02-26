@@ -65,7 +65,7 @@ jobs:
 
   deploy-q0:
     name: Deploy to Q0
-    needs: bygg-app
+    needs: bygg-app-preprod
     if: github.ref == 'refs/heads/q0-pipeline'
     runs-on: ubuntu-latest
     steps:
@@ -101,7 +101,7 @@ jobs:
 
   deploy-q1:
     name: Deploy to Q1
-    needs: bygg-app
+    needs: bygg-app-preprod
     if: github.ref == 'refs/heads/q1-pipeline'
     runs-on: ubuntu-latest
     steps:
