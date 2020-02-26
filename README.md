@@ -8,10 +8,10 @@ Benyttes av soknadarkiverer.
 
 #### Akseptanse
 ##### q0-pipeline
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q0-pipeline)
+![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Pipelines/badge.svg?branch=q0-pipeline)
 ![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Pipelines/badge.svg?branch=q0-pipeline&event=deployment)
 ##### q1-pipeline
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q1-pipeline)
+![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Pipelines/badge.svg?branch=q1-pipeline)
 ![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Pipelines/badge.svg?branch=q1-pipeline&event=deployment)
 
 
