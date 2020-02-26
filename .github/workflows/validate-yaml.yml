@@ -3,7 +3,7 @@ on:
   push:
     paths:
       - '*'
-      - '*/*'        
+      - '*/*'
 jobs:
   lint-alle-yaml-filer:
     runs-on: ubuntu-latest
@@ -11,3 +11,5 @@ jobs:
     - uses: actions/checkout@master
     - name: yaml-lint
       uses: ibiqlik/action-yamllint@master
+      with:
+        config_file: schemas/yamllint-comfig.yml
