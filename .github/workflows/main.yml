@@ -4,6 +4,11 @@ on:
     branches:
       - '*'
       - '*/*'
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
 jobs:
   bygg-app:
     name: Bygg app/image, push til github
