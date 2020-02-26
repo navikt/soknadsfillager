@@ -14,7 +14,7 @@ on:
       - '**.md'
 
 jobs:
-  bygg-app-og-docker-image:
+  bygg-app-preprod:
     name: Bygg app/image, push til github
     runs-on: ubuntu-latest
     steps:
