@@ -28,8 +28,7 @@ spec:
       cpu: 200m
       memory: 256Mi
   ingress:
-    - "https://tjenester-default.nav.no/soknadsfillager"
-    - "https://soknadsfillager-default.nais.oera-q.local/"
+    - "https://soknadsfillager.nais.preprod.local/"
   vault:
     enabled: true
     paths:
@@ -40,3 +39,5 @@ spec:
       value: https://appres-q0.nav.no
     - name: APP_VERSION
       value: {{ app_version }}
+    - name: SRVSOKNADSFILLAGER_USERNAME
+      value: srvsoknadsfillager
