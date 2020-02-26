@@ -29,8 +29,8 @@ jobs:
           echo ::set-env name=IMAGE_VERSION::$(echo ${GITHUB_WORKFLOW})-$(echo ${GITHUB_SHA})
       - name: Read/save .m2 cache
         uses: actions/cache@v1
-      with:
-        path: ~/.m2/repository
+        with:
+          path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
