@@ -1,11 +1,19 @@
 Soknadsfillager
 ================
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=master)
-Ventende pull requests: ![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?event=pull_request)
-q0-pipeline![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q0-pipeline)
-q1-pipeline ![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q1-pipeline)
 Applikasjonen tilbyr tjeneste for å lagre filer, hente filer og slette filer.
 Benyttes av soknadarkiverer.
+### Produksjon
+![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=master)
+![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Prod/badge.svg?branch=master&event=deployment)
+
+#### Akseptanse
+##### q0-pipeline
+![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q0-pipeline)
+![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Prod/badge.svg?branch=q0-pipeline&event=deployment)
+##### q1-pipeline
+![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q1-pipeline)
+![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Prod/badge.svg?branch=q1-pipeline&event=deployment)
+
 
 ## Komme i gang
 
