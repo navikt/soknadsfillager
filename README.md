@@ -1,6 +1,6 @@
 Soknadsfillager
 ================
-![](https://github.com/navikt/soknadsfillager/workflows/main/Build-Deploy/badge.svg?branch=naiserator)
+![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=naiserator)
 ![](https://github.com/navikt/soknadsfillager/workflows/.github/workflows/main.yml/badge.svg)
 
 
