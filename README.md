@@ -1,6 +1,6 @@
 Soknadsfillager
 ================
-![](https://github.com/navikt/soknadsfillager/workflows/main.yml/bygg-app/badge.svg?branch=naiserator)
+![](https://github.com/navikt/soknadsfillager/workflows/main/bygg-app/badge.svg?branch=naiserator)
 
 Applikasjonen tilbyr tjeneste for å lagre filer, hente filer og slette filer.
 Benyttes av soknadarkiverer.
