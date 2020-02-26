@@ -16,6 +16,7 @@ on:
 jobs:
   bygg-app-preprod:
     name: Bygg app/image, push til github
+    needs: YAML validering
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
