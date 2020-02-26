@@ -2,8 +2,8 @@ Soknadsfillager
 ================
 ![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=master)
 ![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?event=pull_request)  
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q0-pipeline)
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q1-pipeline)  
+q0-pipeline![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q0-pipeline)  
+q1-pipeline ![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=q1-pipeline)  
 Applikasjonen tilbyr tjeneste for å lagre filer, hente filer og slette filer.
 Benyttes av soknadarkiverer.
 
