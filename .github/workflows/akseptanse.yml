@@ -14,14 +14,6 @@ on:
       - '**.md'
 
 jobs:
-  lint-alle-yaml-filer:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: yaml-lint
-        uses: ibiqlik/action-yamllint@master
-        with:
-          config_file: schemas/yamllint-comfig.yml
   bygg-app-preprod:
     name: Bygg app/image, push til github
     runs-on: ubuntu-latest
