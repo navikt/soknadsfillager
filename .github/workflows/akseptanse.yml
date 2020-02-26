@@ -14,7 +14,7 @@ on:
       - '**.md'
 
 jobs:
-  name: Bygg app, immage og push til github
+  name: Bygg app, image og push til github
   runs-on: ubuntu-latest
   steps:
     - name: Checkout code
