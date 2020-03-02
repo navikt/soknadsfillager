@@ -41,3 +41,11 @@ spec:
       value: {{ app_version }}
     - name: SRVSOKNADSFILLAGER_USERNAME
       value: srvsoknadsfillager
+    - name: DATABASE_HOST
+      value: TBD
+    - name: DATABASE_PORT
+      value: "5432"
+    - name: DATABASE_NAME
+      value: soknadsfillager-db-dev
+    - name: VAULT_MOUNTPATH
+      value: postgresql/preprod-fss
