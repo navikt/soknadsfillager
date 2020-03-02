@@ -12,7 +12,7 @@ Benyttes av soknadarkiverer.
 ### For lokal utvikling
 * Bygg med `mvn clean install`
 * Avhengig av at databasen kjører lokalt eller i docker
- Docker:`$ docker run -e POSTGRES_PASSWORD=password --name local_postgres -p 5432:5432 postgres`
+ Docker:`$ docker run -e POSTGRES_PASSWORD=postgres --name local_postgres -p 5432:5432 postgres`
 Den vil da kjøre i bakgrunnen dersom man skriver
 `$ docker run -d <-e....>`
 
