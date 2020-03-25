@@ -12,7 +12,7 @@ on:
       - '**.md'
       - '.github/workflows/akseptanse.yml'
 jobs:
-  bygg-app:
+  bygg-app-prod:
     name: Bygg app/image, push til github
     runs-on: ubuntu-latest
     steps:
@@ -61,45 +61,9 @@ jobs:
           name: docker_tag
           path: .docker_tag
 
-  deploy-preprod-default:
-    name: Deploy to preprod default
-    needs: bygg-app
-    if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/q0-pipeline' && github.ref != 'refs/heads/q1-pipeline'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download tag file
-        uses: actions/download-artifact@v1
-        with:
-          name: docker_tag
-      - name: Unpack
-        run: |
-          cp docker_tag/.docker_tag .
-          TAG=`cat .docker_tag`
-          echo $TAG
-          echo ::set-env name=TAG::`cat .docker_tag`
-      - name: Checkout code
-        uses: actions/checkout@v1
-      - name: Login to Github Package Registry
-        env:
-          DOCKER_USERNAME: x-access-token
-          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin docker.pkg.github.com
-      - name: Deploy
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          PRINT_PAYLOAD: true
-          CLUSTER: dev-fss
-          RESOURCE: .nais/nais-preprod.yml
-          VAR: app_version=${{env.TAG}}
-          DRY_RUN: true
-          IMAGE: docker.pkg.github.com/${{ github.repository }}/soknadsfillager:${{env.TAG}}
-
-
   deploy-prod:
     name: Deploy to prod
-    needs: bygg-app
+    needs: bygg-app-prod
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
