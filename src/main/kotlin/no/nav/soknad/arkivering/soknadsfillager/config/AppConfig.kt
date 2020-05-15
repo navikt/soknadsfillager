@@ -20,6 +20,7 @@ private val defaultProperties = ConfigurationMap(
 		"DATABASE_PORT" to "",
 		"DATABASE_NAME" to "soknadsfillager-db-dev",
 		"DATABASE_USERNAME" to "postgres",
+		"FILE_USER" to "arkiverer",
 		"DATABASE_PASSWORD" to "postgres",
 		"DATABASE_ADMIN_USERNAME" to "postgres",
 		"DATABASE_ADMIN_PASSWORD" to "postgres",
@@ -47,6 +48,7 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 		val version: String = "APP_VERSION".configProperty(),
 		val username: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
 		val password: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "APPLICATION_PASSWORD".configProperty()),
+		val fileUser: String = readFileAsText("/var/run/secrets/nais.io/kv/fileUser", "FILE_USER".configProperty()),
 		val restPassword: String = readFileAsText("/var/run/secrets/nais.io/kv/restPassword", "REST_PASSWORD".configProperty()),
 		val url: String = readFileAsText("/var/run/secrets/nais.io/kv/henvendelseUrl", "HENVENDELSE_URL".configProperty()),
 		val hentFraHenvendelse: Boolean = readFileAsText("/var/run/secrets/nais.io/kv/hentFraHenvendelse", "HENT_FRA_HENVENDELSE".configProperty()).toBoolean()
