@@ -7,7 +7,7 @@ metadata:
     team: team-soknad
 spec:
   image: {{image}}
-  port: 8090
+  port: 9042
   liveliness:
     path: /internal/isAlive
     initialDelay: 20
@@ -27,9 +27,9 @@ spec:
     requests:
       cpu: 200m
       memory: 256Mi
-  ingress:
-    - "https://soknadsfillager-q1.adeo.no/soknadsfillager"
-    - "https://soknadsfillager-q1.nais.preprod.local/"
+  ingresses:
+    - "https://soknadsfillager-q1.nais.preprod.local"
+    - "https://soknadsfillager-q1.dev-fss.nais.io"
   vault:
     enabled: true
     paths:
@@ -40,4 +40,12 @@ spec:
       value: https://appres-q1.nav.no
     - name: APP_VERSION
       value: {{ app_version }}
+    - name: DATABASE_HOST
+      value: b27dbvl008.preprod.local
+    - name: DATABASE_PORT
+      value: "5432"
+    - name: DATABASE_NAME
+      value: soknadsfillager-db-q1
+    - name: VAULT_MOUNTPATH
+      value: postgresql/preprod-fss/
 

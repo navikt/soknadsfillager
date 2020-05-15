@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class HentFilerTest {
+
 	private final val listeAvFilerIBasen = opprettListeAv3FilDtoer()
 	val listeAvUuiderIBasen = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(listeAvFilerIBasen)
 
@@ -58,4 +59,32 @@ class HentFilerTest {
 		assertTrue(hentedeFilerResultat.find { it.uuid == uuid1SomIkkeErBlandtDokumentene }?.fil == null)
 		assertTrue(hentedeFilerResultat.find { it.uuid == listeAvUuiderIBasen[0] }?.fil != null)
 	}
+
+	@Test
+	fun hentEnListeAvFilerFlereGangerTest() {
+
+		hentFiler()
+		System.out.println("Ferdig1")
+
+		Thread.sleep(6100)
+
+		hentFiler()
+		System.out.println("Ferdig2")
+
+		Thread.sleep(6100)
+		hentFiler()
+		System.out.println("Ferdig3")
+
+		System.out.println("FerdigFerdig")
+
+	}
+
+	private fun hentFiler() {
+		val hentedeFilerResultat = hentFiler.hentFiler(listeAvUuiderIBasen)
+
+		assertEquals(listeAvUuiderIBasen, hentedeFilerResultat.map { it.uuid })
+		assertEquals(listeAvFilerIBasen.map { it.fil?.size }, hentedeFilerResultat.map { it.fil?.size })
+
+	}
+
 }

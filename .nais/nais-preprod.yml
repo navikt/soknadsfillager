@@ -7,7 +7,7 @@ metadata:
     team: team-soknad
 spec:
   image: {{image}}
-  port: 8090
+  port: 9042
   liveliness:
     path: /internal/isAlive
     initialDelay: 20
@@ -27,12 +27,16 @@ spec:
     requests:
       cpu: 200m
       memory: 256Mi
-  ingress:
-    - "https://tjenester-default.nav.no/soknadsfillager"
-    - "https://soknadsfillager-default.nais.oera-q.local/"
+  ingresses:
+    - "https://soknadsfillager.nais.preprod.local"
+    - "https://soknadsfillager.dev-fss.nais.io"
   vault:
     enabled: true
     paths:
+      - kvPath: /serviceuser/data/dev/srvsoknadsfillager
+        mountPath: /var/run/secrets/nais.io/serviceuser
+      - kvPath: /kv/preprod/fss/soknadsfillager/default
+        mountPath: /var/run/secrets/nais.io/kv
       - kvPath: /apikey/appdynamics/dev
         mountPath: /var/run/secrets/nais.io/appdynamics
   env:
@@ -40,3 +44,11 @@ spec:
       value: https://appres-q0.nav.no
     - name: APP_VERSION
       value: {{ app_version }}
+    - name: DATABASE_HOST
+      value: b27dbvl008.preprod.local
+    - name: DATABASE_PORT
+      value: "5432"
+    - name: DATABASE_NAME
+      value: soknadsfillager-db-dev
+    - name: VAULT_DB_PATH
+      value: postgresql/preprod-fss/
