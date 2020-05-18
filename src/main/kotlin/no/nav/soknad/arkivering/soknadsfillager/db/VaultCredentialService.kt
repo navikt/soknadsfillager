@@ -33,7 +33,7 @@ class VaultCredentialService() {
 
 	fun getNewCredentials(mountPath: String, databaseName: String, role: Role): VaultCredentials {
 		val path = "$mountPath/creds/$databaseName-$role"
-		log.debug("Getting database credentials for path '$path'")
+		log.info("Getting database credentials for path '$path'")
 		try {
 			val response = Vault.client.logical().read(path)
 			val username = checkNotNull(response.data["username"]) { "Username is not set in response from Vault" }
