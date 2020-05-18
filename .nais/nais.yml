@@ -11,11 +11,11 @@ spec:
   liveliness:
     path: /internal/isAlive
     port: 8080
-    initialDelay: 5
+    initialDelay: 20
   readiness:
     path: /internal/isReady
     port: 8080
-    initialDelay: 5
+    initialDelay: 20
   prometheus:
     enable: true
     path: /internal/prometheus
@@ -35,6 +35,10 @@ spec:
   vault:
     enabled: true
     paths:
+      - kvPath: /serviceuser/data/dev/srvsoknadsfillager
+        mountPath: /var/run/secrets/nais.io/serviceuser
+      - kvPath: /kv/prod/fss/soknadsfillager/default
+        mountPath: /var/run/secrets/nais.io/kv
       - kvPath: /apikey/appdynamics/dev
         mountPath: /var/run/secrets/nais.io/appdynamics
   env:
@@ -43,7 +47,7 @@ spec:
     - name: APP_VERSION
       value: {{ app_version }}
     - name: DATABASE_HOST
-      value: a01dbfl039.adeo.no
+      value: A01DBVL014.adeo.no
     - name: DATABASE_PORT
       value: "5432"
     - name: DATABASE_NAME
