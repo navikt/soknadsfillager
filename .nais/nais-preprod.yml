@@ -51,4 +51,4 @@ spec:
     - name: DATABASE_NAME
       value: soknadsfillager-db-dev
     - name: VAULT_DB_PATH
-      value: postgresql/preprod-fss/
+      value: postgresql/preprod-fss

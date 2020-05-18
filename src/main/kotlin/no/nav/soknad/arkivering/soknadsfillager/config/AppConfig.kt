@@ -55,8 +55,6 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 	)
 
 	data class DBConfig(
-		val username: String? = readFileAsText("VAULT_DB_PATH".configProperty() + "/creds/User/username", "DATABASE_USERNAME".configProperty()),
-		val password: String? = readFileAsText("VAULT_DB_PATH".configProperty() + "/creds/User/password", "DATABASE_PASSWORD".configProperty()),
 		val databaseName: String = "DATABASE_NAME".configProperty(),
 		val mountPathVault: String = "VAULT_DB_PATH".configProperty(),
 		val url: String =  "DATABASE_JDBC_URL".configProperty().ifBlank { null } ?: String.format(
