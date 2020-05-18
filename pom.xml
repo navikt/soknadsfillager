@@ -17,6 +17,7 @@
 
 	<properties>
 		<mockito-kotlin.version>2.2.0</mockito-kotlin.version>
+		<flyway.version>6.3.3</flyway.version>
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 		<konfig.version>1.6.10.0</konfig.version>
 
@@ -74,7 +75,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<version>5.2.4</version>
+			<version>${flyway.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.opentable.components</groupId>
