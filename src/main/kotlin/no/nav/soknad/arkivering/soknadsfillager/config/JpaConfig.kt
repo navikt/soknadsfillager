@@ -1,7 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.config
 
 import com.zaxxer.hikari.HikariDataSource
-import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import no.nav.soknad.arkivering.soknadsfillager.db.Database
 import no.nav.soknad.arkivering.soknadsfillager.db.EmbeddedDatabase
 import no.nav.soknad.arkivering.soknadsfillager.db.RenewVaultService
@@ -16,7 +15,6 @@ import java.sql.Connection
 class JpaConfig(private val appConfig: AppConfiguration) {
 
 	val vaultCredentialService = VaultCredentialService()
-	val applicationState = ApplicationState()
 
 	@Bean
 	open fun getDataSource(): HikariDataSource {
@@ -26,8 +24,8 @@ class JpaConfig(private val appConfig: AppConfiguration) {
 			true -> return HikariDataSource(EmbeddedDatabase().createEmbeddedSql())
 			false -> {
 				val database = Database(dbConfig, VaultCredentialService())
-				applicationState.ready = true
-				RenewVaultService(vaultCredentialService, applicationState).startRenewTasks()
+				appConfig.applicationState.ready = true
+				RenewVaultService(vaultCredentialService, appConfig.applicationState).startRenewTasks()
 				return database.dataSource
 			}
 		}

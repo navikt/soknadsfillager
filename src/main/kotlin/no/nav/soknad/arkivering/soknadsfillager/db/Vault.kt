@@ -31,9 +31,9 @@ object Vault {
 			delay(suggestedRefreshIntervalInMillis(lookupSelf.ttl * 1000))
 			while (applicationState.ready) {
 				try {
-					log.debug("Refreshing Vault token (old TTL: ${client.auth().lookupSelf().ttl} seconds)")
+					log.info("Refreshing Vault token (old TTL: ${client.auth().lookupSelf().ttl} seconds)")
 					val response = client.auth().renewSelf()
-					log.debug("Successfully refreshed Vault token (new TTL: ${client.auth().lookupSelf().ttl} seconds)")
+					log.info("Successfully refreshed Vault token (new TTL: ${client.auth().lookupSelf().ttl} seconds)")
 					delay(suggestedRefreshIntervalInMillis(response.authLeaseDuration * 1000))
 				} catch (e: VaultException) {
 					log.error("Could not refresh the Vault token", e)
