@@ -15,7 +15,7 @@ private val defaultProperties = ConfigurationMap(
 		"HENVENDELSE_URL" to "http://localhost:8081",
 		"APPLICATION_PROFILE" to "",
 		"REST_HENVENDELSE" to "filklient",
-		"REST_PASSWORD" to "password",
+		"SHARED_PASSWORD" to "password",
 		"DATABASE_HOST" to "",
 		"DATABASE_PORT" to "",
 		"DATABASE_NAME" to "soknadsfillager-db-dev",
@@ -49,7 +49,7 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 		val username: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
 		val password: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "APPLICATION_PASSWORD".configProperty()),
 		val fileUser: String = readFileAsText("/var/run/secrets/nais.io/kv/fileUser", "FILE_USER".configProperty()),
-		val restPassword: String = readFileAsText("/var/run/secrets/nais.io/kv/restPassword", "REST_PASSWORD".configProperty()),
+		val sharedPassword: String = readFileAsText("/var/run/secrets/nais.io/kv/sharedPassword", "SHARED_PASSWORD".configProperty()),
 		val url: String = readFileAsText("/var/run/secrets/nais.io/kv/henvendelseUrl", "HENVENDELSE_URL".configProperty()),
 		val hentFraHenvendelse: Boolean = readFileAsText("/var/run/secrets/nais.io/kv/hentFraHenvendelse", "HENT_FRA_HENVENDELSE".configProperty()).toBoolean()
 	)

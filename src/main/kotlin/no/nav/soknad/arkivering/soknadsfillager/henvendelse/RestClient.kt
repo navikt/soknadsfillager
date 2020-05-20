@@ -42,7 +42,7 @@ class RestClient(private val appConfig: AppConfiguration): HenvendelseInterface 
 	}
 
 	override fun fetchFile(uuid: String): ByteArray? {
-		return webClient.get().uri("/$uuid")
+		return webClient.get().uri("/hent/$uuid")
 			.retrieve()
 			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) { response ->
 				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid")
@@ -67,7 +67,7 @@ class RestClient(private val appConfig: AppConfiguration): HenvendelseInterface 
 		return WebClient.builder()
 			.baseUrl(config.url)
 			.clientConnector(ReactorClientHttpConnector(HttpClient.from(tcpClient)))
-			.defaultHeaders({ createHeaders(config.username, config.restPassword) })
+			.defaultHeaders({ createHeaders(config.username, config.sharedPassword) })
 			.build()
 	}
 

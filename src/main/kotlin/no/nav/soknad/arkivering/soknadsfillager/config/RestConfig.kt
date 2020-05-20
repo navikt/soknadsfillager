@@ -31,10 +31,10 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 	@Autowired
 	fun configureGlobal(auth: AuthenticationManagerBuilder) {
 		val user = config.restConfig.fileUser
-		val passord = config.restConfig.password
+		val sharedSecret = config.restConfig.sharedPassword
 		auth.inMemoryAuthentication()
 			.withUser(user)
-			.password("{noop}$passord")
+			.password("{noop}$sharedSecret")
 			.roles("ADMIN")
 	}
 }
