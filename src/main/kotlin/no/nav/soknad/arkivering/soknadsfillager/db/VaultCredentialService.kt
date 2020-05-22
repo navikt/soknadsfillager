@@ -38,7 +38,7 @@ class VaultCredentialService() {
 			val response = Vault.client.logical().read(path)
 			val username = checkNotNull(response.data["username"]) { "Username is not set in response from Vault" }
 			val password = checkNotNull(response.data["password"]) { "Password is not set in response from Vault" }
-			log.debug("Got new credentials (username=$username, leaseDuration=${response.leaseDuration})")
+			log.info("Got new credentials (username=$username, leaseDuration=${response.leaseDuration})")
 			leaseDuration = response.leaseDuration
 			return VaultCredentials(response.leaseId, username, password)
 		} catch (e: VaultException) {

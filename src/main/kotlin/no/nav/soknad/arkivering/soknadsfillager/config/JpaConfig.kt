@@ -8,30 +8,29 @@ import no.nav.soknad.arkivering.soknadsfillager.db.VaultCredentialService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-import java.sql.Connection
-
-
 @Configuration
 class JpaConfig(private val appConfig: AppConfiguration) {
 
-	val vaultCredentialService = VaultCredentialService()
+
+	companion object {
+		val vaultCredentialService = VaultCredentialService()
+	}
 
 	@Bean
-	open fun getDataSource(): HikariDataSource {
-		val dbConfig = appConfig.dbConfig
+	fun getDataSource(): HikariDataSource {
+		return initDatasource()
+	}
 
-		when(dbConfig.embedded) {
+	private fun initDatasource(): HikariDataSource {
+		when(appConfig.dbConfig.embedded) {
 			true -> return HikariDataSource(EmbeddedDatabase().createEmbeddedSql())
-			false -> {
-				val database = Database(dbConfig, VaultCredentialService())
+			else -> {
+				val database = Database(appConfig.dbConfig, VaultCredentialService())
 				appConfig.applicationState.ready = true
 				RenewVaultService(vaultCredentialService, appConfig.applicationState).startRenewTasks()
 				return database.dataSource
 			}
 		}
-
-		throw RuntimeException("Database not initialized")
-
 	}
 
 }
