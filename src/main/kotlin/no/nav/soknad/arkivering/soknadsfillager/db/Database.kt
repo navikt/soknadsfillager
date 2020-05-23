@@ -8,12 +8,6 @@ import java.sql.ResultSet
 import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
 
-enum class Role {
-	ADMIN, USER, READONLY;
-
-	override fun toString() = name.toLowerCase()
-}
-
 class Database(private val env: AppConfiguration.DBConfig, private val vaultCredentialService: VaultCredentialService) : DatabaseInterface {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -74,7 +68,3 @@ fun <T> ResultSet.toList(mapper: ResultSet.() -> T) = mutableListOf<T>().apply {
 	}
 }
 
-interface DatabaseInterface {
-	val connection: Connection
-	val dataSource: HikariDataSource
-}

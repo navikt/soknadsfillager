@@ -7,7 +7,7 @@ management:
       show-details: always
   endpoints.web:
     exposure:
-      include: info, health, metrics
+      include: info, health, metrics, refresh
     base-path: "/internal"
     path-mapping:
       info: "/isAlive"
