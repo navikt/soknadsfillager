@@ -3,11 +3,11 @@ package no.nav.soknad.arkivering.soknadsfillager.db
 import kotlinx.coroutines.delay
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
-import org.springframework.cloud.context.scope.refresh.RefreshScope
+//import org.springframework.cloud.context.scope.refresh.RefreshScope
 
 class EmbeddedCredentialService {
 	private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.EmbeddedCredentialService")
-	private val refreshScope: RefreshScope = RefreshScope()
+//	private val refreshScope: RefreshScope = RefreshScope()
 	private val MIN_REFRESH_MARGIN = 300L // seconds
 
 	var leaseDuration: Long = 0
@@ -30,7 +30,7 @@ class EmbeddedCredentialService {
 				}
 			}
 			delay(MIN_REFRESH_MARGIN * 1000)
-			refreshScope.refresh("no.nav.soknad.arkivering.soknadsfillager.config.getDataSource")
+//			refreshScope.refresh("no.nav.soknad.arkivering.soknadsfillager.config.getDataSource")
 		}
 	}
 
