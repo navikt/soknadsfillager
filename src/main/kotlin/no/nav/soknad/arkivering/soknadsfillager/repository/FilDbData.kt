@@ -22,7 +22,6 @@ data class FilDbData(@Id @Column(name = "id") val uuid: String, @Column(name = "
 
 	override fun hashCode(): Int {
 		var result = uuid.hashCode()
-		result = 31 * result + (document?.contentHashCode() ?: 0)
 		return result
 	}
 }
