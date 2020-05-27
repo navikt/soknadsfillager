@@ -9,9 +9,9 @@ internal fun opprettEnUUid(): String = UUID.randomUUID().toString()
 
 internal fun opprettEnEnkelPdf() = getBytesFromFile("/pdf/test.pdf")
 
-internal fun opprettEnFil(): FilElementDto = FilElementDto(opprettEnUUid(), opprettEnEnkelPdf())
+internal fun opprettEnFil(): FilElementDto = FilElementDto(opprettEnUUid(), opprettEnEnkelPdf(), null)
 
-internal fun opprettListeMedEnFil(uuid: String, fil: ByteArray?): List<FilElementDto> = listOf(FilElementDto(uuid, fil))
+internal fun opprettListeMedEnFil(uuid: String, fil: ByteArray?): List<FilElementDto> = listOf(FilElementDto(uuid, fil, null))
 
 internal fun opprettListeAv3FilDtoer(): List<FilElementDto> = listOf(opprettEnFil(), opprettEnFil(), opprettEnFil())
 

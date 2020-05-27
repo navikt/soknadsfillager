@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.service
 
+import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -24,7 +25,11 @@ class SlettFilerService(private val filRepository: FilRepository) {
 	private fun loggAtFilenMangler(uuid: String) = logger.error("$uuid er ikke i basen")
 
 	private fun slettFil(uuid: String) {
-		filRepository.deleteById(uuid)
+		val fil = filRepository.findById(uuid)
+
+		val oppdatertFil = FilDbData(uuid, null, fil.get().created)
+
+		filRepository.saveAndFlush(oppdatertFil)
 		logger.info("Fil med $uuid er slettet fra basen")
 	}
 }

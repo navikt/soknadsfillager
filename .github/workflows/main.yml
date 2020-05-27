@@ -10,7 +10,8 @@ on:
       - 'master'
     paths-ignore:
       - '**.md'
-      - '.github/workflows/akseptanse.yml'
+      - '.github/workflows/main.yml'
+      - '.github/workflows/preprod-pipeline.yml'
 jobs:
   bygg-app-prod:
     name: Bygg app/image, push til github

@@ -4,6 +4,7 @@ import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,6 +23,9 @@ class SlettFilerTest {
 	@Autowired
 	private lateinit var lagreFiler: LagreFiler
 
+	@Autowired
+	private lateinit var hentFiler: HentFiler
+
 	@BeforeEach
 
 	@AfterEach
@@ -39,7 +43,11 @@ class SlettFilerTest {
 
 		slettFiler.slettFiler(listeAvUuiderSomSkalSlettes)
 
-		assertEquals(0, filRepository.count())
+		assertEquals(3, filRepository.count())
+
+		val filer = hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
+		val empty = filer.stream().filter({it.fil != null}).toArray()
+		assert(empty.isEmpty())
 	}
 
 	@Test
@@ -51,7 +59,11 @@ class SlettFilerTest {
 
 		slettFiler.slettFiler(slettelisteMedEkstraUuid)
 
-		assertEquals(0, filRepository.count())
+		assertEquals(3, filRepository.count())
+
+		val filer = hentFiler.hentFiler(slettelisteMedEkstraUuid)
+		val empty = filer.stream().filter({it.fil != null}).toArray()
+		assert(empty.isEmpty())
 	}
 
 
@@ -61,9 +73,14 @@ class SlettFilerTest {
 		val listeMedFilerSomErLagret = lagreEnListeAvDokumenter() // A, B, C
 		val sletteListe = listeMedFilerSomErLagret.plus(listeMedFilerSomErLagret.first()) // A, B, C, A
 
+		// Databasen vil bare inneholde 3 elementer da element 0 og 3 i sletteListe har samme uuid.
 		slettFiler.slettFiler(sletteListe.map { it.uuid })
 
-		assertEquals(0, filRepository.count().toInt())
+		assertEquals(3, filRepository.count().toInt())
+
+		val filer = hentFiler.hentFiler(sletteListe.map { it.uuid })
+		val empty = filer.stream().filter({it.fil != null}).toArray()
+		assert(empty.isEmpty())
 	}
 
 	private fun lagreEnListeAvDokumenter() = opprettListeAv3FilDtoer().also { lagreFiler(it) }

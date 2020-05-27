@@ -17,37 +17,82 @@
 
 	<properties>
 		<mockito-kotlin.version>2.2.0</mockito-kotlin.version>
+		<flyway.version>6.3.3</flyway.version>
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+		<konfig.version>1.6.10.0</konfig.version>
 
 		<kotlin.version>1.3.72</kotlin.version>
 		<java.version>11</java.version>
-		<main.class>no.nav.soknad.arkivering.soknadsfillager.SoknadsfillagerApplicationKt</main.class>
+		<vaultJavaDriveVersion>3.1.0</vaultJavaDriveVersion>
+		<coroutinesVersion>1.3.3</coroutinesVersion>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-kotlin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectreactor</groupId>
+			<artifactId>reactor-spring</artifactId>
+			<version>1.0.1.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>${flyway.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.opentable.components</groupId>
+			<artifactId>otj-pg-embedded</artifactId>
+			<version>0.13.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.natpryce</groupId>
+			<artifactId>konfig</artifactId>
+			<version>${konfig.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bettercloud</groupId>
+			<artifactId>vault-java-driver</artifactId>
+			<version>${vaultJavaDriveVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlinx</groupId>
+			<artifactId>kotlinx-coroutines-slf4j</artifactId>
+			<version>${coroutinesVersion}</version>
 		</dependency>
 
 		<dependency>
@@ -61,12 +106,8 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
+
 
 	<build>
 		<finalName>soknadsfillager</finalName>
