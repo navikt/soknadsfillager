@@ -30,7 +30,6 @@ class EmbeddedDatabase (private val env: AppConfiguration.DBConfig, private val 
 
 		runFlywayMigrations(hikariConfig)
 
-		//hikariConfig = createHikariConfig(Role.USER)
 		dataSource = HikariDataSource(hikariConfig.apply { validate() })
 
 		logger.info("Database init. Start RenewCredentialsTaskData")

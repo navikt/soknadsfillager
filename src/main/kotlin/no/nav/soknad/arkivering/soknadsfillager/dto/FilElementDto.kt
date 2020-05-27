@@ -10,9 +10,6 @@ data class FilElementDto(val uuid: String, val fil: ByteArray?, val opprettet: L
 		other as FilElementDto
 
 		if (uuid != other.uuid) return false
-		if (fil != null) {
-			if (!other.fil?.let { fil.contentEquals(it) }!!) return false
-		}
 
 		return true
 	}

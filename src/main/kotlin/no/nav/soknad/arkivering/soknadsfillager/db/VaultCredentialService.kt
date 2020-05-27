@@ -5,14 +5,11 @@ import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.delay
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
-//import org.springframework.cloud.context.scope.refresh.RefreshScope
-
-private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.db")
-//private val refreshScope: RefreshScope  = RefreshScope()
 
 class VaultCredentialService() {
 	var leaseDuration: Long = 0
 	var renewCredentialsTaskData: RenewCredentialsTaskData? = null
+	private val log = LoggerFactory.getLogger(javaClass)
 
 	suspend fun runRenewCredentialsTask(applicationState: ApplicationState) {
 		delay(leaseDuration)
@@ -30,7 +27,6 @@ class VaultCredentialService() {
 				}
 			}
 			delay(Vault.suggestedRefreshIntervalInMillis(leaseDuration * 1000))
-//			refreshScope.refresh("no.nav.soknad.arkivering.soknadsfillager.config.getDataSource")
 		}
 	}
 

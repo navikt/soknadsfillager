@@ -1,6 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.config
 
-
 import com.natpryce.konfig.*
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState

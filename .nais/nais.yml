@@ -10,11 +10,9 @@ spec:
   port: 9042
   liveliness:
     path: /internal/isAlive
-    port: 8080
     initialDelay: 20
   readiness:
     path: /internal/isReady
-    port: 8080
     initialDelay: 20
   prometheus:
     enable: true
@@ -52,5 +50,5 @@ spec:
       value: "5432"
     - name: DATABASE_NAME
       value: soknadsfillager-db
-    - name: VAULT_MOUNTPATH
+    - name: VAULT_DB_PATH
       value: postgresql/prod-fss/

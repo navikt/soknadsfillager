@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class HentFilerService(private val filRepository: FilRepository, private val henvendelse: HenvendelseInterface, private val appConfig: AppConfiguration) {
-	private val logger = LoggerFactory.getLogger(HentFilerService::class.java)
+	private val logger = LoggerFactory.getLogger(javaClass)
 	private val config = 	appConfig.restConfig
 
 	fun hentFiler(filListe: List<String>) = filListe.map { hentFil(it) }
@@ -25,7 +25,7 @@ class HentFilerService(private val filRepository: FilRepository, private val hen
 					FilElementDto(uuid, null, null)
 				}
 			} else {
-				FilElementDto(uuid, filDbData.get().data, filDbData.get().opprettet)
+				FilElementDto(uuid, filDbData.get().document, filDbData.get().created)
 			}
 
 		} catch (e: Exception) {

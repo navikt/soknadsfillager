@@ -18,9 +18,9 @@ import reactor.netty.http.client.HttpClient
 import reactor.netty.tcp.TcpClient
 
 @Service
-class RestClient(private val appConfig: AppConfiguration): HenvendelseInterface {
+class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInterface {
 
-	private val logger = LoggerFactory.getLogger(RestClient::class.java)
+	private val logger = LoggerFactory.getLogger(javaClass)
 	private val config = appConfig.restConfig
 	private val webClient = defaultWebClient()
 

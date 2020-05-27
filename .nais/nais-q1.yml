@@ -50,6 +50,6 @@ spec:
       value: "5432"
     - name: DATABASE_NAME
       value: soknadsfillager-db-q1
-    - name: VAULT_MOUNTPATH
-      value: postgresql/preprod-fss/
+    - name: VAULT_DB_PATH
+      value: postgresql/preprod-fss
 

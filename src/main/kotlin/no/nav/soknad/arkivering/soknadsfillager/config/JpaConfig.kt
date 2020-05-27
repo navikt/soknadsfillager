@@ -2,12 +2,10 @@ package no.nav.soknad.arkivering.soknadsfillager.config
 
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.soknad.arkivering.soknadsfillager.db.*
-//import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-//@RefreshScope
 class JpaConfig(private val appConfig: AppConfiguration) {
 
 
@@ -17,7 +15,6 @@ class JpaConfig(private val appConfig: AppConfiguration) {
 	}
 
 	@Bean
-	//@RefreshScope
 	fun getDataSource(): HikariDataSource {
 		return initDatasource()
 	}
