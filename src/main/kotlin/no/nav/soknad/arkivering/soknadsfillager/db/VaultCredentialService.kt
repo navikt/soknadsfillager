@@ -6,12 +6,13 @@ import kotlinx.coroutines.delay
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
 
-class VaultCredentialService() {
+class VaultCredentialService() : CredentialService {
+
 	var leaseDuration: Long = 0
-	var renewCredentialsTaskData: RenewCredentialsTaskData? = null
+	private var renewCredentialsTaskData: RenewCredentialsTaskData? = null
 	private val log = LoggerFactory.getLogger(javaClass)
 
-	suspend fun runRenewCredentialsTask(applicationState: ApplicationState) {
+	override suspend fun runRenewCredentialsTask(applicationState: ApplicationState) {
 		delay(leaseDuration)
 		while (applicationState.ready) {
 			renewCredentialsTaskData?.run {
@@ -30,7 +31,7 @@ class VaultCredentialService() {
 		}
 	}
 
-	fun getNewCredentials(mountPath: String, databaseName: String, role: Role): VaultCredentials {
+	override fun getNewCredentials(mountPath: String, databaseName: String, role: Role): Credentials {
 		val path = "$mountPath/creds/$databaseName-$role"
 		log.info("Getting database credentials for path '$path'")
 		try {
@@ -39,7 +40,7 @@ class VaultCredentialService() {
 			val password = checkNotNull(response.data["password"]) { "Password is not set in response from Vault" }
 			log.info("Got new credentials (username=$username, leaseDuration=${response.leaseDuration})")
 			leaseDuration = response.leaseDuration
-			return VaultCredentials(response.leaseId, username, password)
+			return Credentials(response.leaseId, username, password)
 		} catch (e: VaultException) {
 			when (e.httpStatusCode) {
 				403 -> log.error("Vault denied permission to fetch database credentials for path '$path'", e)
@@ -48,17 +49,13 @@ class VaultCredentialService() {
 			throw e
 		}
 	}
+
+	override fun renewCredentialsTaskData(): RenewCredentialsTaskData? {
+		return renewCredentialsTaskData
+	}
+
+	override fun setRenewCredentialsTaskData(dataSource: HikariDataSource, mountPath: String, databaseName: String, role: Role) {
+		renewCredentialsTaskData = RenewCredentialsTaskData(dataSource, mountPath, databaseName, role)
+	}
 }
 
-data class RenewCredentialsTaskData(
-	val dataSource: HikariDataSource,
-	val mountPath: String,
-	val databaseName: String,
-	val role: Role
-)
-
-data class VaultCredentials(
-	val leaseId: String,
-	val username: String,
-	val password: String
-)

@@ -3,6 +3,7 @@ package no.nav.soknad.arkivering.soknadsfillager.config
 import com.natpryce.konfig.*
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
+import no.nav.soknad.arkivering.soknadsfillager.db.*
 import org.springframework.context.annotation.Bean
 import java.io.File
 
@@ -12,12 +13,12 @@ private val defaultProperties = ConfigurationMap(
 		"APPLICATION_USERNAME" to "filehandler",
 		"APPLICATION_PASSWORD" to "",
 		"HENVENDELSE_URL" to "http://localhost:8081",
-		"APPLICATION_PROFILE" to "",
+		"APPLICATION_PROFILE" to "spring",
 		"REST_HENVENDELSE" to "filklient",
 		"SHARED_PASSWORD" to "password",
-		"DATABASE_HOST" to "",
-		"DATABASE_PORT" to "",
-		"DATABASE_NAME" to "soknadsfillager-db-dev",
+		"DATABASE_HOST" to "localhost",
+		"DATABASE_PORT" to "5432",
+		"DATABASE_NAME" to "soknadsfillager",
 		"DATABASE_USERNAME" to "postgres",
 		"FILE_USER" to "arkiverer",
 		"DATABASE_PASSWORD" to "postgres",
@@ -42,8 +43,9 @@ fun readFileAsText(fileName: String, default: String) = try { File(fileName).rea
 
 //@ConfigurationProperties
 data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbConfig: DBConfig = DBConfig()) {
+	val applicationState = ApplicationState()
+
 	data class RestConfig(
-		val profiles: String = "APPLICATION_PROFILE".configProperty(),
 		val version: String = "APP_VERSION".configProperty(),
 		val username: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
 		val password: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "APPLICATION_PASSWORD".configProperty()),
@@ -54,6 +56,7 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 	)
 
 	data class DBConfig(
+		val profiles: String = "APPLICATION_PROFILE".configProperty(),
 		val databaseName: String = "DATABASE_NAME".configProperty(),
 		val mountPathVault: String = "VAULT_DB_PATH".configProperty(),
 		val url: String =  "DATABASE_JDBC_URL".configProperty().ifBlank { null } ?: String.format(
@@ -62,10 +65,12 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 			requireNotNull("DATABASE_PORT".configProperty()) { "database port must be set if jdbc url is not provided" },
 			requireNotNull("DATABASE_NAME".configProperty()) { "database name must be set if jdbc url is not provided" }),
 		val driver: String = readFileAsText("/var/run/secrets/nais.io/kv/dbDriver", "DB_DRIVER".configProperty()),
-		val embedded: Boolean = "".equals("VAULT_DB_PATH".configProperty())
+		val embedded: Boolean = "spring".equals(profiles),
+		val useVault: Boolean = "nais".equals(profiles),
+		val credentialService: CredentialService = if (useVault) VaultCredentialService() else EmbeddedCredentialService(),
+		val renewService: RenewService = if (useVault) RenewVaultService(credentialService) else EmbeddedRenewService(credentialService)
 	)
 
-	val applicationState = ApplicationState()
 }
 
 @org.springframework.context.annotation.Configuration
