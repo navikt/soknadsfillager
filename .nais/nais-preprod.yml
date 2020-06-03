@@ -52,3 +52,6 @@ spec:
       value: soknadsfillager-db-dev
     - name: VAULT_DB_PATH
       value: postgresql/preprod-fss
+    - name: APPLICATION_PROFILE
+      value: nais
+

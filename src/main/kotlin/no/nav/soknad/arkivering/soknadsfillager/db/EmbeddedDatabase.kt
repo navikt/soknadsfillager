@@ -8,13 +8,12 @@ import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
 import java.sql.Connection
 
-class EmbeddedDatabase (private val env: AppConfiguration.DBConfig, private val vaultCredentialService: EmbeddedCredentialService): DatabaseInterface {
+class EmbeddedDatabase (private val env: AppConfiguration.DBConfig, private val credentialService: CredentialService): DatabaseInterface {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	companion object {
 		private lateinit var embeddedPostgres: EmbeddedPostgres
 		private lateinit var postgresConnection: Connection
-
 	}
 
 	override val dataSource: HikariDataSource
@@ -33,7 +32,7 @@ class EmbeddedDatabase (private val env: AppConfiguration.DBConfig, private val 
 		dataSource = HikariDataSource(hikariConfig.apply { validate() })
 
 		logger.info("Database init. Start RenewCredentialsTaskData")
-		vaultCredentialService.renewCredentialsTaskData = RenewCredentialsTaskData(
+		credentialService.setRenewCredentialsTaskData(
 			dataSource = dataSource,
 			mountPath = env.mountPathVault,
 			databaseName = env.databaseName,
@@ -54,7 +53,7 @@ class EmbeddedDatabase (private val env: AppConfiguration.DBConfig, private val 
 	}
 
 	private fun runFlywayMigrations(config: HikariConfig) = Flyway.configure().run {
-		val credentials = vaultCredentialService.getNewCredentials(
+		val credentials = credentialService.getNewCredentials(
 			mountPath = env.mountPathVault,
 			databaseName = env.databaseName,
 			role = Role.ADMIN

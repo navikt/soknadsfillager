@@ -5,15 +5,15 @@ import kotlinx.coroutines.launch
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
 
-class EmbeddedRenewService(private val vaultCredentialService: EmbeddedCredentialService, private val applicationState: ApplicationState) {
+class EmbeddedRenewService(private val credentialService: CredentialService): RenewService {
 	private val log = LoggerFactory.getLogger(javaClass)
 
-	fun startRenewTasks() {
+	override fun startRenewTasks(applicationState: ApplicationState) {
 		log.info("renewTokenTask $applicationState")
 
 		GlobalScope.launch {
 			try {
-				vaultCredentialService.runRenewCredentialsTask(applicationState)
+				credentialService.runRenewCredentialsTask(applicationState)
 			} catch (e: Exception) {
 				log.error("Noe gikk galt ved fornying av vault-credentials", e.message)
 			} finally {

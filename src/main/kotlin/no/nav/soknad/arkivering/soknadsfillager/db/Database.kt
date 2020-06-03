@@ -8,7 +8,7 @@ import java.sql.ResultSet
 import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
 
-class Database(private val env: AppConfiguration.DBConfig, private val vaultCredentialService: VaultCredentialService) : DatabaseInterface {
+class Database(private val env: AppConfiguration.DBConfig, private val vaultCredentialService: CredentialService) : DatabaseInterface {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	override val dataSource: HikariDataSource
@@ -41,7 +41,7 @@ class Database(private val env: AppConfiguration.DBConfig, private val vaultCred
 		})
 
 		logger.info("Database init. Start RenewCredentialsTaskData")
-		vaultCredentialService.renewCredentialsTaskData = RenewCredentialsTaskData(
+		vaultCredentialService.setRenewCredentialsTaskData(
 			dataSource = dataSource,
 			mountPath = env.mountPathVault,
 			databaseName = env.databaseName,
@@ -56,8 +56,12 @@ class Database(private val env: AppConfiguration.DBConfig, private val vaultCred
 			role = Role.ADMIN
 		)
 		dataSource(env.url, credentials.username, credentials.password)
-		initSql("SET ROLE \"${env.databaseName}-${Role.ADMIN}\"") // required for assigning proper owners for the tables
-		logger.info("Database , runFlywayMigrations: "+"SET ROLE \"${env.databaseName}-${Role.ADMIN}\"")
+		if (!"docker".equals(env.profiles, true)) {
+			initSql("SET ROLE \"${env.databaseName}-${Role.ADMIN}\"") // required for assigning proper owners for the tables
+			logger.info("Database , runFlywayMigrations: "+"SET ROLE \"${env.databaseName}-${Role.ADMIN}\"")
+		} else {
+			logger.info("Database , runFlywayMigrations without setting role")
+		}
 		load().migrate()
 	}
 }
