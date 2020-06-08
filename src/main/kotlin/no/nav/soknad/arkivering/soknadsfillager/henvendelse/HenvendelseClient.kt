@@ -67,7 +67,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInt
 		return WebClient.builder()
 			.baseUrl(config.url)
 			.clientConnector(ReactorClientHttpConnector(HttpClient.from(tcpClient)))
-			.defaultHeaders({ createHeaders(config.username, config.sharedPassword) })
+			.defaultHeaders({ createHeaders(config.username, config.password) })
 			.build()
 	}
 
