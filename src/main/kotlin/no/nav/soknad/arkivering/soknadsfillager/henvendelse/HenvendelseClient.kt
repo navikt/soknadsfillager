@@ -4,18 +4,19 @@ import io.netty.channel.ChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
-import org.apache.tomcat.util.codec.binary.Base64
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.stereotype.Service
+import org.springframework.util.Base64Utils
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import reactor.netty.Connection
 import reactor.netty.http.client.HttpClient
 import reactor.netty.tcp.TcpClient
+import kotlin.text.Charsets.UTF_8
 
 @Service
 class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInterface {
@@ -43,6 +44,10 @@ class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInt
 
 	override fun fetchFile(uuid: String): ByteArray? {
 		return webClient.get().uri("/hent/$uuid")
+			.header(HttpHeaders.AUTHORIZATION,"Basic " + Base64Utils
+				.encodeToString((config.username + ":" + config.password).toByteArray(UTF_8)))
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
 			.retrieve()
 			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) { response ->
 				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid")
@@ -64,20 +69,18 @@ class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInt
 					.addHandlerLast(WriteTimeoutHandler(2))
 			}
 
+		val headers = createHeaders(config.username, config.password)
 		return WebClient.builder()
 			.baseUrl(config.url)
 			.clientConnector(ReactorClientHttpConnector(HttpClient.from(tcpClient)))
-			.defaultHeaders({ createHeaders(config.username, config.password) })
+			.defaultHeaders({headers}) //{ createHeaders(config.username, config.password) }
 			.build()
 	}
 
 	private fun createHeaders(username: String, password: String): HttpHeaders {
 		return object : HttpHeaders() {
 			init {
-				val auth = "$username:$password"
-				val encodedAuth: ByteArray = Base64.encodeBase64(auth.toByteArray())
-				val authHeader = "Basic " + String(encodedAuth)
-				set("Authorization", authHeader)
+				setBasicAuth(username, password)
 				set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
 			}
