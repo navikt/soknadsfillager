@@ -10,14 +10,12 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.stereotype.Service
-import org.springframework.util.Base64Utils
 import org.springframework.web.reactive.function.client.*
 import reactor.core.publisher.Mono
 import reactor.netty.Connection
 import reactor.netty.http.client.HttpClient
 import reactor.netty.tcp.TcpClient
 import java.util.function.Consumer
-import kotlin.text.Charsets.UTF_8
 
 @Service
 class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInterface {
@@ -46,12 +44,6 @@ class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInt
 	override fun fetchFile(uuid: String): ByteArray? {
 		logger.info("Henter fil med $uuid fra henvendelse")
 		return webClient.get().uri("/hent/$uuid")
-/*
-			.header(HttpHeaders.AUTHORIZATION,"Basic " + Base64Utils
-				.encodeToString((config.username + ":" + config.password).toByteArray(UTF_8)))
-			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-			.header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-*/
 			.retrieve()
 			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) { response ->
 				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid. " )
@@ -75,7 +67,6 @@ class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInt
 					.addHandlerLast(WriteTimeoutHandler(2))
 			}
 
-		//val headers = createHeaders(config.username, config.password)
 		return WebClient.builder()
 			.baseUrl(config.url)
 			.clientConnector(ReactorClientHttpConnector(HttpClient.from(tcpClient)))
@@ -99,7 +90,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInt
 		return ExchangeFilterFunction { clientRequest: ClientRequest, next: ExchangeFunction ->
 			logger.info("Request: {} {}", clientRequest.method(), clientRequest.url())
 			clientRequest.headers()
-				.forEach { name: String?, values: List<String?> -> values.forEach(Consumer { value: String? -> logger.info("{}={}", name, value) }) }
+				.forEach { name: String?, values: List<String?> -> values.forEach(Consumer { value: String? -> logger.info("{}={}", name, if (name =="Authorization") "****" else value) }) }
 			next.exchange(clientRequest)
 		}
 	}
