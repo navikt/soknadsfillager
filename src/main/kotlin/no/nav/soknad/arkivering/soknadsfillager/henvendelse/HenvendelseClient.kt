@@ -4,6 +4,7 @@ import io.netty.channel.ChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
+import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -41,7 +42,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInt
 		return true
 	}
 
-	override fun fetchFile(uuid: String): ByteArray? {
+	override fun fetchFile(uuid: String): FilElementDto? {
 		logger.info("Henter fil med $uuid fra henvendelse")
 		return webClient.get().uri("/hent/$uuid")
 			.retrieve()
@@ -55,7 +56,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInt
 				logger.warn("Fikk 5xx feil ved forsøk på å hente uuid=$uuid")
 				Mono.error(RuntimeException("5xx"))
 			}
-			.bodyToMono(ByteArray::class.java)
+			.bodyToMono(FilElementDto::class.java)
 			.block()
 	}
 
