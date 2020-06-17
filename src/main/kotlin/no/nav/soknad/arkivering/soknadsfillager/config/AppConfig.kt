@@ -49,8 +49,8 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 		val version: String = "APP_VERSION".configProperty(),
 		val username: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
 		val password: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "APPLICATION_PASSWORD".configProperty()),
-		val fileUser: String = readFileAsText("/var/run/secrets/nais.io/kv/fileUser", "FILE_USER".configProperty()),
-		val sharedPassword: String = readFileAsText("/var/run/secrets/nais.io/kv/sharedPassword", "SHARED_PASSWORD".configProperty()),
+		val fileUser: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/username", "FILE_USER".configProperty()),
+		val sharedPassword: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/password", "SHARED_PASSWORD".configProperty()),
 		val url: String = readFileAsText("/var/run/secrets/nais.io/kv/henvendelseUrl", "HENVENDELSE_URL".configProperty()),
 		val hentFraHenvendelse: Boolean = readFileAsText("/var/run/secrets/nais.io/kv/hentFraHenvendelse", "HENT_FRA_HENVENDELSE".configProperty()).toBoolean()
 	)
