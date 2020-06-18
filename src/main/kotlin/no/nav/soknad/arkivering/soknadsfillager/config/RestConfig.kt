@@ -35,10 +35,11 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 	fun configureGlobal(auth: AuthenticationManagerBuilder) {
 		val user = config.restConfig.fileUser
 		val sharedSecret = config.restConfig.sharedPassword
-		logger.info("Filuser brukernavn=${user}, passord=${sharedSecret.substring(0,2)}") // TMP skal slettes
 		auth.inMemoryAuthentication()
 			.withUser(user)
 			.password("{noop}$sharedSecret")
 			.roles("ADMIN")
+
+		logger.info("Konfigurert authenticationManager")
 	}
 }

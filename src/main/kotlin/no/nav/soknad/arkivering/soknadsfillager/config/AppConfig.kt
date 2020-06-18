@@ -47,10 +47,10 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 
 	data class RestConfig(
 		val version: String = "APP_VERSION".configProperty(),
-		val username: String = readFileAsText("/var/run/secretsATION_PASSW/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
+		val username: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
 		val password: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "APPLICATION_PASSWORD".configProperty()),
 		val fileUser: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/username", readFileAsText("/var/run/secrets/nais.io/kv/fileUser", "FILE_USER".configProperty())),
-		val sharedPassword: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/password", readFileAsText("/var/run/secrets/nais.io/kv/restPassword", "SHARED_PASSWORD".configProperty())),
+		val sharedPassword: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/password", readFileAsText("/var/run/secrets/nais.io/kv/sharedPassword", "SHARED_PASSWORD".configProperty())),
 		val url: String = readFileAsText("/var/run/secrets/nais.io/kv/henvendelseUrl", "HENVENDELSE_URL".configProperty()),
 		val hentFraHenvendelse: Boolean = readFileAsText("/var/run/secrets/nais.io/kv/hentFraHenvendelse", "HENT_FRA_HENVENDELSE".configProperty()).toBoolean()
 	)
