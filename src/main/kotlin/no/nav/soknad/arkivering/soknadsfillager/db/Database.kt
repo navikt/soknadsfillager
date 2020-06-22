@@ -3,12 +3,12 @@ package no.nav.soknad.arkivering.soknadsfillager.db
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
-import java.sql.Connection
-import java.sql.ResultSet
 import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
+import java.sql.Connection
 
-class Database(private val env: AppConfiguration.DBConfig, private val vaultCredentialService: CredentialService) : DatabaseInterface {
+class Database(private val env: AppConfiguration.DBConfig,
+							 private val vaultCredentialService: CredentialService) : DatabaseInterface {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	override val dataSource: HikariDataSource
@@ -65,10 +65,3 @@ class Database(private val env: AppConfiguration.DBConfig, private val vaultCred
 		load().migrate()
 	}
 }
-
-fun <T> ResultSet.toList(mapper: ResultSet.() -> T) = mutableListOf<T>().apply {
-	while (next()) {
-		add(mapper())
-	}
-}
-

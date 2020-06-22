@@ -15,10 +15,6 @@ data class FilElementDto(val uuid: String, val fil: ByteArray?, val opprettet: L
 	}
 
 	override fun hashCode(): Int {
-		var result = uuid.hashCode()
-		if (fil != null) {
-			result = 31 * result + fil.contentHashCode()
-		}
-		return result
+		return uuid.hashCode()
 	}
 }

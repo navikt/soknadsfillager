@@ -24,7 +24,4 @@ class JpaConfig(private val appConfig: AppConfiguration) {
 		appConfig.dbConfig.renewService.startRenewTasks(appConfig.applicationState)
 		return database.dataSource
 	}
-
 }
-
-
