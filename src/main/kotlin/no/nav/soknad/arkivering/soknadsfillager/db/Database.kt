@@ -57,10 +57,11 @@ class Database(private val env: AppConfiguration.DBConfig,
 		)
 		dataSource(env.url, credentials.username, credentials.password)
 		if (!"docker".equals(env.profiles, true)) {
-			initSql("SET ROLE \"${env.databaseName}-${Role.ADMIN}\"") // required for assigning proper owners for the tables
-			logger.info("Database , runFlywayMigrations: "+"SET ROLE \"${env.databaseName}-${Role.ADMIN}\"")
+			val sql = "SET ROLE \"${env.databaseName}-${Role.ADMIN}\""
+			initSql(sql) // required for assigning proper owners for the tables
+			logger.info("Database, runFlywayMigrations: $sql")
 		} else {
-			logger.info("Database , runFlywayMigrations without setting role")
+			logger.info("Database, runFlywayMigrations without setting role")
 		}
 		load().migrate()
 	}

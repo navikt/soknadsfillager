@@ -18,14 +18,14 @@ import reactor.netty.http.client.HttpClient
 import reactor.netty.tcp.TcpClient
 
 @Service
-class HenvendelseClient(private val appConfig: AppConfiguration): HenvendelseInterface {
+class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseInterface {
 
 	private val logger = LoggerFactory.getLogger(javaClass)
 	private val config = appConfig.restConfig
 	private val webClient = defaultWebClient()
 
 	override fun deleteFile(uuid: String): Boolean {
-		val resultat =  webClient.delete().uri("/$uuid")
+		val resultat = webClient.delete().uri("/$uuid")
 			.retrieve()
 			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) { response ->
 				logger.warn("Fikk 4xx feil ved forsøk på å slette uuid=$uuid")

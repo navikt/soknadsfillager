@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
 
-class EmbeddedRenewService(private val credentialService: CredentialService): RenewService {
+class EmbeddedRenewService(private val credentialService: CredentialService) : RenewService {
 	private val log = LoggerFactory.getLogger(javaClass)
 
 	override fun startRenewTasks(applicationState: ApplicationState) {

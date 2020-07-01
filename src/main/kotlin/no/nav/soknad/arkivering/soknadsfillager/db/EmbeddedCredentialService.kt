@@ -5,7 +5,7 @@ import kotlinx.coroutines.delay
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
 
-class EmbeddedCredentialService(): CredentialService {
+class EmbeddedCredentialService() : CredentialService {
 	private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.EmbeddedCredentialService")
 	private val MIN_REFRESH_MARGIN = 300L // seconds
 
@@ -33,7 +33,7 @@ class EmbeddedCredentialService(): CredentialService {
 	}
 
 	override fun getNewCredentials(mountPath: String, databaseName: String, role: Role): Credentials {
-		return Credentials("1234", "postgres","postgres")
+		return Credentials("1234", "postgres", "postgres")
 	}
 
 	override fun renewCredentialsTaskData(): RenewCredentialsTaskData? {

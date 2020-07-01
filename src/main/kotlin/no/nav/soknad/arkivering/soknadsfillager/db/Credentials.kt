@@ -2,7 +2,7 @@ package no.nav.soknad.arkivering.soknadsfillager.db
 
 import com.zaxxer.hikari.HikariDataSource
 
-data class RenewCredentialsTaskData (
+data class RenewCredentialsTaskData(
 	val dataSource: HikariDataSource,
 	val mountPath: String,
 	val databaseName: String,

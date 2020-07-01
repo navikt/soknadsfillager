@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
 
-class RenewVaultService(private val vaultCredentialService: CredentialService): RenewService {
+class RenewVaultService(private val vaultCredentialService: CredentialService) : RenewService {
 
 	private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.RenewVaultService")
 
