@@ -33,12 +33,13 @@ spec:
   vault:
     enabled: true
     paths:
-      - kvPath: /serviceuser/data/dev/srvsoknadsfillager
-        mountPath: /var/run/secrets/nais.io/serviceuser
-      - kvPath: /kv/prod/fss/soknadsfillager/default
-        mountPath: /var/run/secrets/nais.io/kv
-      - kvPath: /apikey/appdynamics/dev
-        mountPath: /var/run/secrets/nais.io/appdynamics
+      - mountPath: /var/run/secrets/nais.io/serviceuser
+        kvPath: /serviceuser/data/prod/srvsoknadsfillager
+      - mountPath: /var/run/secrets/nais.io/kv
+        kvPath: /kv/prod/fss/soknadsfillager/default
+      - mountPath: /var/run/secrets/nais.io/appdynamics
+        kvPath: /apikey/appdynamics/prod
+
   env:
     - name: APPRES_CMS_URL
       value: https://appres.nav.no
@@ -51,6 +52,6 @@ spec:
     - name: DATABASE_NAME
       value: soknadsfillager-db
     - name: VAULT_DB_PATH
-      value: postgresql/prod-fss/
+      value: postgresql/prod-fss
     - name: APPLICATION_PROFILE
-      value: nais
+      value: prod
