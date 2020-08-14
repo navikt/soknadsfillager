@@ -41,7 +41,6 @@ private fun String.configProperty(): String = appConfig[Key(this, stringType)]
 
 fun readFileAsText(fileName: String, default: String) = try { File(fileName).readText(Charsets.UTF_8) } catch (e: Exception ) { default }
 
-//@ConfigurationProperties
 data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbConfig: DBConfig = DBConfig()) {
 	val applicationState = ApplicationState()
 
@@ -70,7 +69,6 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 		val credentialService: CredentialService = if (useVault) VaultCredentialService() else EmbeddedCredentialService(),
 		val renewService: RenewService = if (useVault) RenewVaultService(credentialService) else EmbeddedRenewService(credentialService)
 	)
-
 }
 
 @org.springframework.context.annotation.Configuration
