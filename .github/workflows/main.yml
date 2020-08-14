@@ -10,6 +10,7 @@ on:
       - 'master'
     paths-ignore:
       - '**.md'
+      - '.github/workflows/main.yml'
       - '.github/workflows/preprod-pipeline.yml'
 jobs:
   bygg-app-prod:
