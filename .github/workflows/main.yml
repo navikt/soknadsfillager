@@ -10,7 +10,6 @@ on:
       - 'master'
     paths-ignore:
       - '**.md'
-      - '.github/workflows/main.yml'
       - '.github/workflows/preprod-pipeline.yml'
 jobs:
   bygg-app-prod:
@@ -96,4 +95,3 @@ jobs:
           VAR: app_version=${{env.TAG}}
           DRY_RUN: true
           IMAGE: docker.pkg.github.com/${{ github.repository }}/soknadsfillager:${{env.TAG}}
-
