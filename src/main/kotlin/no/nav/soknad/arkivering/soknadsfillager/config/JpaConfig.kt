@@ -1,7 +1,8 @@
 package no.nav.soknad.arkivering.soknadsfillager.config
 
 import com.zaxxer.hikari.HikariDataSource
-import no.nav.soknad.arkivering.soknadsfillager.db.*
+import no.nav.soknad.arkivering.soknadsfillager.db.Database
+import no.nav.soknad.arkivering.soknadsfillager.db.EmbeddedDatabase
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -23,7 +24,4 @@ class JpaConfig(private val appConfig: AppConfiguration) {
 		appConfig.dbConfig.renewService.startRenewTasks(appConfig.applicationState)
 		return database.dataSource
 	}
-
 }
-
-

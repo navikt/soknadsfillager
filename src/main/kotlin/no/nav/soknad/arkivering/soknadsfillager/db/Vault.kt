@@ -4,12 +4,13 @@ import com.bettercloud.vault.SslConfig
 import com.bettercloud.vault.Vault
 import com.bettercloud.vault.VaultConfig
 import com.bettercloud.vault.VaultException
-import java.io.File
 import kotlinx.coroutines.delay
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
+import java.io.File
 
 private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.vault")
+
 object Vault {
 	private const val MIN_REFRESH_MARGIN = 600_000L // 10 minutes
 	private val vaultToken: String = System.getenv("VAULT_TOKEN")

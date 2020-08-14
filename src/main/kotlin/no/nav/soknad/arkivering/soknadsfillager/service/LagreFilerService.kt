@@ -17,9 +17,10 @@ class LagreFilerService(private val filRepository: FilRepository) {
 
 		if (filElementDto.fil == null) {
 			logger.warn("Finnes ingen fil å lagre med Uuid ${filElementDto.uuid}")
-			return
+
 		} else {
-			filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil, filElementDto.opprettet?: LocalDateTime.now()) )
+			val created = filElementDto.opprettet ?: LocalDateTime.now()
+			filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil, created))
 		}
 	}
 }

@@ -4,7 +4,6 @@ import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,7 +45,7 @@ class SlettFilerTest {
 		assertEquals(3, filRepository.count())
 
 		val filer = hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
-		val empty = filer.stream().filter({it.fil != null}).toArray()
+		val empty = filer.stream().filter({ it.fil != null }).toArray()
 		assert(empty.isEmpty())
 	}
 
@@ -62,7 +61,7 @@ class SlettFilerTest {
 		assertEquals(3, filRepository.count())
 
 		val filer = hentFiler.hentFiler(slettelisteMedEkstraUuid)
-		val empty = filer.stream().filter({it.fil != null}).toArray()
+		val empty = filer.stream().filter({ it.fil != null }).toArray()
 		assert(empty.isEmpty())
 	}
 
@@ -79,7 +78,7 @@ class SlettFilerTest {
 		assertEquals(3, filRepository.count().toInt())
 
 		val filer = hentFiler.hentFiler(sletteListe.map { it.uuid })
-		val empty = filer.stream().filter({it.fil != null}).toArray()
+		val empty = filer.stream().filter({ it.fil != null }).toArray()
 		assert(empty.isEmpty())
 	}
 

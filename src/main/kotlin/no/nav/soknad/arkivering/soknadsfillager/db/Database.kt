@@ -3,12 +3,12 @@ package no.nav.soknad.arkivering.soknadsfillager.db
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
-import java.sql.Connection
-import java.sql.ResultSet
 import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
+import java.sql.Connection
 
-class Database(private val env: AppConfiguration.DBConfig, private val vaultCredentialService: CredentialService) : DatabaseInterface {
+class Database(private val env: AppConfiguration.DBConfig,
+							 private val vaultCredentialService: CredentialService) : DatabaseInterface {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	override val dataSource: HikariDataSource
@@ -57,18 +57,12 @@ class Database(private val env: AppConfiguration.DBConfig, private val vaultCred
 		)
 		dataSource(env.url, credentials.username, credentials.password)
 		if (!"docker".equals(env.profiles, true)) {
-			initSql("SET ROLE \"${env.databaseName}-${Role.ADMIN}\"") // required for assigning proper owners for the tables
-			logger.info("Database , runFlywayMigrations: "+"SET ROLE \"${env.databaseName}-${Role.ADMIN}\"")
+			val sql = "SET ROLE \"${env.databaseName}-${Role.ADMIN}\""
+			initSql(sql) // required for assigning proper owners for the tables
+			logger.info("Database, runFlywayMigrations: $sql")
 		} else {
-			logger.info("Database , runFlywayMigrations without setting role")
+			logger.info("Database, runFlywayMigrations without setting role")
 		}
 		load().migrate()
 	}
 }
-
-fun <T> ResultSet.toList(mapper: ResultSet.() -> T) = mutableListOf<T>().apply {
-	while (next()) {
-		add(mapper())
-	}
-}
-

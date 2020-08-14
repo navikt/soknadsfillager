@@ -8,7 +8,7 @@ import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
 import java.sql.Connection
 
-class EmbeddedDatabase (private val env: AppConfiguration.DBConfig, private val credentialService: CredentialService): DatabaseInterface {
+class EmbeddedDatabase(private val env: AppConfiguration.DBConfig, private val credentialService: CredentialService) : DatabaseInterface {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	companion object {
@@ -19,7 +19,7 @@ class EmbeddedDatabase (private val env: AppConfiguration.DBConfig, private val 
 	override val dataSource: HikariDataSource
 
 	override val connection: Connection
-	get() = dataSource.connection
+		get() = dataSource.connection
 
 	init {
 		logger.info("Init of embeddedPostres")

@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class LagreFilerTest {
 	val minUuid = opprettEnUUid()
 	val mineFilerListe = opprettListeAv3FilDtoer()
+
 	@Autowired
 	private lateinit var lagreFiler: LagreFiler
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class HentFilerService(private val filRepository: FilRepository, private val henvendelse: HenvendelseInterface, private val appConfig: AppConfiguration) {
 	private val logger = LoggerFactory.getLogger(javaClass)
-	private val config = 	appConfig.restConfig
+	private val config = appConfig.restConfig
 
 	fun hentFiler(filListe: List<String>) = filListe.map { hentFil(it) }
 

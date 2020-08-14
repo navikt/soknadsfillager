@@ -33,13 +33,13 @@ spec:
   vault:
     enabled: true
     paths:
-      - kvPath: /serviceuser/data/dev/srvsoknadsfillager
+      - kvPath: /serviceuser/data/prod/srvsoknadsfillager
         mountPath: /var/run/secrets/nais.io/serviceuser
-      - kvPath: /serviceuser/data/dev/srvsoknadarkiverer
-        mountPath: /var/run/secrets/nais.io/arkiverer
+     - kvPath: /serviceuser/data/dev/srvsoknadarkiverer
+       mountPath: /var/run/secrets/nais.io/arkiverer
       - kvPath: /kv/prod/fss/soknadsfillager/default
         mountPath: /var/run/secrets/nais.io/kv
-      - kvPath: /apikey/appdynamics/dev
+      - kvPath: /apikey/appdynamics/prod
         mountPath: /var/run/secrets/nais.io/appdynamics
   env:
     - name: APPRES_CMS_URL
