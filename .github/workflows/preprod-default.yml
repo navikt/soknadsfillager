@@ -1,19 +1,24 @@
-name: Build-Deploy-Prod
+name: Build-Deploy-Default
 on:
   push:
-    branches:
+    branches-ignore:
+      - 'q0-pipeline'
+      - 'q1-pipeline'
       - 'master'
     paths-ignore:
       - '**.md'
   pull_request:
-    branches:
+    branches-ignore:
+      - 'q0-pipeline'
+      - 'q1-pipeline'
       - 'master'
     paths-ignore:
       - '**.md'
       - '.github/workflows/main.yml'
       - '.github/workflows/preprod-pipeline.yml'
+
 jobs:
-  bygg-app-prod:
+  bygg-app-preprod-default:
     name: Bygg app/image, push til github
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +42,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '11.x'
-      - name: Build with maven
+      - name: Maven build
         env:
           GITHUB_USERNAME: x-access-token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -62,10 +67,10 @@ jobs:
           name: docker_tag
           path: .docker_tag
 
-  deploy-prod:
-    name: Deploy to prod
-    needs: bygg-app-prod
-    if: github.ref == 'refs/heads/master'
+  deploy-default:
+    name: Deploy to default
+    needs: bygg-app-preprod-default
+    if: github.ref != 'refs/heads/master' || github.ref !='refs/heads/q0-pipeline' || github.ref !='refs/heads/q1-pipeline'
     runs-on: ubuntu-latest
     steps:
       - name: Download tag file
@@ -90,9 +95,8 @@ jobs:
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          PRINT_PAYLOAD: true
-          CLUSTER: prod-fss
-          RESOURCE: .nais/nais.yml
+          CLUSTER: dev-fss
+          RESOURCE: .nais/nais-preprod.yml
           VAR: app_version=${{env.TAG}}
-          DRY_RUN: true
+          DRY_RUN: false
           IMAGE: docker.pkg.github.com/${{ github.repository }}/soknadsfillager:${{env.TAG}}

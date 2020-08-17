@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class LagreFilerTest {
 	val minUuid = opprettEnUUid()
 	val mineFilerListe = opprettListeAv3FilDtoer()
+
 	@Autowired
 	private lateinit var lagreFiler: LagreFiler
 
@@ -42,13 +43,13 @@ class LagreFilerTest {
 		val forsteFilVersjonIliste = opprettListeMedEnFil(minUuid, forsteFilVersion)
 		this.lagreFiler.lagreFiler(forsteFilVersjonIliste)
 
-		assertEquals(forsteFilVersion.size, mittRepository.findById(minUuid).get().data?.size)
+		assertEquals(forsteFilVersion.size, mittRepository.findById(minUuid).get().document?.size)
 
 		val andeFilVersjon = opprettEnEnkelPdf()
 		val minAndreFilVersjonIListe = opprettListeMedEnFil(minUuid, andeFilVersjon)
 		this.lagreFiler.lagreFiler(minAndreFilVersjonIListe)
 
-		assertEquals(andeFilVersjon.size, mittRepository.findById(minUuid).get().data?.size)
+		assertEquals(andeFilVersjon.size, mittRepository.findById(minUuid).get().document?.size)
 	}
 
 	@Test

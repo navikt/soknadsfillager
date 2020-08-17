@@ -5,6 +5,7 @@ import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class LagreFilerService(private val filRepository: FilRepository) {
@@ -16,9 +17,10 @@ class LagreFilerService(private val filRepository: FilRepository) {
 
 		if (filElementDto.fil == null) {
 			logger.warn("Finnes ingen fil å lagre med Uuid ${filElementDto.uuid}")
-			return
+
 		} else {
-			filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil))
+			val created = filElementDto.opprettet ?: LocalDateTime.now()
+			filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil, created))
 		}
 	}
 }
