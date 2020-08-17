@@ -66,7 +66,7 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 			requireNotNull("DATABASE_NAME".configProperty()) { "database name must be set if jdbc url is not provided" }),
 		val driver: String = readFileAsText("/var/run/secrets/nais.io/kv/dbDriver", "DB_DRIVER".configProperty()),
 		val embedded: Boolean = "spring" == profiles,
-		val useVault: Boolean = "nais" == profiles,
+		val useVault: Boolean = "dev".equals(profiles) || "prod".equals(profiles),
 		val credentialService: CredentialService = if (useVault) VaultCredentialService() else EmbeddedCredentialService(),
 		val renewService: RenewService = if (useVault) RenewVaultService(credentialService) else EmbeddedRenewService(credentialService)
 	)
