@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.config
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Configuration
@@ -13,6 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfigurerAdapter() {
+
+	private val logger = LoggerFactory.getLogger(javaClass)
 
 	override fun configure(http: HttpSecurity) {
 		http
@@ -36,5 +39,7 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 			.withUser(user)
 			.password("{noop}$sharedSecret")
 			.roles("ADMIN")
+
+		logger.info("Konfigurert authenticationManager")
 	}
 }
