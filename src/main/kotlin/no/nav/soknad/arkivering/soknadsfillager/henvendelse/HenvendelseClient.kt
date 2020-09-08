@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
+import org.springframework.http.codec.ClientCodecConfigurer
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.*
 import reactor.core.publisher.Mono
@@ -17,6 +18,7 @@ import reactor.netty.Connection
 import reactor.netty.http.client.HttpClient
 import reactor.netty.tcp.TcpClient
 import java.util.function.Consumer
+
 
 @Service
 class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseInterface {
@@ -47,7 +49,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 		return webClient.get().uri("/hent/$uuid")
 			.retrieve()
 			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) { response ->
-				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid. " )
+				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid. ")
 				val status = response.rawStatusCode()
 				logger.info("status code= $status")
 				Mono.error(RuntimeException("4xx"))
@@ -68,8 +70,11 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 					.addHandlerLast(WriteTimeoutHandler(2))
 			}
 
+		val exchangeStrategies = ExchangeStrategies.builder()
+			.codecs { configurer: ClientCodecConfigurer -> configurer.defaultCodecs().maxInMemorySize(1024 * 1024 * 100) }.build()
 		return WebClient.builder()
 			.baseUrl(config.url)
+			.exchangeStrategies(exchangeStrategies)
 			.clientConnector(ReactorClientHttpConnector(HttpClient.from(tcpClient)))
 			.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.filter(ExchangeFilterFunctions.basicAuthentication(config.username, config.password))
@@ -91,7 +96,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 		return ExchangeFilterFunction { clientRequest: ClientRequest, next: ExchangeFunction ->
 			logger.info("Request: {} {}", clientRequest.method(), clientRequest.url())
 			clientRequest.headers()
-				.forEach { name: String?, values: List<String?> -> values.forEach(Consumer { value: String? -> logger.info("{}={}", name, if (name =="Authorization") "****" else value) }) }
+				.forEach { name: String?, values: List<String?> -> values.forEach(Consumer { value: String? -> logger.info("{}={}", name, if (name == "Authorization") "****" else value) }) }
 			next.exchange(clientRequest)
 		}
 	}
