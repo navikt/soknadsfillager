@@ -1,6 +1,10 @@
 server:
   port: 9042
 
+spring:
+  codec:
+    max-in-memory-size=50MB
+
 management:
   endpoint:
     health:
