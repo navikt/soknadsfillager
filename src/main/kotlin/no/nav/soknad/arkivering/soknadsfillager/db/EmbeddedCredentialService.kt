@@ -5,7 +5,7 @@ import kotlinx.coroutines.delay
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
 
-class EmbeddedCredentialService : CredentialService {
+class EmbeddedCredentialService() : CredentialService {
 	private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.EmbeddedCredentialService")
 	private val MIN_REFRESH_MARGIN = 300L // seconds
 
