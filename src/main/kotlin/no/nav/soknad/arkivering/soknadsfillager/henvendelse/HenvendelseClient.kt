@@ -71,7 +71,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 			}
 
 		val exchangeStrategies = ExchangeStrategies.builder()
-			.codecs { configurer: ClientCodecConfigurer -> configurer.defaultCodecs().maxInMemorySize(1024 * 1024 * 100) }.build()
+			.codecs { configurer: ClientCodecConfigurer -> configurer.defaultCodecs().maxInMemorySize(appConfig.restConfig.maxFileSize) }.build()
 		return WebClient.builder()
 			.baseUrl(config.url)
 			.exchangeStrategies(exchangeStrategies)

@@ -25,9 +25,9 @@ private val defaultProperties = ConfigurationMap(
 		"DATABASE_ADMIN_USERNAME" to "postgres",
 		"DATABASE_ADMIN_PASSWORD" to "postgres",
 		"DATABASE_JDBC_URL" to "",
-		"DB_DRIVER" to "com.opentable.db.postgres.embedded.EmbeddedPostgres",
 		"VAULT_DB_PATH" to "",
-		"HENT_FRA_HENVENDELSE" to "false"
+		"HENT_FRA_HENVENDELSE" to "false",
+		"MAX_FILE_SIZE" to (1024 * 1024 * 100).toString()
 	)
 )
 
@@ -48,10 +48,11 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 		val version: String = "APP_VERSION".configProperty(),
 		val username: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
 		val password: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "APPLICATION_PASSWORD".configProperty()),
-		val fileUser: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/username", readFileAsText("/var/run/secrets/nais.io/kv/fileUser", "FILE_USER".configProperty())),
-		val sharedPassword: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/password", readFileAsText("/var/run/secrets/nais.io/kv/sharedPassword", "SHARED_PASSWORD".configProperty())),
-		val url: String = readFileAsText("/var/run/secrets/nais.io/kv/henvendelseUrl", "HENVENDELSE_URL".configProperty()),
-		val hentFraHenvendelse: Boolean = readFileAsText("/var/run/secrets/nais.io/kv/hentFraHenvendelse", "HENT_FRA_HENVENDELSE".configProperty()).toBoolean()
+		val fileUser: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/username", "FILE_USER".configProperty()),
+		val sharedPassword: String = readFileAsText("/var/run/secrets/nais.io/arkiverer/password", "SHARED_PASSWORD".configProperty()),
+		val url: String = "HENVENDELSE_URL".configProperty(),
+		val hentFraHenvendelse: Boolean = "HENT_FRA_HENVENDELSE".configProperty().toBoolean(),
+		val maxFileSize: Int = "MAX_FILE_SIZE".configProperty().toInt()
 	)
 
 	data class DBConfig(
@@ -63,7 +64,6 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 			requireNotNull("DATABASE_HOST".configProperty()) { "database host must be set if jdbc url is not provided" },
 			requireNotNull("DATABASE_PORT".configProperty()) { "database port must be set if jdbc url is not provided" },
 			requireNotNull("DATABASE_NAME".configProperty()) { "database name must be set if jdbc url is not provided" }),
-		val driver: String = readFileAsText("/var/run/secrets/nais.io/kv/dbDriver", "DB_DRIVER".configProperty()),
 		val embedded: Boolean = "spring" == profiles,
 		val useVault: Boolean = "dev".equals(profiles) || "prod".equals(profiles),
 		val credentialService: CredentialService = if (useVault) VaultCredentialService() else EmbeddedCredentialService(),
