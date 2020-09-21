@@ -37,6 +37,8 @@ spec:
         kvPath: /serviceuser/data/dev/srvsoknadsfillager
       - mountPath: /var/run/secrets/nais.io/arkiverer
         kvPath: /serviceuser/data/dev/srvsoknadarkiverer
+      - mountPath: /var/run/secrets/nais.io/filewriter
+        kvPath: /serviceuser/data/dev/srvhenvendelse
       - mountPath: /var/run/secrets/nais.io/appdynamics
         kvPath: /apikey/appdynamics/dev
 

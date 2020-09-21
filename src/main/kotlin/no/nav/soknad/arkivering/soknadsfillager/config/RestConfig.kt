@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import java.util.*
+
 
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -33,13 +36,19 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 
 	@Autowired
 	fun configureGlobal(auth: AuthenticationManagerBuilder) {
-		val user = config.restConfig.fileUser
-		val sharedSecret = config.restConfig.sharedPassword
-		auth.inMemoryAuthentication()
-			.withUser(user)
-			.password("{noop}$sharedSecret")
-			.roles("ADMIN")
+		auth.userDetailsService(inMemoryUserDetailsManager())
 
 		logger.info("Konfigurert authenticationManager")
 	}
+
+	fun inMemoryUserDetailsManager(): InMemoryUserDetailsManager? {
+		val users = Properties()
+
+		users[config.restConfig.fileUser] = "${config.restConfig.fileUserPassword}, ADMIN, enabled"
+		if (!config.restConfig.fileUser.equals(config.restConfig.fileWriter, true))
+			users[config.restConfig.fileWriter] = "${config.restConfig.fileWriterPassword}, ADMIN, enabled"
+
+		return InMemoryUserDetailsManager(users)
+	}
+
 }
