@@ -37,22 +37,14 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 
 	@Autowired
 	fun configureGlobal(auth: AuthenticationManagerBuilder) {
-		auth.userDetailsService(inMemoryUserDetailsManager())
 
+		auth.inMemoryAuthentication().withUser(config.restConfig.fileUser).password("{noop}${config.restConfig.fileUserPassword}").roles("USER")
+		logger.info("Konfigurert fileUser=${config.restConfig.fileUser}")
+		if (!config.restConfig.fileUser.equals(config.restConfig.fileWriter, true)) {
+			auth.inMemoryAuthentication().withUser(config.restConfig.fileWriter).password("{noop}${config.restConfig.fileWriterPassword}").roles("USER")
+		}
 		logger.info("Konfigurert authenticationManager")
 	}
 
-	fun inMemoryUserDetailsManager(): InMemoryUserDetailsManager {
-		val inMemoryUserDetailsManager = InMemoryUserDetailsManager()
-
-		inMemoryUserDetailsManager.createUser(User.withUsername(config.restConfig.fileUser).password(config.restConfig.fileUserPassword).roles("USER").build())
-		logger.info("Konfigurert fileUser=${config.restConfig.fileUser}")
-		if (!config.restConfig.fileUser.equals(config.restConfig.fileWriter, true)) {
-			logger.info("Konfigurert fileWriter=${config.restConfig.fileWriter}")
-			inMemoryUserDetailsManager.createUser(User.withUsername(config.restConfig.fileWriter).password(config.restConfig.fileWriterPassword).roles("USER").build())
-		}
-
-		return inMemoryUserDetailsManager
-	}
 
 }
