@@ -20,7 +20,12 @@ class HentFilerService(private val filRepository: FilRepository, private val hen
 			return if (!filDbData.isPresent) {
 				this.logger.info("Fil med id='$uuid' finnes ikke i basen")
 				if (config.hentFraHenvendelse) {
-					FilElementDto(uuid, henvendelse.fetchFile(uuid), null)
+					val filElementDto = henvendelse.fetchFile(uuid)
+					if (filElementDto == null) {
+						return FilElementDto(uuid, null, null)
+					} else {
+						return filElementDto
+					}
 				} else {
 					FilElementDto(uuid, null, null)
 				}

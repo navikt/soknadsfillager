@@ -20,7 +20,7 @@ spec:
   replicas:
     min: 2
     max: 4
-  resource:
+  resources:
     limits:
       cpu: 3000m
       memory: 512Mi
@@ -35,8 +35,8 @@ spec:
     paths:
       - mountPath: /var/run/secrets/nais.io/serviceuser
         kvPath: /serviceuser/data/prod/srvsoknadsfillager
-      - mountPath: /var/run/secrets/nais.io/kv
-        kvPath: /kv/prod/fss/soknadsfillager/default
+      - mountPath: /var/run/secrets/nais.io/arkiverer
+        kvPath: /serviceuser/data/prod/srvsoknadarkiverer
       - mountPath: /var/run/secrets/nais.io/appdynamics
         kvPath: /apikey/appdynamics/prod
 
@@ -52,6 +52,6 @@ spec:
     - name: DATABASE_NAME
       value: soknadsfillager-db
     - name: VAULT_DB_PATH
-      value: postgresql/prod-fss
+      value: postgresql/prod-fss/
     - name: APPLICATION_PROFILE
       value: prod

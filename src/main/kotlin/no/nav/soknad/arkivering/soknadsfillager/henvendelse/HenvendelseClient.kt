@@ -4,18 +4,21 @@ import io.netty.channel.ChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
-import org.apache.tomcat.util.codec.binary.Base64
+import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
+import org.springframework.http.codec.ClientCodecConfigurer
 import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.*
 import reactor.core.publisher.Mono
 import reactor.netty.Connection
 import reactor.netty.http.client.HttpClient
 import reactor.netty.tcp.TcpClient
+import java.util.function.Consumer
+
 
 @Service
 class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseInterface {
@@ -41,18 +44,21 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 		return true
 	}
 
-	override fun fetchFile(uuid: String): ByteArray? {
+	override fun fetchFile(uuid: String): FilElementDto? {
+		logger.info("Henter fil med $uuid fra henvendelse")
 		return webClient.get().uri("/hent/$uuid")
 			.retrieve()
 			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) { response ->
-				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid")
+				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid. ")
+				val status = response.rawStatusCode()
+				logger.info("status code= $status")
 				Mono.error(RuntimeException("4xx"))
 			}
 			.onStatus({ obj: HttpStatus -> obj.is5xxServerError }) { response ->
 				logger.warn("Fikk 5xx feil ved forsøk på å hente uuid=$uuid")
 				Mono.error(RuntimeException("5xx"))
 			}
-			.bodyToMono(ByteArray::class.java)
+			.bodyToMono(FilElementDto::class.java)
 			.block()
 	}
 
@@ -64,23 +70,34 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 					.addHandlerLast(WriteTimeoutHandler(2))
 			}
 
+		val exchangeStrategies = ExchangeStrategies.builder()
+			.codecs { configurer: ClientCodecConfigurer -> configurer.defaultCodecs().maxInMemorySize(appConfig.restConfig.maxFileSize) }.build()
 		return WebClient.builder()
 			.baseUrl(config.url)
+			.exchangeStrategies(exchangeStrategies)
 			.clientConnector(ReactorClientHttpConnector(HttpClient.from(tcpClient)))
-			.defaultHeaders({ createHeaders(config.username, config.sharedPassword) })
+			.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.filter(ExchangeFilterFunctions.basicAuthentication(config.username, config.password))
+			.filter(logRequest())
 			.build()
 	}
 
 	private fun createHeaders(username: String, password: String): HttpHeaders {
 		return object : HttpHeaders() {
 			init {
-				val auth = "$username:$password"
-				val encodedAuth: ByteArray = Base64.encodeBase64(auth.toByteArray())
-				val authHeader = "Basic " + String(encodedAuth)
-				set("Authorization", authHeader)
+				setBasicAuth(username, password)
 				set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
 			}
+		}
+	}
+
+	private fun logRequest(): ExchangeFilterFunction {
+		return ExchangeFilterFunction { clientRequest: ClientRequest, next: ExchangeFunction ->
+			logger.info("Request: {} {}", clientRequest.method(), clientRequest.url())
+			clientRequest.headers()
+				.forEach { name: String?, values: List<String?> -> values.forEach(Consumer { value: String? -> logger.info("{}={}", name, if (name == "Authorization") "****" else value) }) }
+			next.exchange(clientRequest)
 		}
 	}
 
