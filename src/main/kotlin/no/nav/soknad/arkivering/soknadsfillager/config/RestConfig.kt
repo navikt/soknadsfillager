@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import java.util.*
 
@@ -41,14 +42,17 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 		logger.info("Konfigurert authenticationManager")
 	}
 
-	fun inMemoryUserDetailsManager(): InMemoryUserDetailsManager? {
-		val users = Properties()
+	fun inMemoryUserDetailsManager(): InMemoryUserDetailsManager {
+		val inMemoryUserDetailsManager = InMemoryUserDetailsManager()
 
-		users[config.restConfig.fileUser] = "${config.restConfig.fileUserPassword}, ADMIN, enabled"
-		if (!config.restConfig.fileUser.equals(config.restConfig.fileWriter, true))
-			users[config.restConfig.fileWriter] = "${config.restConfig.fileWriterPassword}, ADMIN, enabled"
+		inMemoryUserDetailsManager.createUser(User.withUsername(config.restConfig.fileUser).password(config.restConfig.fileUserPassword).roles("USER").build())
+		logger.info("Konfigurert fileUser=${config.restConfig.fileUser}")
+		if (!config.restConfig.fileUser.equals(config.restConfig.fileWriter, true)) {
+			logger.info("Konfigurert fileWriter=${config.restConfig.fileWriter}")
+			inMemoryUserDetailsManager.createUser(User.withUsername(config.restConfig.fileWriter).password(config.restConfig.fileWriterPassword).roles("USER").build())
+		}
 
-		return InMemoryUserDetailsManager(users)
+		return inMemoryUserDetailsManager
 	}
 
 }
