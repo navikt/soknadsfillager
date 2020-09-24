@@ -47,15 +47,6 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 			.password("{noop}${config.restConfig.fileUserPassword}")
 			.roles("USER")
 
-/*
-		if (!config.restConfig.fileUser.equals(config.restConfig.fileWriter, true)) {
-			auth.inMemoryAuthentication().withUser(config.restConfig.fileWriter).password("{noop}${config.restConfig.fileWriterPassword}").roles("USER")
-			logger.info("Konfigurert fileWriter=${config.restConfig.fileWriter}")
-		}
-		auth.inMemoryAuthentication().withUser(config.restConfig.fileUser).password("{noop}${config.restConfig.fileUserPassword}").roles("USER")
-		logger.info("Konfigurert fileUser=${config.restConfig.fileUser}")
-*/
-
 		logger.info("Konfigurert authenticationManager")
 	}
 
