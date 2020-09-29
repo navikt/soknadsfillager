@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import java.util.*
+
 
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -23,6 +27,7 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 			.authorizeRequests()
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 			.antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+			.antMatchers("/filer").hasAnyRole("USER", "ADMIN")
 			.antMatchers("/filer").authenticated()
 			.and()
 			.httpBasic()
@@ -33,13 +38,17 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 
 	@Autowired
 	fun configureGlobal(auth: AuthenticationManagerBuilder) {
-		val user = config.restConfig.fileUser
-		val sharedSecret = config.restConfig.sharedPassword
 		auth.inMemoryAuthentication()
-			.withUser(user)
-			.password("{noop}$sharedSecret")
-			.roles("ADMIN")
+			.withUser(config.restConfig.fileWriter)
+			.password("{noop}${config.restConfig.fileWriterPassword}")
+			.roles("USER")
+			.and()
+			.withUser(config.restConfig.fileUser)
+			.password("{noop}${config.restConfig.fileUserPassword}")
+			.roles("USER")
 
 		logger.info("Konfigurert authenticationManager")
 	}
+
+
 }

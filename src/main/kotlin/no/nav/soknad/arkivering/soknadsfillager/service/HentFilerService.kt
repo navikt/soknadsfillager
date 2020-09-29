@@ -24,6 +24,7 @@ class HentFilerService(private val filRepository: FilRepository, private val hen
 					if (filElementDto == null) {
 						return FilElementDto(uuid, null, null)
 					} else {
+						this.logger.info("Hentet fil med id='$uuid', size= ${filElementDto.fil?.size}  fra Henvendelse")
 						return filElementDto
 					}
 				} else {
