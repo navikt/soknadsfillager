@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class JpaConfig(private val appConfig: AppConfiguration) {
 
+	private val logger = LoggerFactory.getLogger(javaClass)
+
 	@Bean
 	fun getDataSource(): HikariDataSource {
 		return initDatasource()
@@ -22,6 +24,7 @@ class JpaConfig(private val appConfig: AppConfiguration) {
 		}
 		appConfig.applicationState.ready = true
 		appConfig.dbConfig.renewService.startRenewTasks(appConfig.applicationState)
+		logger.info("Datasource er initialisert")
 		return database.dataSource
 	}
 }
