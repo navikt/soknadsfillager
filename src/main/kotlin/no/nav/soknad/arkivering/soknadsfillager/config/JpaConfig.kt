@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.config
 
+import org.slf4j.LoggerFactory
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.soknad.arkivering.soknadsfillager.db.Database
 import no.nav.soknad.arkivering.soknadsfillager.db.EmbeddedDatabase
