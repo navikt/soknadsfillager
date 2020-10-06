@@ -15,7 +15,7 @@ class LagreFilerService(private val filRepository: FilRepository) {
 
 	private fun lagreFil(filElementDto: FilElementDto) {
 
-		if (filElementDto.fil == null) {
+		if (filElementDto.fil == null || filElementDto.fil.size == 0) {
 			logger.warn("Finnes ingen fil å lagre med Uuid ${filElementDto.uuid}")
 
 		} else {
