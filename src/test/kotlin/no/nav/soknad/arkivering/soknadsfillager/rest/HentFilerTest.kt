@@ -1,5 +1,7 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
+import no.nav.soknad.arkivering.soknadsfillager.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.Operations
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -36,10 +38,16 @@ class HentFilerTest {
 
 	@Test
 	fun hentEnListeAvDokumenterTest() {
+		val fileCounter = Metrics.filCounterGet(Operations.FIND.name)
+		val errorCounter = Metrics.errorCounterGet(Operations.FIND.name)
 		val hentedeFilerResultat = hentFiler.hentFiler(listeAvUuiderIBasen)
 
 		assertEquals(listeAvUuiderIBasen, hentedeFilerResultat.map { it.uuid })
 		assertEquals(listeAvFilerIBasen.map { it.fil?.size }, hentedeFilerResultat.map { it.fil?.size })
+		assertTrue(Metrics.filCounterGet(Operations.FIND.name) == fileCounter + 3.0)
+		assertTrue(Metrics.errorCounterGet(Operations.FIND.name) == errorCounter + 0.0)
+		assertTrue(Metrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0 && Metrics.filSummaryLatencyGet(Operations.FIND.name).count == fileCounter + 3.0)
+		assertTrue((Metrics.filSummarySizeGet(Operations.FIND.name).sum/Metrics.filSummarySizeGet(Operations.FIND.name).count) == 625172.0)
 	}
 
 	@Test
@@ -53,11 +61,15 @@ class HentFilerTest {
 		listeSomHarUuidErSomIkkeFinnes.add(uuid1SomIkkeErBlandtDokumentene)
 		listeSomHarUuidErSomIkkeFinnes.add(uuid2SomIkkeErBlandtDokumentene)
 		assertEquals(5, listeSomHarUuidErSomIkkeFinnes.size)
+		val fileCounter = Metrics.filCounterGet(Operations.FIND.name)
+		val fileNotFoundCounter = Metrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
 
 		val hentedeFilerResultat = hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes)
 		assertTrue(hentedeFilerResultat.size == 5)
 		assertTrue(hentedeFilerResultat.find { it.uuid == uuid1SomIkkeErBlandtDokumentene }?.fil == null)
 		assertTrue(hentedeFilerResultat.find { it.uuid == listeAvUuiderIBasen[0] }?.fil != null)
+		assertTrue(Metrics.filCounterGet(Operations.FIND.name) == fileCounter + 3.0)
+		assertTrue(Metrics.filCounterGet(Operations.FIND_NOT_FOUND.name) == fileNotFoundCounter + 2.0)
 	}
 
 	@Test

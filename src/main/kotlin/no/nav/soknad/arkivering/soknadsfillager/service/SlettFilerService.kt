@@ -1,5 +1,7 @@
 package no.nav.soknad.arkivering.soknadsfillager.service
 
+import no.nav.soknad.arkivering.soknadsfillager.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.Operations
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.slf4j.LoggerFactory
@@ -29,7 +31,17 @@ class SlettFilerService(private val filRepository: FilRepository) {
 
 		val oppdatertFil = FilDbData(uuid, null, fil.get().created)
 
-		filRepository.saveAndFlush(oppdatertFil)
-		logger.info("Fil med $uuid er slettet fra basen")
+		val start = Metrics.filSummaryLatencyStart(Operations.DELETE.name)
+		try {
+			filRepository.saveAndFlush(oppdatertFil)
+			Metrics.filCounterInc(Operations.DELETE.name)
+
+			logger.info("Fil med $uuid er slettet fra basen")
+		} catch (error: Exception) {
+			Metrics.errorCounterInc(Operations.DELETE.name)
+			throw error
+		} finally {
+			Metrics.filSummaryLatencyEnd(start)
+		}
 	}
 }
