@@ -16,6 +16,7 @@ class HentFilerTest {
 
 	private final val listeAvFilerIBasen = opprettListeAv3FilDtoer()
 	val listeAvUuiderIBasen = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(listeAvFilerIBasen)
+	private final val fileSize = 625172.0
 
 	@Autowired
 	private lateinit var lagreFiler: LagreFiler
@@ -44,10 +45,10 @@ class HentFilerTest {
 
 		assertEquals(listeAvUuiderIBasen, hentedeFilerResultat.map { it.uuid })
 		assertEquals(listeAvFilerIBasen.map { it.fil?.size }, hentedeFilerResultat.map { it.fil?.size })
-		assertTrue(Metrics.filCounterGet(Operations.FIND.name) == fileCounter + 3.0)
-		assertTrue(Metrics.errorCounterGet(Operations.FIND.name) == errorCounter + 0.0)
+		assertEquals(Metrics.filCounterGet(Operations.FIND.name), fileCounter + 3.0)
+		assertEquals(Metrics.errorCounterGet(Operations.FIND.name), errorCounter + 0.0)
 		assertTrue(Metrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0 && Metrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 3.0)
-		assertTrue((Metrics.filSummarySizeGet(Operations.FIND.name).sum/Metrics.filSummarySizeGet(Operations.FIND.name).count) == 625172.0)
+		assertEquals((Metrics.filSummarySizeGet(Operations.FIND.name).sum/Metrics.filSummarySizeGet(Operations.FIND.name).count), fileSize)
 	}
 
 	@Test
@@ -65,11 +66,11 @@ class HentFilerTest {
 		val fileNotFoundCounter = Metrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
 
 		val hentedeFilerResultat = hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes)
-		assertTrue(hentedeFilerResultat.size == 5)
+		assertEquals(hentedeFilerResultat.size, 5)
 		assertTrue(hentedeFilerResultat.find { it.uuid == uuid1SomIkkeErBlandtDokumentene }?.fil == null)
 		assertTrue(hentedeFilerResultat.find { it.uuid == listeAvUuiderIBasen[0] }?.fil != null)
-		assertTrue(Metrics.filCounterGet(Operations.FIND.name) == fileCounter + 3.0)
-		assertTrue(Metrics.filCounterGet(Operations.FIND_NOT_FOUND.name) == fileNotFoundCounter + 2.0)
+		assertEquals(Metrics.filCounterGet(Operations.FIND.name), fileCounter + 3.0)
+		assertEquals(Metrics.filCounterGet(Operations.FIND_NOT_FOUND.name), fileNotFoundCounter + 2.0)
 	}
 
 	@Test

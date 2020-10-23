@@ -17,10 +17,6 @@ class HentFiler(private val hentFilerService: HentFilerService) {
 	fun hentFiler(@RequestParam ids: List<String>): List<FilElementDto> {
 		logger.info("Forsøker å hente følgende filer: $ids")
 
-		try {
-			return hentFilerService.hentFiler(ids)
-		} finally {
-
-		}
+		return hentFilerService.hentFiler(ids)
 	}
 }
