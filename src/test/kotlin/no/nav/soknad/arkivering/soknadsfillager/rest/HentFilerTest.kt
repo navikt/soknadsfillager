@@ -46,7 +46,7 @@ class HentFilerTest {
 		assertEquals(listeAvFilerIBasen.map { it.fil?.size }, hentedeFilerResultat.map { it.fil?.size })
 		assertTrue(Metrics.filCounterGet(Operations.FIND.name) == fileCounter + 3.0)
 		assertTrue(Metrics.errorCounterGet(Operations.FIND.name) == errorCounter + 0.0)
-		assertTrue(Metrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0 && Metrics.filSummaryLatencyGet(Operations.FIND.name).count == fileCounter + 3.0)
+		assertTrue(Metrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0 && Metrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 3.0)
 		assertTrue((Metrics.filSummarySizeGet(Operations.FIND.name).sum/Metrics.filSummarySizeGet(Operations.FIND.name).count) == 625172.0)
 	}
 
