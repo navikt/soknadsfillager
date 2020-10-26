@@ -1,5 +1,7 @@
 package no.nav.soknad.arkivering.soknadsfillager.service
 
+import no.nav.soknad.arkivering.soknadsfillager.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.Operations
 import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.henvendelse.HenvendelseInterface
@@ -15,6 +17,7 @@ class HentFilerService(private val filRepository: FilRepository, private val hen
 	fun hentFiler(filListe: List<String>) = filListe.map { hentFil(it) }
 
 	private fun hentFil(uuid: String): FilElementDto {
+		val timer = Metrics.filSummaryLatencyStart(Operations.FIND.name)
 		try {
 			val filDbData = filRepository.findById(uuid)
 			return if (!filDbData.isPresent) {
@@ -22,21 +25,30 @@ class HentFilerService(private val filRepository: FilRepository, private val hen
 				if (config.hentFraHenvendelse) {
 					val filElementDto = henvendelse.fetchFile(uuid)
 					if (filElementDto == null) {
+						Metrics.filCounterInc(Operations.FIND_NOT_FOUND.name)
 						return FilElementDto(uuid, null, null)
 					} else {
+						Metrics.filCounterInc(Operations.FIND_HENVENDELSE.name)
+						Metrics.filSummarySetSize("find_henvendelse", filElementDto.fil?.size?.toDouble())
 						this.logger.info("Hentet fil med id='$uuid', size= ${filElementDto.fil?.size}  fra Henvendelse")
 						return filElementDto
 					}
 				} else {
+					Metrics.filCounterInc(Operations.FIND_NOT_FOUND.name)
 					FilElementDto(uuid, null, null)
 				}
 			} else {
-				FilElementDto(uuid, filDbData.get().document, filDbData.get().created)
+				Metrics.filCounterInc(Operations.FIND.name)
+				Metrics.filSummarySetSize(Operations.FIND.name, filDbData.get()?.document?.size?.toDouble())
+				return FilElementDto(uuid, filDbData.get().document, filDbData.get().created)
 			}
 
 		} catch (e: Exception) {
+			Metrics.errorCounterInc(Operations.FIND.name)
 			logger.error("Feil ved henting av $uuid", e)
 			throw e
+		} finally {
+			Metrics.filSummaryLatencyEnd(timer)
 		}
 	}
 }

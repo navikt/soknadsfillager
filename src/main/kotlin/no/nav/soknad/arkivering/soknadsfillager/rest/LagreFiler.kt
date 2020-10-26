@@ -13,7 +13,7 @@ class LagreFiler(private val lagreFilerService: LagreFilerService) {
 
 	@PostMapping("/filer")
 	fun lagreFiler(@RequestBody filer: List<FilElementDto>) {
-		logger.info("mottatt filer '${filer.map { it.uuid }}'")
+		logger.info("mottatt filer '${filer.map { it.uuid + ":" + it.fil?.size}}'")
 
 		lagreFilerService.lagreFiler(filer)
 	}

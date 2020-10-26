@@ -1,5 +1,7 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
+import no.nav.soknad.arkivering.soknadsfillager.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.Operations
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.service.HentFilerService
 import org.slf4j.LoggerFactory
