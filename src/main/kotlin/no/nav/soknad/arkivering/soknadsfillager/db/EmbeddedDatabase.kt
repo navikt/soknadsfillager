@@ -25,7 +25,7 @@ class EmbeddedDatabase(private val env: AppConfiguration.DBConfig, private val c
 		logger.info("Init of embeddedPostres")
 		embeddedPostgres = EmbeddedPostgres.builder().start()
 		postgresConnection = embeddedPostgres.postgresDatabase.connection
-		val hikariConfig = createHikariConfig(Role.ADMIN)
+		val hikariConfig = createHikariConfig()
 
 		runFlywayMigrations(hikariConfig)
 
@@ -38,12 +38,11 @@ class EmbeddedDatabase(private val env: AppConfiguration.DBConfig, private val c
 			databaseName = env.databaseName,
 			role = Role.USER
 		)
-
 	}
 
-	private fun createHikariConfig(role: Role): HikariConfig {
+	private fun createHikariConfig(): HikariConfig {
 		return HikariConfig().apply {
-			this.jdbcUrl = embeddedPostgres.getJdbcUrl("postgres", "postgres")
+			jdbcUrl = embeddedPostgres.getJdbcUrl("postgres", "postgres")
 			maximumPoolSize = 2
 			minimumIdle = 0
 			idleTimeout = 10001
@@ -64,7 +63,3 @@ class EmbeddedDatabase(private val env: AppConfiguration.DBConfig, private val c
 		load().migrate()
 	}
 }
-
-
-
-

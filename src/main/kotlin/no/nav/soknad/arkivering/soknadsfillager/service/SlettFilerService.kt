@@ -1,9 +1,9 @@
 package no.nav.soknad.arkivering.soknadsfillager.service
 
-import no.nav.soknad.arkivering.soknadsfillager.Metrics
-import no.nav.soknad.arkivering.soknadsfillager.Operations
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import no.nav.soknad.arkivering.soknadsfillager.supervision.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 

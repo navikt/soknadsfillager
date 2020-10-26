@@ -1,11 +1,10 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
-import no.nav.soknad.arkivering.soknadsfillager.Metrics
-import no.nav.soknad.arkivering.soknadsfillager.Operations
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import no.nav.soknad.arkivering.soknadsfillager.supervision.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class HentFilerTest {
 
 	private final val listeAvFilerIBasen = opprettListeAv3FilDtoer()
-	val listeAvUuiderIBasen = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(listeAvFilerIBasen)
+	private val listeAvUuiderIBasen = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(listeAvFilerIBasen)
 	private final val fileSize = 625172.0
 
 	@Autowired
@@ -29,7 +28,7 @@ class HentFilerTest {
 
 	@BeforeEach
 	private fun lagreListeAvFiler() {
-		this.lagreFiler.lagreFiler(listeAvFilerIBasen)
+		lagreFiler.lagreFiler(listeAvFilerIBasen)
 	}
 
 	@AfterEach
@@ -45,10 +44,10 @@ class HentFilerTest {
 
 		assertEquals(listeAvUuiderIBasen, hentedeFilerResultat.map { it.uuid })
 		assertEquals(listeAvFilerIBasen.map { it.fil?.size }, hentedeFilerResultat.map { it.fil?.size })
-		assertEquals(Metrics.filCounterGet(Operations.FIND.name), fileCounter + 3.0)
-		assertEquals(Metrics.errorCounterGet(Operations.FIND.name), errorCounter + 0.0)
+		assertEquals(fileCounter + 3.0, Metrics.filCounterGet(Operations.FIND.name))
+		assertEquals(errorCounter + 0.0, Metrics.errorCounterGet(Operations.FIND.name))
 		assertTrue(Metrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0 && Metrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 3.0)
-		assertEquals((Metrics.filSummarySizeGet(Operations.FIND.name).sum/Metrics.filSummarySizeGet(Operations.FIND.name).count), fileSize)
+		assertEquals(fileSize, (Metrics.filSummarySizeGet(Operations.FIND.name).sum / Metrics.filSummarySizeGet(Operations.FIND.name).count))
 	}
 
 	@Test
@@ -66,38 +65,11 @@ class HentFilerTest {
 		val fileNotFoundCounter = Metrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
 
 		val hentedeFilerResultat = hentFiler.hentFiler(listeSomHarUuidErSomIkkeFinnes)
-		assertEquals(hentedeFilerResultat.size, 5)
-		assertTrue(hentedeFilerResultat.find { it.uuid == uuid1SomIkkeErBlandtDokumentene }?.fil == null)
-		assertTrue(hentedeFilerResultat.find { it.uuid == listeAvUuiderIBasen[0] }?.fil != null)
-		assertEquals(Metrics.filCounterGet(Operations.FIND.name), fileCounter + 3.0)
-		assertEquals(Metrics.filCounterGet(Operations.FIND_NOT_FOUND.name), fileNotFoundCounter + 2.0)
+
+		assertEquals(5, hentedeFilerResultat.size)
+		assertNull(hentedeFilerResultat.find { it.uuid == uuid1SomIkkeErBlandtDokumentene }?.fil)
+		assertNotNull(hentedeFilerResultat.find { it.uuid == listeAvUuiderIBasen[0] }?.fil)
+		assertEquals(fileCounter + 3.0, Metrics.filCounterGet(Operations.FIND.name))
+		assertEquals(fileNotFoundCounter + 2.0, Metrics.filCounterGet(Operations.FIND_NOT_FOUND.name))
 	}
-
-	@Test
-	fun hentEnListeAvFilerFlereGangerTest() {
-
-		hentFiler()
-		System.out.println("Ferdig1")
-
-		Thread.sleep(6100)
-
-		hentFiler()
-		System.out.println("Ferdig2")
-
-		Thread.sleep(6100)
-		hentFiler()
-		System.out.println("Ferdig3")
-
-		System.out.println("FerdigFerdig")
-
-	}
-
-	private fun hentFiler() {
-		val hentedeFilerResultat = hentFiler.hentFiler(listeAvUuiderIBasen)
-
-		assertEquals(listeAvUuiderIBasen, hentedeFilerResultat.map { it.uuid })
-		assertEquals(listeAvFilerIBasen.map { it.fil?.size }, hentedeFilerResultat.map { it.fil?.size })
-
-	}
-
 }

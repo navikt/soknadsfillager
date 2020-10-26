@@ -1,8 +1,8 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
-import no.nav.soknad.arkivering.soknadsfillager.Metrics
-import no.nav.soknad.arkivering.soknadsfillager.Operations
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import no.nav.soknad.arkivering.soknadsfillager.supervision.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-
 
 @SpringBootTest
 class LagreFilerTest {
@@ -22,13 +21,13 @@ class LagreFilerTest {
 	private lateinit var lagreFiler: LagreFiler
 
 	@Autowired
-	private lateinit var mittRepository: FilRepository
+	private lateinit var filRepository: FilRepository
 
 	@BeforeEach
 	private fun lagreListeAvFiler() = lagreFiler.lagreFiler(mineFilerListe)
 
 	@AfterEach
-	fun ryddOpp() = mittRepository.deleteAll()
+	fun ryddOpp() = filRepository.deleteAll()
 
 	@Test
 	fun enkelTestAvMottaFilerTjenste() {
@@ -36,13 +35,13 @@ class LagreFilerTest {
 		val fileCounter = Metrics.filCounterGet(Operations.SAVE.name)
 		val errorCounter = Metrics.errorCounterGet(Operations.SAVE.name)
 
-		this.lagreFiler.lagreFiler(liste)
+		lagreFiler.lagreFiler(liste)
 
-		assertTrue(this.mittRepository.findById(minUuid).isPresent)
-		assertTrue(Metrics.filCounterGet(Operations.SAVE.name) == fileCounter + liste.size.toDouble())
-		assertTrue(Metrics.errorCounterGet(Operations.SAVE.name) == errorCounter + 0.0)
+		assertTrue(filRepository.findById(minUuid).isPresent)
+		assertEquals(fileCounter + liste.size.toDouble(), Metrics.filCounterGet(Operations.SAVE.name))
+		assertEquals(errorCounter + 0.0, Metrics.errorCounterGet(Operations.SAVE.name))
 		assertTrue(Metrics.filSummaryLatencyGet(Operations.SAVE.name).sum > 0 && Metrics.filSummaryLatencyGet(Operations.SAVE.name).count == fileCounter + 1.0)
-		assertTrue((Metrics.filSummarySizeGet(Operations.SAVE.name).sum/ Metrics.filSummarySizeGet(Operations.SAVE.name).count) == testFileSize)
+		assertEquals(testFileSize, (Metrics.filSummarySizeGet(Operations.SAVE.name).sum / Metrics.filSummarySizeGet(Operations.SAVE.name).count))
 	}
 
 	@Test
@@ -50,28 +49,28 @@ class LagreFilerTest {
 		val forsteFilVersion = opprettEnEnkelPdf()
 
 		val forsteFilVersjonIliste = opprettListeMedEnFil(minUuid, forsteFilVersion)
-		this.lagreFiler.lagreFiler(forsteFilVersjonIliste)
+		lagreFiler.lagreFiler(forsteFilVersjonIliste)
 
-		assertEquals(forsteFilVersion.size, mittRepository.findById(minUuid).get().document?.size)
+		assertEquals(forsteFilVersion.size, filRepository.findById(minUuid).get().document?.size)
 
 		val andeFilVersjon = opprettEnEnkelPdf()
 		val minAndreFilVersjonIListe = opprettListeMedEnFil(minUuid, andeFilVersjon)
 		val fileCounter = Metrics.filCounterGet(Operations.SAVE.name)
 
-		this.lagreFiler.lagreFiler(minAndreFilVersjonIListe)
+		lagreFiler.lagreFiler(minAndreFilVersjonIListe)
 
-		assertTrue(Metrics.filCounterGet(Operations.SAVE.name) == fileCounter + 1.0)
-		assertEquals(andeFilVersjon.size, mittRepository.findById(minUuid).get().document?.size)
+		assertEquals(fileCounter + 1.0, Metrics.filCounterGet(Operations.SAVE.name))
+		assertEquals(andeFilVersjon.size, filRepository.findById(minUuid).get().document?.size)
 	}
 
 	@Test
 	fun skalIkkeKunneLagreEnFilDtoSomManglerFil() {
-		val antallFilerVedStart = mittRepository.count()
+		val antallFilerVedStart = filRepository.count()
 		val listeMedFilElementDtoSomManglerFil = opprettListeMedEnFil(minUuid, null)
 
-		this.lagreFiler.lagreFiler(listeMedFilElementDtoSomManglerFil)
+		lagreFiler.lagreFiler(listeMedFilElementDtoSomManglerFil)
 
-		val filterEtterTest = mittRepository.count()
+		val filterEtterTest = filRepository.count()
 		assertEquals(antallFilerVedStart, filterEtterTest)
 	}
 }

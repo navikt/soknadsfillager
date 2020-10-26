@@ -6,11 +6,11 @@ import kotlinx.coroutines.delay
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
 
-class VaultCredentialService() : CredentialService {
+class VaultCredentialService : CredentialService {
 
-	var leaseDuration: Long = 0
-	private var renewCredentialsTaskData: RenewCredentialsTaskData? = null
 	private val log = LoggerFactory.getLogger(javaClass)
+	private var renewCredentialsTaskData: RenewCredentialsTaskData? = null
+	private var leaseDuration: Long = 0
 
 	override suspend fun runRenewCredentialsTask(applicationState: ApplicationState) {
 		delay(leaseDuration)
@@ -58,4 +58,3 @@ class VaultCredentialService() : CredentialService {
 		renewCredentialsTaskData = RenewCredentialsTaskData(dataSource, mountPath, databaseName, role)
 	}
 }
-

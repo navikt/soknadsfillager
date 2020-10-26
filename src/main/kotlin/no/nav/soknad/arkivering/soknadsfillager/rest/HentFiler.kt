@@ -1,7 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
-import no.nav.soknad.arkivering.soknadsfillager.Metrics
-import no.nav.soknad.arkivering.soknadsfillager.Operations
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.service.HentFilerService
 import org.slf4j.LoggerFactory
@@ -15,7 +13,7 @@ class HentFiler(private val hentFilerService: HentFilerService) {
 
 	@GetMapping("/filer")
 	fun hentFiler(@RequestParam ids: List<String>): List<FilElementDto> {
-		logger.info("Forsøker å hente følgende filer: $ids")
+		logger.info("Skal hente følgende filer: $ids")
 
 		return hentFilerService.hentFiler(ids)
 	}

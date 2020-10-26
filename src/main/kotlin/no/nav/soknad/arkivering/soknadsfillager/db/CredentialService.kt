@@ -15,5 +15,4 @@ interface CredentialService {
 																	mountPath: String,
 																	databaseName: String,
 																	role: Role)
-
 }
