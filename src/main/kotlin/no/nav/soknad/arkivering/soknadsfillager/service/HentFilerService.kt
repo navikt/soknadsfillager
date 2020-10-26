@@ -32,7 +32,7 @@ class HentFilerService(private val filRepository: FilRepository,
 						FilElementDto(uuid, null, null)
 					} else {
 						Metrics.filCounterInc(Operations.FIND_HENVENDELSE.name)
-						Metrics.filSummarySetSize("find_henvendelse", filElementDto.fil?.size?.toDouble())
+						Metrics.filSummarySetSize(Operations.FIND_HENVENDELSE.name, filElementDto.fil?.size?.toDouble())
 						logger.info("Hentet fil med id='$uuid', size= ${filElementDto.fil?.size}  fra Henvendelse")
 						filElementDto
 					}
