@@ -28,6 +28,8 @@ spec:
       cpu: 200m
       memory: 256Mi
   ingresses:
+    - "https://soknadsfillager.nais.preprod.local"
+    - "https://soknadsfillager.dev-fss.nais.io"
     - "https://soknadsfillager.dev.adeo.no"
   vault:
     enabled: true
