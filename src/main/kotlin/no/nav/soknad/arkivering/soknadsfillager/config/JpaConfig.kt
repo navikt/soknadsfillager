@@ -1,9 +1,9 @@
 package no.nav.soknad.arkivering.soknadsfillager.config
 
-import org.slf4j.LoggerFactory
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.soknad.arkivering.soknadsfillager.db.Database
 import no.nav.soknad.arkivering.soknadsfillager.db.EmbeddedDatabase
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -13,9 +13,7 @@ class JpaConfig(private val appConfig: AppConfiguration) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	@Bean
-	fun getDataSource(): HikariDataSource {
-		return initDatasource()
-	}
+	fun getDataSource() = initDatasource()
 
 	private fun initDatasource(): HikariDataSource {
 		val database = if (appConfig.dbConfig.embedded) {

@@ -7,5 +7,4 @@ interface HenvendelseInterface {
 	fun fetchFile(uuid: String): FilElementDto?
 
 	fun deleteFile(uuid: String): Boolean
-
 }

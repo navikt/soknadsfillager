@@ -1,8 +1,7 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
 
 enum class Role {
-	ADMIN, USER, READONLY;
+	ADMIN, USER;
 
 	override fun toString() = name.toLowerCase()
-
 }

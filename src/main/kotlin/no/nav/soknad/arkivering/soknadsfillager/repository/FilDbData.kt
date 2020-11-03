@@ -20,8 +20,5 @@ data class FilDbData(@Id @Column(name = "id") val uuid: String, @Column(name = "
 		return true
 	}
 
-	override fun hashCode(): Int {
-		var result = uuid.hashCode()
-		return result
-	}
+	override fun hashCode() = uuid.hashCode()
 }
