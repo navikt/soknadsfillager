@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 
 class RenewVaultService(private val vaultCredentialService: CredentialService) : RenewService {
 
-	private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.RenewVaultService")
+	private val log = LoggerFactory.getLogger(javaClass)
 
 	override fun startRenewTasks(applicationState: ApplicationState) {
 		GlobalScope.launch {

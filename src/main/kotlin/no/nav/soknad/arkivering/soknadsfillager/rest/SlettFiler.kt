@@ -12,7 +12,7 @@ class SlettFiler(private val slettFilerService: SlettFilerService) {
 
 	@DeleteMapping("/filer")
 	fun slettFiler(@RequestParam ids: List<String>) {
-		logger.info("Forsøker å slette '$ids'")
+		logger.info("Skal slette '$ids'")
 
 		slettFilerService.slettFiler(ids)
 	}

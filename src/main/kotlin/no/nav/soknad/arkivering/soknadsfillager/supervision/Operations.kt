@@ -1,4 +1,4 @@
-package no.nav.soknad.arkivering.soknadsfillager
+package no.nav.soknad.arkivering.soknadsfillager.supervision
 
 enum class Operations(name: String) {
 	FIND("find"),
@@ -6,5 +6,4 @@ enum class Operations(name: String) {
 	FIND_NOT_FOUND("find_not_found"),
 	SAVE("save"),
 	DELETE("saveAndFlush_clear")
-
 }

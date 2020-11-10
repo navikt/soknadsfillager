@@ -2,8 +2,8 @@ package no.nav.soknad.arkivering.soknadsfillager.config
 
 import com.natpryce.konfig.*
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
-import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import no.nav.soknad.arkivering.soknadsfillager.db.*
+import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.springframework.context.annotation.Bean
 import java.io.File
 
@@ -69,7 +69,7 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 			requireNotNull("DATABASE_PORT".configProperty()) { "database port must be set if jdbc url is not provided" },
 			requireNotNull("DATABASE_NAME".configProperty()) { "database name must be set if jdbc url is not provided" }),
 		val embedded: Boolean = "spring" == profiles,
-		val useVault: Boolean = "dev".equals(profiles) || "prod".equals(profiles),
+		val useVault: Boolean = profiles == "dev" || profiles == "prod",
 		val credentialService: CredentialService = if (useVault) VaultCredentialService() else EmbeddedCredentialService(),
 		val renewService: RenewService = if (useVault) RenewVaultService(credentialService) else EmbeddedRenewService(credentialService)
 	)

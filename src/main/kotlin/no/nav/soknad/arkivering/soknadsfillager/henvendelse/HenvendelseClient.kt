@@ -19,7 +19,6 @@ import reactor.netty.http.client.HttpClient
 import reactor.netty.tcp.TcpClient
 import java.util.function.Consumer
 
-
 @Service
 class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseInterface {
 
@@ -28,13 +27,13 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 	private val webClient = defaultWebClient()
 
 	override fun deleteFile(uuid: String): Boolean {
-		val resultat = webClient.delete().uri("/$uuid")
+		webClient.delete().uri("/$uuid")
 			.retrieve()
-			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) { response ->
+			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) {
 				logger.warn("Fikk 4xx feil ved forsøk på å slette uuid=$uuid")
 				Mono.error(RuntimeException("4xx"))
 			}
-			.onStatus({ obj: HttpStatus -> obj.is5xxServerError }) { response ->
+			.onStatus({ obj: HttpStatus -> obj.is5xxServerError }) {
 				logger.warn("Fikk 5xx feil ved forsøk på å slette uuid=$uuid")
 				Mono.error(RuntimeException("5xx"))
 			}
@@ -54,7 +53,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 				logger.info("status code= $status")
 				Mono.error(RuntimeException("4xx"))
 			}
-			.onStatus({ obj: HttpStatus -> obj.is5xxServerError }) { response ->
+			.onStatus({ obj: HttpStatus -> obj.is5xxServerError }) {
 				logger.warn("Fikk 5xx feil ved forsøk på å hente uuid=$uuid")
 				Mono.error(RuntimeException("5xx"))
 			}
@@ -82,16 +81,6 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 			.build()
 	}
 
-	private fun createHeaders(username: String, password: String): HttpHeaders {
-		return object : HttpHeaders() {
-			init {
-				setBasicAuth(username, password)
-				set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-			}
-		}
-	}
-
 	private fun logRequest(): ExchangeFilterFunction {
 		return ExchangeFilterFunction { clientRequest: ClientRequest, next: ExchangeFunction ->
 			logger.info("Request: {} {}", clientRequest.method(), clientRequest.url())
@@ -100,5 +89,4 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 			next.exchange(clientRequest)
 		}
 	}
-
 }
