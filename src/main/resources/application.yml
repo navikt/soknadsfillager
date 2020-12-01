@@ -1,6 +1,17 @@
 server:
   port: 9042
 
+log.level:
+  jdbc.sql: WARN
+  org.hibernate.SQL: WARN
+  org.hibernate.SQL_SLOW: WARN
+  com.zaxxer.hikari: WARN
+  org.hibernate.type: WARN
+  org.hibernate: WARN
+  ch.qos.logback: WARN
+  org.flywaydb: WARN
+  org.apache: WARN
+
 spring:
   codec:
     max-in-memory-size=50MB
