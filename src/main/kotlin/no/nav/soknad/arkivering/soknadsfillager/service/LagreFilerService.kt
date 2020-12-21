@@ -3,14 +3,14 @@ package no.nav.soknad.arkivering.soknadsfillager.service
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
-import no.nav.soknad.arkivering.soknadsfillager.supervision.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class LagreFilerService(private val filRepository: FilRepository) {
+class LagreFilerService(private val filRepository: FilRepository, private val fileMetrics: FileMetrics) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	fun lagreFiler(filListe: List<FilElementDto>) = filListe.forEach { lagreFil(it) }
@@ -22,16 +22,16 @@ class LagreFilerService(private val filRepository: FilRepository) {
 
 		} else {
 			val created = filElementDto.opprettet ?: LocalDateTime.now()
-			val start = Metrics.filSummaryLatencyStart(Operations.SAVE.name)
+			val start = fileMetrics.filSummaryLatencyStart(Operations.SAVE.name)
 			try {
 				filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil, created))
-				Metrics.filCounterInc(Operations.SAVE.name)
-				Metrics.filSummarySetSize(Operations.SAVE.name, filElementDto.fil.size.toDouble())
+				fileMetrics.filCounterInc(Operations.SAVE.name)
+				fileMetrics.filSummarySetSize(Operations.SAVE.name, filElementDto.fil.size.toDouble())
 			} catch (error: Exception) {
-				Metrics.errorCounterInc(Operations.SAVE.name)
+				fileMetrics.errorCounterInc(Operations.SAVE.name)
 				throw error
 			} finally {
-				Metrics.filSummaryLatencyEnd(start)
+				fileMetrics.filSummaryLatencyEnd(start)
 			}
 		}
 	}

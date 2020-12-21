@@ -2,13 +2,13 @@ package no.nav.soknad.arkivering.soknadsfillager.service
 
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
-import no.nav.soknad.arkivering.soknadsfillager.supervision.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class SlettFilerService(private val filRepository: FilRepository) {
+class SlettFilerService(private val filRepository: FilRepository, private val fileMetrics: FileMetrics) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	fun slettFiler(filListe: List<String>) {
@@ -31,17 +31,17 @@ class SlettFilerService(private val filRepository: FilRepository) {
 
 		val oppdatertFil = FilDbData(uuid, null, fil.get().created)
 
-		val start = Metrics.filSummaryLatencyStart(Operations.DELETE.name)
+		val start = fileMetrics.filSummaryLatencyStart(Operations.DELETE.name)
 		try {
 			filRepository.saveAndFlush(oppdatertFil)
-			Metrics.filCounterInc(Operations.DELETE.name)
+			fileMetrics.filCounterInc(Operations.DELETE.name)
 
 			logger.info("Fil med $uuid er slettet fra basen")
 		} catch (error: Exception) {
-			Metrics.errorCounterInc(Operations.DELETE.name)
+			fileMetrics.errorCounterInc(Operations.DELETE.name)
 			throw error
 		} finally {
-			Metrics.filSummaryLatencyEnd(start)
+			fileMetrics.filSummaryLatencyEnd(start)
 		}
 	}
 }
