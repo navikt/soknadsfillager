@@ -21,7 +21,7 @@ private val defaultProperties = ConfigurationMap(
 		"DATABASE_NAME" to "soknadsfillager",
 		"DATABASE_USERNAME" to "postgres",
 		"FILE_USER" to "arkiverer",
-		"FILE_WRITER" to "fileWriter",
+		"FILE_WRITER" to "avsender",
 		"FILE_WRITER_PASSWORD" to "password",
 		"DATABASE_PASSWORD" to "postgres",
 		"DATABASE_ADMIN_USERNAME" to "postgres",

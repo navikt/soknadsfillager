@@ -2,7 +2,7 @@ package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
-import no.nav.soknad.arkivering.soknadsfillager.supervision.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations.DELETE
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,6 +26,9 @@ class SlettFilerTest {
 	@Autowired
 	private lateinit var hentFiler: HentFiler
 
+	@Autowired
+	private lateinit var fileMetrics: FileMetrics
+
 	@AfterEach
 	fun ryddOpp() {
 		filRepository.deleteAll()
@@ -38,8 +41,8 @@ class SlettFilerTest {
 		assertEquals(3, filRepository.count())
 
 		val listeAvUuiderSomSkalSlettes = listeAvMineDokumenterSomSkalSlettes.map { it.uuid }
-		val fileCounter = Metrics.filCounterGet(DELETE.name)
-		val errorCounter = Metrics.errorCounterGet(DELETE.name)
+		val fileCounter = fileMetrics.filCounterGet(DELETE.name)
+		val errorCounter = fileMetrics.errorCounterGet(DELETE.name)
 
 		slettFiler.slettFiler(listeAvUuiderSomSkalSlettes)
 
@@ -48,9 +51,9 @@ class SlettFilerTest {
 		val filer = hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
 		val nonNullFiles = filer.stream().filter { it.fil != null }.toArray()
 		assertTrue(nonNullFiles.isEmpty())
-		assertEquals(fileCounter + listeAvUuiderSomSkalSlettes.size.toDouble(), Metrics.filCounterGet(DELETE.name))
-		assertEquals(errorCounter + 0.0, Metrics.errorCounterGet(DELETE.name))
-		assertTrue(Metrics.filSummaryLatencyGet(DELETE.name).sum > 0 && Metrics.filSummaryLatencyGet(DELETE.name).count == fileCounter + listeAvUuiderSomSkalSlettes.size.toDouble())
+		assertEquals(fileCounter!! + listeAvUuiderSomSkalSlettes.size.toDouble(), fileMetrics.filCounterGet(DELETE.name))
+		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(DELETE.name))
+		assertTrue(fileMetrics.filSummaryLatencyGet(DELETE.name).sum > 0 && fileMetrics.filSummaryLatencyGet(DELETE.name).count == fileCounter + listeAvUuiderSomSkalSlettes.size.toDouble())
 	}
 
 	@Test

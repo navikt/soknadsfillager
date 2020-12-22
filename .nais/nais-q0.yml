@@ -8,14 +8,14 @@ metadata:
 spec:
   image: {{image}}
   port: 9042
-  liveliness:
+  liveness:
     path: /internal/isAlive
     initialDelay: 20
   readiness:
     path: /internal/isReady
     initialDelay: 20
   prometheus:
-    enable: true
+    enabled: true
     path: /internal/prometheus
   replicas:
     min: 2

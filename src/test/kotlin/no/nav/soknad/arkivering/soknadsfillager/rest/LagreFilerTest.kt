@@ -1,7 +1,7 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
-import no.nav.soknad.arkivering.soknadsfillager.supervision.Metrics
+import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,22 +26,25 @@ class LagreFilerTest {
 	@BeforeEach
 	private fun lagreListeAvFiler() = lagreFiler.lagreFiler(mineFilerListe)
 
+	@Autowired
+	private lateinit var fileMetrics: FileMetrics
+
 	@AfterEach
 	fun ryddOpp() = filRepository.deleteAll()
 
 	@Test
 	fun enkelTestAvMottaFilerTjenste() {
 		val liste = opprettListeMedEnFil(minUuid, opprettEnEnkelPdf())
-		val fileCounter = Metrics.filCounterGet(Operations.SAVE.name)
-		val errorCounter = Metrics.errorCounterGet(Operations.SAVE.name)
+		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
+		val errorCounter = fileMetrics.errorCounterGet(Operations.SAVE.name)
 
 		lagreFiler.lagreFiler(liste)
 
 		assertTrue(filRepository.findById(minUuid).isPresent)
-		assertEquals(fileCounter + liste.size.toDouble(), Metrics.filCounterGet(Operations.SAVE.name))
-		assertEquals(errorCounter + 0.0, Metrics.errorCounterGet(Operations.SAVE.name))
-		assertTrue(Metrics.filSummaryLatencyGet(Operations.SAVE.name).sum > 0 && Metrics.filSummaryLatencyGet(Operations.SAVE.name).count == fileCounter + 1.0)
-		assertEquals(testFileSize, (Metrics.filSummarySizeGet(Operations.SAVE.name).sum / Metrics.filSummarySizeGet(Operations.SAVE.name).count))
+		assertEquals(fileCounter!! + liste.size.toDouble(), fileMetrics.filCounterGet(Operations.SAVE.name))
+		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(Operations.SAVE.name))
+		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.SAVE.name).sum > 0 && fileMetrics.filSummaryLatencyGet(Operations.SAVE.name).count == fileCounter!! + 1.0)
+		assertEquals(testFileSize, (fileMetrics.filSummarySizeGet(Operations.SAVE.name).sum / fileMetrics.filSummarySizeGet(Operations.SAVE.name).count))
 	}
 
 	@Test
@@ -55,11 +58,11 @@ class LagreFilerTest {
 
 		val andeFilVersjon = opprettEnEnkelPdf()
 		val minAndreFilVersjonIListe = opprettListeMedEnFil(minUuid, andeFilVersjon)
-		val fileCounter = Metrics.filCounterGet(Operations.SAVE.name)
+		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 
 		lagreFiler.lagreFiler(minAndreFilVersjonIListe)
 
-		assertEquals(fileCounter + 1.0, Metrics.filCounterGet(Operations.SAVE.name))
+		assertEquals(fileCounter!! + 1.0, fileMetrics.filCounterGet(Operations.SAVE.name))
 		assertEquals(andeFilVersjon.size, filRepository.findById(minUuid).get().document?.size)
 	}
 
