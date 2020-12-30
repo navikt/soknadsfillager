@@ -5,8 +5,8 @@ Dokumentasjon av [hele arkiveringssystemet](https://github.com/navikt/archiving-
 
 
 ### Produksjon
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=master)
-![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Prod/badge.svg?branch=master&event=deployment)
+![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=main)
+![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Prod/badge.svg?branch=main&event=deployment)
 
 #### Akseptanse
 ##### q0-pipeline
