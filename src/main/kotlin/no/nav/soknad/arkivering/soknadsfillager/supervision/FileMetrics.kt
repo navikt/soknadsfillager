@@ -33,7 +33,7 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	private val filSizeSummary = registerSummary(SUMMARY, SUMMARY_HELP, LABEL)
 	private val filLatencySummary = registerSummary(SUMMARY_LATENCY, SUMMARY_LATENCY_HELP, LABEL)
 
-	private val filSizeHistogram = registerHistogram(SUMMARY, SUMMARY_HELP, LABEL)
+	private val filSizeHistogram = registerHistogram(SUMMARY_HISTOGRAM, SUMMARY_HISTOGRAM_HELP, LABEL)
 
 	private fun registerCounter(name: String, help: String, label: String): Counter =
 		Counter
@@ -96,4 +96,11 @@ class FileMetrics(private val registry: CollectorRegistry) {
 
 	fun filSummaryLatencyGet(operation: String): Summary.Child.Value = filLatencySummary.labels(operation, APP).get()
 
+	fun unregister() {
+		registry.unregister(filCounter)
+		registry.unregister(errorCounter)
+		registry.unregister(filSizeSummary)
+		registry.unregister(filLatencySummary)
+		registry.unregister(filSizeHistogram)
+	}
 }

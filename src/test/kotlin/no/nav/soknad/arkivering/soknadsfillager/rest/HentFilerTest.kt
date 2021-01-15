@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
+import io.prometheus.client.CollectorRegistry
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
