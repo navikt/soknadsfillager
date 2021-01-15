@@ -27,6 +27,7 @@ class LagreFilerService(private val filRepository: FilRepository, private val fi
 				filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil, created))
 				fileMetrics.filCounterInc(Operations.SAVE.name)
 				fileMetrics.filSummarySetSize(Operations.SAVE.name, filElementDto.fil.size.toDouble())
+				fileMetrics.filHistogramSetSize(Operations.SAVE.name, filElementDto.fil.size.toDouble())
 			} catch (error: Exception) {
 				fileMetrics.errorCounterInc(Operations.SAVE.name)
 				throw error
