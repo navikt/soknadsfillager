@@ -63,7 +63,7 @@ class FileMetrics(private val registry: CollectorRegistry) {
 			.name(name)
 			.help(help)
 			.labelNames(label, APP_LABEL)
-			.buckets(4096.0, 16384.0, 65536.0, 262144.0, 1048576.0, 4194304.0, 16777216.0, 67108864.0, 268435456.0)
+			.buckets(4.0, 16.0, 64.0, 256.0, 1024.0, 4096.0, 16384.0, 65536.0, 262144.0)
 			.register(registry)
 
 
@@ -80,12 +80,12 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	fun errorCounterGet(operation: String) = errorCounter.labels(operation, APP)?.get()
 
 	fun filSummarySetSize(operation: String, size: Double?) {
-		if (size != null) filSizeSummary.labels(operation, APP).observe(size)
+		if (size != null) filSizeSummary.labels(operation, APP).observe(size/1024)
 	}
 	fun filSummarySizeGet(operation: String): Summary.Child.Value = filSizeSummary.labels(operation, APP).get()
 
 	fun filHistogramSetSize(operation: String, size: Double?) {
-		if (size != null) filSizeHistogram.labels(operation, APP).observe(size)
+		if (size != null) filSizeHistogram.labels(operation, APP).observe(size/1024)
 	}
 	fun filHistogramGetSize(operation: String): Histogram.Child.Value = filSizeHistogram.labels(operation, APP).get()
 
