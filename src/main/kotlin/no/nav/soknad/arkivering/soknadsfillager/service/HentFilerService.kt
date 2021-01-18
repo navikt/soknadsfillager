@@ -34,6 +34,7 @@ class HentFilerService(private val filRepository: FilRepository,
 					} else {
 						fileMetrics.filCounterInc(Operations.FIND_HENVENDELSE.name)
 						fileMetrics.filSummarySetSize(Operations.FIND_HENVENDELSE.name, filElementDto.fil?.size?.toDouble())
+						fileMetrics.filHistogramSetSize(Operations.FIND_HENVENDELSE.name, filElementDto.fil?.size?.toDouble())
 						logger.info("Hentet fil med id='$uuid', size= ${filElementDto.fil?.size}  fra Henvendelse")
 						filElementDto
 					}
@@ -44,6 +45,7 @@ class HentFilerService(private val filRepository: FilRepository,
 			} else {
 				fileMetrics.filCounterInc(Operations.FIND.name)
 				fileMetrics.filSummarySetSize(Operations.FIND.name, filDbData.get().document?.size?.toDouble())
+				fileMetrics.filHistogramSetSize(Operations.FIND.name, filDbData.get().document?.size?.toDouble())
 				return FilElementDto(uuid, filDbData.get().document, filDbData.get().created)
 			}
 

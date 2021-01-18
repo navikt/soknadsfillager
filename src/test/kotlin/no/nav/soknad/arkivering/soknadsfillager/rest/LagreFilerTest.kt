@@ -44,7 +44,14 @@ class LagreFilerTest {
 		assertEquals(fileCounter!! + liste.size.toDouble(), fileMetrics.filCounterGet(Operations.SAVE.name))
 		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(Operations.SAVE.name))
 		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.SAVE.name).sum > 0 && fileMetrics.filSummaryLatencyGet(Operations.SAVE.name).count == fileCounter!! + 1.0)
-		assertEquals(testFileSize, (fileMetrics.filSummarySizeGet(Operations.SAVE.name).sum / fileMetrics.filSummarySizeGet(Operations.SAVE.name).count))
+		assertEquals(testFileSize/1024, (fileMetrics.filSummarySizeGet(Operations.SAVE.name).sum / fileMetrics.filSummarySizeGet(Operations.SAVE.name).count))
+	}
+
+	fun multiply(int: Int?): Int? {
+		if (int != null)
+			return 1024 * int
+		else
+			return null
 	}
 
 	@Test

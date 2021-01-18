@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
+import io.prometheus.client.CollectorRegistry
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.web.bind.annotation.RequestParam
 
 @SpringBootTest
 class HentFilerTest {
@@ -50,7 +52,14 @@ class HentFilerTest {
 		assertEquals(fileCounter!! + 3.0, fileMetrics.filCounterGet(Operations.FIND.name)!!)
 		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(Operations.FIND.name)!!)
 		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0 && fileMetrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 3.0)
-		assertEquals(fileSize, (fileMetrics.filSummarySizeGet(Operations.FIND.name).sum / fileMetrics.filSummarySizeGet(Operations.FIND.name).count))
+		assertEquals(fileSize, (fileMetrics.filSummarySizeGet(Operations.FIND.name).sum / fileMetrics.filSummarySizeGet(Operations.FIND.name).count)*1024)
+	}
+
+	fun multiply(int: Int?): Int? {
+		if (int != null)
+			return 1024 * int
+		else
+			return null
 	}
 
 	@Test
