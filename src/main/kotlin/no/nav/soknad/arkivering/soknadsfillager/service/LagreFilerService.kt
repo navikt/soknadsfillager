@@ -23,6 +23,7 @@ class LagreFilerService(private val filRepository: FilRepository, private val fi
 		} else {
 			val created = filElementDto.opprettet ?: LocalDateTime.now()
 			val start = fileMetrics.filSummaryLatencyStart(Operations.SAVE.name)
+			val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.SAVE.name)
 			try {
 				filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil, created))
 				fileMetrics.filCounterInc(Operations.SAVE.name)
@@ -33,6 +34,7 @@ class LagreFilerService(private val filRepository: FilRepository, private val fi
 				throw error
 			} finally {
 				fileMetrics.filSummaryLatencyEnd(start)
+				fileMetrics.fileHistogramLatencyEnd(histogramTimer)
 			}
 		}
 	}
