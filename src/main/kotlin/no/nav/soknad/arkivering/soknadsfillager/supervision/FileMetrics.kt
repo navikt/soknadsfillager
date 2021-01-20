@@ -76,7 +76,7 @@ class FileMetrics(private val registry: CollectorRegistry) {
 			.name(name)
 			.help(help)
 			.labelNames(label, APP_LABEL)
-			.buckets(400.0, 1000.0, 2000.0, 4000.0, 15000.0, 30000.0, 60000.0)
+			.buckets(100.0, 200.0, 400.0, 1000.0, 2000.0, 4000.0, 15000.0, 30000.0)
 			.register(registry)
 
 	fun filCounterInc(operation: String) {
