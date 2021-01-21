@@ -92,8 +92,10 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	fun filCounterInc(operation: String) = filCounter.labels(operation, APP).inc()
 	fun filCounterGet(operation: String) = filCounter.labels(operation, APP)?.get()
 
-	fun filesInDbCounterInc(number: Long?) = {if (number != null) filesInDb.labels("FIND", APP).set(number.toDouble())}
-	fun filesInDbCounterGet() = filesInDb.labels("FIND", APP)?.get()
+	fun filesInDbGaugeSet(number: Long?) {
+		if (number != null) filesInDb.labels("FIND", APP).set(number.toDouble())
+	}
+	fun filesInDbGaugeGet() = filesInDb.labels("FIND", APP)?.get()
 
 	fun errorCounterInc(operation: String) {
 		errorCounter.labels(operation, APP).inc()

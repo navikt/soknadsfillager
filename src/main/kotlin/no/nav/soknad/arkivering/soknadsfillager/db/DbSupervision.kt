@@ -8,7 +8,6 @@ import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import org.slf4j.LoggerFactory
-import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Component
 
 @Component
@@ -43,7 +42,7 @@ class DbSupervision(private val appConfig: AppConfiguration, private val filRepo
 		val documentCount = filRepository.documentCount()
 		logger.info("Antall rader i databasen med dokumenter: $documentCount")
 
-		fileMetrics.filesInDbCounterInc(documentCount)
+		fileMetrics.filesInDbGaugeSet(documentCount)
 	}
 
 }
