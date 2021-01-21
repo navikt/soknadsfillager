@@ -1,9 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.supervision
 
-import io.prometheus.client.CollectorRegistry
-import io.prometheus.client.Counter
-import io.prometheus.client.Histogram
-import io.prometheus.client.Summary
+import io.prometheus.client.*
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
@@ -28,6 +25,8 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	private val SUMMARY_HISTOGRAM_HELP = "File size distribution"
 	private val LATENCY_HISTOGRAM = "file_latency_histogram"
 	private val LATENCY_HISTOGRAM_HELP = "File latency distribution"
+	private val FILENUMBER_COUNTER = "antall_filer_i_db"
+	private val FILENUMBER_COUNTER_HELP = "Number of files in the database"
 
 	private val filCounter = registerCounter(NAME, HELP, LABEL)
 	private val errorCounter = registerCounter(ERROR_NAME, ERROR_HELP, LABEL)
@@ -37,6 +36,17 @@ class FileMetrics(private val registry: CollectorRegistry) {
 
 	private val filSizeHistogram = registerSizeHistogram(SUMMARY_HISTOGRAM, SUMMARY_HISTOGRAM_HELP, LABEL)
 	private val fileLatencyHistogram = registerLatencyHistogram(LATENCY_HISTOGRAM, LATENCY_HISTOGRAM_HELP, LABEL)
+
+	private val filesInDb = registerGauge(FILENUMBER_COUNTER, FILENUMBER_COUNTER_HELP, LABEL)
+
+	private fun registerGauge(name: String, help: String, label: String): Gauge =
+		Gauge
+			.build()
+			.namespace(SOKNAD_NAMESPACE)
+			.name(name)
+			.help(help)
+			.labelNames(label, APP_LABEL)
+			.register(registry)
 
 	private fun registerCounter(name: String, help: String, label: String): Counter =
 		Counter
@@ -79,11 +89,11 @@ class FileMetrics(private val registry: CollectorRegistry) {
 			.buckets(100.0, 200.0, 400.0, 1000.0, 2000.0, 4000.0, 15000.0, 30000.0)
 			.register(registry)
 
-	fun filCounterInc(operation: String) {
-		filCounter.labels(operation, APP).inc()
-	}
-
+	fun filCounterInc(operation: String) = filCounter.labels(operation, APP).inc()
 	fun filCounterGet(operation: String) = filCounter.labels(operation, APP)?.get()
+
+	fun filesInDbCounterInc(number: Long?) = {if (number != null) filesInDb.labels("FIND", APP).set(number.toDouble())}
+	fun filesInDbCounterGet() = filesInDb.labels("FIND", APP)?.get()
 
 	fun errorCounterInc(operation: String) {
 		errorCounter.labels(operation, APP).inc()
