@@ -25,8 +25,8 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	private val SUMMARY_HISTOGRAM_HELP = "File size distribution"
 	private val LATENCY_HISTOGRAM = "file_latency_histogram"
 	private val LATENCY_HISTOGRAM_HELP = "File latency distribution"
-	private val FILENUMBER_COUNTER = "antall_filer_i_db"
-	private val FILENUMBER_COUNTER_HELP = "Number of files in the database"
+	private val FILENUMBER_GAUGE = "antall_filer_i_db_gauge"
+	private val FILENUMBER_GAUGE_HELP = "Number of rows with documents in the database"
 
 	private val filCounter = registerCounter(NAME, HELP, LABEL)
 	private val errorCounter = registerCounter(ERROR_NAME, ERROR_HELP, LABEL)
@@ -37,7 +37,7 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	private val filSizeHistogram = registerSizeHistogram(SUMMARY_HISTOGRAM, SUMMARY_HISTOGRAM_HELP, LABEL)
 	private val fileLatencyHistogram = registerLatencyHistogram(LATENCY_HISTOGRAM, LATENCY_HISTOGRAM_HELP, LABEL)
 
-	private val filesInDb = registerGauge(FILENUMBER_COUNTER, FILENUMBER_COUNTER_HELP, LABEL)
+	private val filesInDb = registerGauge(FILENUMBER_GAUGE, FILENUMBER_GAUGE_HELP, LABEL)
 
 	private fun registerGauge(name: String, help: String, label: String): Gauge =
 		Gauge
