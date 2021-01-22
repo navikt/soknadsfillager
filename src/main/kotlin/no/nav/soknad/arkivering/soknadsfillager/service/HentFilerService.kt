@@ -22,6 +22,7 @@ class HentFilerService(private val filRepository: FilRepository,
 
 	private fun hentFil(uuid: String): FilElementDto {
 		val timer = fileMetrics.filSummaryLatencyStart(Operations.FIND.name)
+		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.FIND.name)
 		try {
 			val filDbData = filRepository.findById(uuid)
 			return if (!filDbData.isPresent) {
@@ -55,6 +56,7 @@ class HentFilerService(private val filRepository: FilRepository,
 			throw e
 		} finally {
 			fileMetrics.filSummaryLatencyEnd(timer)
+			fileMetrics.fileHistogramLatencyEnd(histogramTimer)
 		}
 	}
 }

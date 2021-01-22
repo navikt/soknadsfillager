@@ -32,6 +32,7 @@ class SlettFilerService(private val filRepository: FilRepository, private val fi
 		val oppdatertFil = FilDbData(uuid, null, fil.get().created)
 
 		val start = fileMetrics.filSummaryLatencyStart(Operations.DELETE.name)
+		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.DELETE.name)
 		try {
 			filRepository.saveAndFlush(oppdatertFil)
 			fileMetrics.filCounterInc(Operations.DELETE.name)
@@ -42,6 +43,7 @@ class SlettFilerService(private val filRepository: FilRepository, private val fi
 			throw error
 		} finally {
 			fileMetrics.filSummaryLatencyEnd(start)
+			fileMetrics.fileHistogramLatencyEnd(histogramTimer)
 		}
 	}
 }
