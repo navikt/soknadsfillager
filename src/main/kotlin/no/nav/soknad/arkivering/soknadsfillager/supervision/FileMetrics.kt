@@ -1,9 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.supervision
 
-import io.prometheus.client.CollectorRegistry
-import io.prometheus.client.Counter
-import io.prometheus.client.Histogram
-import io.prometheus.client.Summary
+import io.prometheus.client.*
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
