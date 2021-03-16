@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.EmptyResultDataAccessException
 import java.util.*
 
 @SpringBootTest
@@ -36,21 +37,29 @@ class SlettFilerTest {
 
 	@Test
 	fun slettFiler() {
-		val listeAvMineDokumenterSomSkalSlettes = lagreEnListeAvDokumenter()
+		val listeAvMineDokumenter = lagreEnListeAvDokumenter()
 
 		assertEquals(3, filRepository.count())
 
-		val listeAvUuiderSomSkalSlettes = listeAvMineDokumenterSomSkalSlettes.map { it.uuid }
 		val fileCounter = fileMetrics.filCounterGet(DELETE.name)
 		val errorCounter = fileMetrics.errorCounterGet(DELETE.name)
 
+		val listeAvUuiderSomSkalSlettes = listOf(listeAvMineDokumenter[1].uuid)
 		slettFiler.slettFiler(listeAvUuiderSomSkalSlettes)
 
 		assertEquals(3, filRepository.count())
 
-		val filer = hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
+		val filer = hentFiler.hentFiler(listOf(listeAvMineDokumenter[0].uuid))
 		val nonNullFiles = filer.stream().filter { it.fil != null }.toArray()
-		assertTrue(nonNullFiles.isEmpty())
+		assertTrue(nonNullFiles.isNotEmpty())
+
+		try {
+			val filer = hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
+			assertTrue(filer.isEmpty())
+		} catch (e: Exception) {
+			assertTrue(e is EmptyResultDataAccessException)
+		}
+
 		assertEquals(fileCounter!! + listeAvUuiderSomSkalSlettes.size.toDouble(), fileMetrics.filCounterGet(DELETE.name))
 		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(DELETE.name))
 		assertTrue(fileMetrics.filSummaryLatencyGet(DELETE.name).sum > 0 && fileMetrics.filSummaryLatencyGet(DELETE.name).count == fileCounter + listeAvUuiderSomSkalSlettes.size.toDouble())
@@ -67,9 +76,12 @@ class SlettFilerTest {
 
 		assertEquals(3, filRepository.count())
 
-		val filer = hentFiler.hentFiler(slettelisteMedEkstraUuid)
-		val nonNullFiles = filer.stream().filter { it.fil != null }.toArray()
-		assertTrue(nonNullFiles.isEmpty())
+		try {
+			val filer = hentFiler.hentFiler(slettelisteMedEkstraUuid)
+			assertTrue(filer.isEmpty())
+		} catch (e: Exception) {
+			assertTrue(e is EmptyResultDataAccessException)
+		}
 	}
 
 
@@ -84,9 +96,6 @@ class SlettFilerTest {
 
 		assertEquals(3, filRepository.count().toInt())
 
-		val filer = hentFiler.hentFiler(sletteListe.map { it.uuid })
-		val empty = filer.stream().filter { it.fil != null }.toArray()
-		assert(empty.isEmpty())
 	}
 
 	private fun lagreEnListeAvDokumenter() = opprettListeAv3FilDtoer().also { lagreFiler(it) }
