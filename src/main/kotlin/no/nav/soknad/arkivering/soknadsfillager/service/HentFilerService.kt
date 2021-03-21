@@ -7,6 +7,7 @@ import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.slf4j.LoggerFactory
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
 
 @Service
@@ -47,6 +48,10 @@ class HentFilerService(private val filRepository: FilRepository,
 				fileMetrics.filCounterInc(Operations.FIND.name)
 				fileMetrics.filSummarySetSize(Operations.FIND.name, filDbData.get().document?.size?.toDouble())
 				fileMetrics.filHistogramSetSize(Operations.FIND.name, filDbData.get().document?.size?.toDouble())
+				if (filDbData.get().document == null) {
+					logger.warn("Hentet fil med id='$uuid', size= null. Kaster 410 - GONE")
+					throw EmptyResultDataAccessException(99)
+				}
 				return FilElementDto(uuid, filDbData.get().document, filDbData.get().created)
 			}
 

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.web.bind.annotation.RequestParam
 
 @SpringBootTest
@@ -24,6 +25,9 @@ class HentFilerTest {
 
 	@Autowired
 	private lateinit var hentFiler: HentFiler
+
+	@Autowired
+	private lateinit var slettFiler: SlettFiler
 
 	@Autowired
 	private lateinit var filRepository: FilRepository
@@ -84,4 +88,19 @@ class HentFilerTest {
 		assertEquals(fileCounter!! + 3.0, fileMetrics.filCounterGet(Operations.FIND.name))
 		assertEquals(fileNotFoundCounter!! + 2.0, fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name))
 	}
+
+	@Test
+	fun hentEnListeAvDokumenterHvorEttAvDisseErBlittSlettet() {
+		try {
+			slettFiler.slettFiler(listOf(listeAvUuiderIBasen.get(0)))
+
+			val hentedeFilerResultat = hentFiler.hentFiler(listeAvUuiderIBasen)
+			assertTrue(hentedeFilerResultat == null, "Forventet at feil er blitt kastet")
+
+		} catch (e: Exception) 	{
+			assertTrue(e is EmptyResultDataAccessException)
+		}
+
+	}
+
 }
