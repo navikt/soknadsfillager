@@ -6,20 +6,20 @@ import java.time.LocalDateTime
 
 class ErrorResponse(
 	status: HttpStatus,
-	message_: String
+	message: String
 ) {
 
 	val code: Int
 	val state: String
 	val message: String
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD hh:mm:ss")
 	val timestamp: LocalDateTime
 
 	init {
 		code = status.value()
 		state = status.name
-		message = message_
+		this.message = message
 		timestamp = LocalDateTime.now()
 	}
 }

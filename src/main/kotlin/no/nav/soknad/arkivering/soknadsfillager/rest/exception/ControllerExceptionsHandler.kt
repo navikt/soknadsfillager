@@ -1,7 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest.exception
 
 import org.slf4j.LoggerFactory
-import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -20,7 +19,6 @@ class ControllerExceptionsHandler {
 		EntityNotFoundException::class,
 		NoSuchElementException::class,
 		NoResultException::class,
-		//EmptyResultDataAccessException::class,
 		KotlinNullPointerException::class
 	)
 	fun notFoundException(e: Exception): ResponseEntity<ErrorResponse> {
@@ -28,18 +26,11 @@ class ControllerExceptionsHandler {
 	}
 
 	@ExceptionHandler(
-		EmptyResultDataAccessException::class
+		FileGoneException::class
 	)
 	fun resourceGoneException(e: Exception): ResponseEntity<ErrorResponse> {
 		return generateErrorResponse(HttpStatus.GONE, "Resource gone", e)
 	}
-
-/*
-	@ExceptionHandler(AuthorizationException::class)
-	fun unauthorizedException(e: Exception): ResponseEntity<ErrorResponse> {
-		return generateErrorResponse(HttpStatus.FORBIDDEN, "You are not authorized to do this operation", e)
-	}
-*/
 
 	@ExceptionHandler(AuthenticationException::class)
 	fun forbiddenException(e: Exception): ResponseEntity<ErrorResponse> {

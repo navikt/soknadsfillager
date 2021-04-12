@@ -2,15 +2,16 @@ package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import no.nav.soknad.arkivering.soknadsfillager.rest.exception.FileGoneException
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations.DELETE
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.dao.EmptyResultDataAccessException
 import java.util.*
 
 @SpringBootTest
@@ -53,13 +54,9 @@ class SlettFilerTest {
 		val nonNullFiles = filer.stream().filter { it.fil != null }.toArray()
 		assertTrue(nonNullFiles.isNotEmpty())
 
-		try {
-			val filer = hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
-			assertTrue(filer.isEmpty())
-		} catch (e: Exception) {
-			assertTrue(e is EmptyResultDataAccessException)
+		assertThrows<FileGoneException> {
+			hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
 		}
-
 		assertEquals(fileCounter!! + listeAvUuiderSomSkalSlettes.size.toDouble(), fileMetrics.filCounterGet(DELETE.name))
 		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(DELETE.name))
 		assertTrue(fileMetrics.filSummaryLatencyGet(DELETE.name).sum > 0 && fileMetrics.filSummaryLatencyGet(DELETE.name).count == fileCounter + listeAvUuiderSomSkalSlettes.size.toDouble())
@@ -76,11 +73,8 @@ class SlettFilerTest {
 
 		assertEquals(3, filRepository.count())
 
-		try {
-			val filer = hentFiler.hentFiler(slettelisteMedEkstraUuid)
-			assertTrue(filer.isEmpty())
-		} catch (e: Exception) {
-			assertTrue(e is EmptyResultDataAccessException)
+		assertThrows<FileGoneException> {
+			hentFiler.hentFiler(slettelisteMedEkstraUuid)
 		}
 	}
 
