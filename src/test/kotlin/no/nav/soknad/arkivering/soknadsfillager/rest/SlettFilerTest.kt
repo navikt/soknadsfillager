@@ -2,12 +2,14 @@ package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import no.nav.soknad.arkivering.soknadsfillager.rest.exception.FileGoneException
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations.DELETE
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.util.*
@@ -36,21 +38,25 @@ class SlettFilerTest {
 
 	@Test
 	fun slettFiler() {
-		val listeAvMineDokumenterSomSkalSlettes = lagreEnListeAvDokumenter()
+		val listeAvMineDokumenter = lagreEnListeAvDokumenter()
 
 		assertEquals(3, filRepository.count())
 
-		val listeAvUuiderSomSkalSlettes = listeAvMineDokumenterSomSkalSlettes.map { it.uuid }
 		val fileCounter = fileMetrics.filCounterGet(DELETE.name)
 		val errorCounter = fileMetrics.errorCounterGet(DELETE.name)
 
+		val listeAvUuiderSomSkalSlettes = listOf(listeAvMineDokumenter[1].uuid)
 		slettFiler.slettFiler(listeAvUuiderSomSkalSlettes)
 
 		assertEquals(3, filRepository.count())
 
-		val filer = hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
+		val filer = hentFiler.hentFiler(listOf(listeAvMineDokumenter[0].uuid))
 		val nonNullFiles = filer.stream().filter { it.fil != null }.toArray()
-		assertTrue(nonNullFiles.isEmpty())
+		assertTrue(nonNullFiles.isNotEmpty())
+
+		assertThrows<FileGoneException> {
+			hentFiler.hentFiler(listeAvUuiderSomSkalSlettes)
+		}
 		assertEquals(fileCounter!! + listeAvUuiderSomSkalSlettes.size.toDouble(), fileMetrics.filCounterGet(DELETE.name))
 		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(DELETE.name))
 		assertTrue(fileMetrics.filSummaryLatencyGet(DELETE.name).sum > 0 && fileMetrics.filSummaryLatencyGet(DELETE.name).count == fileCounter + listeAvUuiderSomSkalSlettes.size.toDouble())
@@ -67,9 +73,9 @@ class SlettFilerTest {
 
 		assertEquals(3, filRepository.count())
 
-		val filer = hentFiler.hentFiler(slettelisteMedEkstraUuid)
-		val nonNullFiles = filer.stream().filter { it.fil != null }.toArray()
-		assertTrue(nonNullFiles.isEmpty())
+		assertThrows<FileGoneException> {
+			hentFiler.hentFiler(slettelisteMedEkstraUuid)
+		}
 	}
 
 
@@ -84,9 +90,6 @@ class SlettFilerTest {
 
 		assertEquals(3, filRepository.count().toInt())
 
-		val filer = hentFiler.hentFiler(sletteListe.map { it.uuid })
-		val empty = filer.stream().filter { it.fil != null }.toArray()
-		assert(empty.isEmpty())
 	}
 
 	private fun lagreEnListeAvDokumenter() = opprettListeAv3FilDtoer().also { lagreFiler(it) }

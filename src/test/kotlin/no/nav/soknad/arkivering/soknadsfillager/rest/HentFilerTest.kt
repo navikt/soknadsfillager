@@ -1,16 +1,16 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
-import io.prometheus.client.CollectorRegistry
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import no.nav.soknad.arkivering.soknadsfillager.rest.exception.FileGoneException
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.web.bind.annotation.RequestParam
 
 @SpringBootTest
 class HentFilerTest {
@@ -24,6 +24,9 @@ class HentFilerTest {
 
 	@Autowired
 	private lateinit var hentFiler: HentFiler
+
+	@Autowired
+	private lateinit var slettFiler: SlettFiler
 
 	@Autowired
 	private lateinit var filRepository: FilRepository
@@ -84,4 +87,14 @@ class HentFilerTest {
 		assertEquals(fileCounter!! + 3.0, fileMetrics.filCounterGet(Operations.FIND.name))
 		assertEquals(fileNotFoundCounter!! + 2.0, fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name))
 	}
+
+	@Test
+	fun hentEnListeAvDokumenterHvorEttAvDisseErBlittSlettet() {
+		slettFiler.slettFiler(listOf(listeAvUuiderIBasen.get(0)))
+
+		assertThrows<FileGoneException> {
+			hentFiler.hentFiler(listeAvUuiderIBasen)
+		}
+	}
+
 }
