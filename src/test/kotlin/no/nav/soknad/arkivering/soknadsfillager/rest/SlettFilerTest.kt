@@ -38,19 +38,19 @@ class SlettFilerTest {
 
 	@Test
 	fun slettFiler() {
-		val listeAvMineDokumenter = lagreEnListeAvDokumenter()
+		val listeAvDokumenter = lagreEnListeAvDokumenter()
 
 		assertEquals(3, filRepository.count())
 
 		val fileCounter = fileMetrics.filCounterGet(DELETE.name)
 		val errorCounter = fileMetrics.errorCounterGet(DELETE.name)
 
-		val listeAvUuiderSomSkalSlettes = listOf(listeAvMineDokumenter[1].uuid)
+		val listeAvUuiderSomSkalSlettes = listOf(listeAvDokumenter[1].uuid)
 		slettFiler.slettFiler(listeAvUuiderSomSkalSlettes)
 
 		assertEquals(3, filRepository.count())
 
-		val filer = hentFiler.hentFiler(listOf(listeAvMineDokumenter[0].uuid))
+		val filer = hentFiler.hentFiler(listOf(listeAvDokumenter[0].uuid))
 		val nonNullFiles = filer.stream().filter { it.fil != null }.toArray()
 		assertTrue(nonNullFiles.isNotEmpty())
 
@@ -89,8 +89,8 @@ class SlettFilerTest {
 		slettFiler.slettFiler(sletteListe.map { it.uuid })
 
 		assertEquals(3, filRepository.count().toInt())
-
 	}
+
 
 	private fun lagreEnListeAvDokumenter() = opprettListeAv3FilDtoer().also { lagreFiler(it) }
 

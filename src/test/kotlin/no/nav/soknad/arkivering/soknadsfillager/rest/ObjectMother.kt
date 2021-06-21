@@ -23,7 +23,7 @@ fun getBytesFromFile(path: String): ByteArray {
 	val outputStream = ByteArrayOutputStream()
 	resourceAsStream.use { input ->
 		outputStream.use { output ->
-			input.copyTo(output)
+			input!!.copyTo(output)
 		}
 	}
 	return outputStream.toByteArray()

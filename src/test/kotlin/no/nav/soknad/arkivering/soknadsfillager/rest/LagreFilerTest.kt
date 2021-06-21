@@ -13,9 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class LagreFilerTest {
-	val minUuid = opprettEnUUid()
-	val mineFilerListe = opprettListeAv3FilDtoer()
-	val testFileSize = 625172.0
+	private val uuid = opprettEnUUid()
+	private val listOfFiles = opprettListeAv3FilDtoer()
+	private val testFileSize = 625172.0
 
 	@Autowired
 	private lateinit var lagreFiler: LagreFiler
@@ -24,7 +24,7 @@ class LagreFilerTest {
 	private lateinit var filRepository: FilRepository
 
 	@BeforeEach
-	private fun lagreListeAvFiler() = lagreFiler.lagreFiler(mineFilerListe)
+	private fun lagreListeAvFiler() = lagreFiler.lagreFiler(listOfFiles)
 
 	@Autowired
 	private lateinit var fileMetrics: FileMetrics
@@ -34,49 +34,42 @@ class LagreFilerTest {
 
 	@Test
 	fun enkelTestAvMottaFilerTjenste() {
-		val liste = opprettListeMedEnFil(minUuid, opprettEnEnkelPdf())
+		val liste = opprettListeMedEnFil(uuid, opprettEnEnkelPdf())
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 		val errorCounter = fileMetrics.errorCounterGet(Operations.SAVE.name)
 
 		lagreFiler.lagreFiler(liste)
 
-		assertTrue(filRepository.findById(minUuid).isPresent)
+		assertTrue(filRepository.findById(uuid).isPresent)
 		assertEquals(fileCounter!! + liste.size.toDouble(), fileMetrics.filCounterGet(Operations.SAVE.name))
 		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(Operations.SAVE.name))
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.SAVE.name).sum > 0 && fileMetrics.filSummaryLatencyGet(Operations.SAVE.name).count == fileCounter!! + 1.0)
+		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.SAVE.name).sum > 0 && fileMetrics.filSummaryLatencyGet(Operations.SAVE.name).count == fileCounter + 1.0)
 		assertEquals(testFileSize/1024, (fileMetrics.filSummarySizeGet(Operations.SAVE.name).sum / fileMetrics.filSummarySizeGet(Operations.SAVE.name).count))
-	}
-
-	fun multiply(int: Int?): Int? {
-		if (int != null)
-			return 1024 * int
-		else
-			return null
 	}
 
 	@Test
 	fun erstatterFilMedGittUuidMedNyFil() {
 		val forsteFilVersion = opprettEnEnkelPdf()
 
-		val forsteFilVersjonIliste = opprettListeMedEnFil(minUuid, forsteFilVersion)
+		val forsteFilVersjonIliste = opprettListeMedEnFil(uuid, forsteFilVersion)
 		lagreFiler.lagreFiler(forsteFilVersjonIliste)
 
-		assertEquals(forsteFilVersion.size, filRepository.findById(minUuid).get().document?.size)
+		assertEquals(forsteFilVersion.size, filRepository.findById(uuid).get().document?.size)
 
 		val andeFilVersjon = opprettEnEnkelPdf()
-		val minAndreFilVersjonIListe = opprettListeMedEnFil(minUuid, andeFilVersjon)
+		val andreFilVersjonIListe = opprettListeMedEnFil(uuid, andeFilVersjon)
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 
-		lagreFiler.lagreFiler(minAndreFilVersjonIListe)
+		lagreFiler.lagreFiler(andreFilVersjonIListe)
 
 		assertEquals(fileCounter!! + 1.0, fileMetrics.filCounterGet(Operations.SAVE.name))
-		assertEquals(andeFilVersjon.size, filRepository.findById(minUuid).get().document?.size)
+		assertEquals(andeFilVersjon.size, filRepository.findById(uuid).get().document?.size)
 	}
 
 	@Test
 	fun skalIkkeKunneLagreEnFilDtoSomManglerFil() {
 		val antallFilerVedStart = filRepository.count()
-		val listeMedFilElementDtoSomManglerFil = opprettListeMedEnFil(minUuid, null)
+		val listeMedFilElementDtoSomManglerFil = opprettListeMedEnFil(uuid, null)
 
 		lagreFiler.lagreFiler(listeMedFilElementDtoSomManglerFil)
 

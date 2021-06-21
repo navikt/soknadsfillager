@@ -49,13 +49,13 @@ class HentFilerService(private val filRepository: FilRepository,
 			val filElementDto = henvendelse.fetchFile(uuid)
 			return if (filElementDto == null) {
 				fileMetrics.filCounterInc(Operations.FIND_NOT_FOUND.name)
-				return FilElementDto(uuid, null, null)
+				FilElementDto(uuid, null, null)
 			} else {
 				fileMetrics.filCounterInc(Operations.FIND_HENVENDELSE.name)
 				fileMetrics.filSummarySetSize(Operations.FIND_HENVENDELSE.name, filElementDto.fil?.size?.toDouble())
 				fileMetrics.filHistogramSetSize(Operations.FIND_HENVENDELSE.name, filElementDto.fil?.size?.toDouble())
 				logger.info("Hentet fil med id='$uuid', size= ${filElementDto.fil?.size}  fra Henvendelse")
-				return filElementDto
+				filElementDto
 			}
 		} else {
 			fileMetrics.filCounterInc(Operations.FIND_NOT_FOUND.name)
@@ -70,7 +70,7 @@ class HentFilerService(private val filRepository: FilRepository,
 		fileMetrics.filHistogramSetSize(Operations.FIND.name, filDbData.document?.size?.toDouble())
 		if (filDbData.document == null) {
 			logger.warn("Hentet fil med id='$uuid', size= null. Kaster 410 - GONE")
-			throw FileGoneException("File with ${uuid} is deleted")
+			throw FileGoneException("File with $uuid is deleted")
 		}
 		return FilElementDto(uuid, filDbData.document, filDbData.created)
 	}
