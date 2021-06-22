@@ -15,6 +15,8 @@ class HentFiler(private val hentFilerService: HentFilerService) {
 	fun hentFiler(@RequestParam ids: List<String>): List<FilElementDto> {
 		logger.info("Skal hente følgende filer: $ids")
 
-		return hentFilerService.hentFiler(ids)
+		val files = hentFilerService.hentFiler(ids)
+		logger.info("Hentet filer: '${files.map { "id: '" + it.uuid + "', size in bytes: " + it.fil?.size }}'")
+		return files
 	}
 }
