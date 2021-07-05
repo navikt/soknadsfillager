@@ -15,9 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class HentFilerTest {
 
-	private final val listeAvFilerIBasen = opprettListeAv3FilDtoer()
+	private val listeAvFilerIBasen = opprettListeAv3FilDtoer()
 	private val listeAvUuiderIBasen = hentUtEnListeAvUuiderFraListeAvFilElementDtoer(listeAvFilerIBasen)
-	private final val fileSize = 625172.0
+	private val fileSize = 625172.0
 
 	@Autowired
 	private lateinit var lagreFiler: LagreFiler
@@ -58,13 +58,6 @@ class HentFilerTest {
 		assertEquals(fileSize, (fileMetrics.filSummarySizeGet(Operations.FIND.name).sum / fileMetrics.filSummarySizeGet(Operations.FIND.name).count)*1024)
 	}
 
-	fun multiply(int: Int?): Int? {
-		if (int != null)
-			return 1024 * int
-		else
-			return null
-	}
-
 	@Test
 	fun hentEnListeAvDokumenterHvorIkkeAlleUuiderErKnyttetTilFil() {
 		val uuid1SomIkkeErBlandtDokumentene = opprettEnUUid()
@@ -90,11 +83,10 @@ class HentFilerTest {
 
 	@Test
 	fun hentEnListeAvDokumenterHvorEttAvDisseErBlittSlettet() {
-		slettFiler.slettFiler(listOf(listeAvUuiderIBasen.get(0)))
+		slettFiler.slettFiler(listOf(listeAvUuiderIBasen[0]))
 
 		assertThrows<FileGoneException> {
 			hentFiler.hentFiler(listeAvUuiderIBasen)
 		}
 	}
-
 }
