@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
+import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
 import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.service.HentFilerService
 import org.slf4j.LoggerFactory
@@ -8,15 +9,22 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class HentFiler(private val hentFilerService: HentFilerService) {
+class HentFiler(private val hentFilerService: HentFilerService, private val appConfig: AppConfiguration) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	@GetMapping("/filer")
 	fun hentFiler(@RequestParam ids: List<String>): List<FilElementDto> {
-		logger.info("Skal hente følgende filer: $ids")
+		try {
+			logger.info("Skal hente følgende filer: $ids")
 
-		val files = hentFilerService.hentFiler(ids)
-		logger.info("Hentet filer: '${files.map { "id: '" + it.uuid + "', size in bytes: " + it.fil?.size }}'")
-		return files
+			val files = hentFilerService.hentFiler(ids)
+			logger.info("Hentet filer: '${files.map { "id: '" + it.uuid + "', size in bytes: " + it.fil?.size }}'")
+			return files
+
+		} catch (e: Exception) {
+			appConfig.applicationState.alive = false
+			logger.error("Exception occurred!", e)
+			throw e
+		}
 	}
 }
