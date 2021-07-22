@@ -54,7 +54,12 @@ class VaultCredentialService : CredentialService {
 		return renewCredentialsTaskData
 	}
 
-	override fun setRenewCredentialsTaskData(dataSource: HikariDataSource, mountPath: String, databaseName: String, role: Role) {
+	override fun setRenewCredentialsTaskData(
+		dataSource: HikariDataSource,
+		mountPath: String,
+		databaseName: String,
+		role: Role
+	) {
 		renewCredentialsTaskData = RenewCredentialsTaskData(dataSource, mountPath, databaseName, role)
 	}
 }

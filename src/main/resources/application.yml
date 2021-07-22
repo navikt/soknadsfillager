@@ -13,8 +13,6 @@ management:
     exposure:
       include: info, health, metrics, refresh, prometheus
     base-path: "/internal"
-    path-mapping:
-      info: "/isAlive"
   metrics:
     export:
       prometheus:

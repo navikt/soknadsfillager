@@ -19,6 +19,7 @@ object Vault {
 	val client: Vault = Vault(
 		VaultConfig()
 			.address(System.getenv("VAULT_ADDR") ?: "https://vault.adeo.no")
+			.engineVersion(1)
 			.token(vaultToken)
 			.openTimeout(5)
 			.readTimeout(30)

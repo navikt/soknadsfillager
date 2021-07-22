@@ -37,7 +37,12 @@ class EmbeddedCredentialService : CredentialService {
 
 	override fun renewCredentialsTaskData() = renewCredentialsTaskData
 
-	override fun setRenewCredentialsTaskData(dataSource: HikariDataSource, mountPath: String, databaseName: String, role: Role) {
+	override fun setRenewCredentialsTaskData(
+		dataSource: HikariDataSource,
+		mountPath: String,
+		databaseName: String,
+		role: Role
+	) {
 		renewCredentialsTaskData = RenewCredentialsTaskData(dataSource, mountPath, databaseName, role)
 	}
 }
