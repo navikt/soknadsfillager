@@ -11,8 +11,10 @@ interface CredentialService {
 
 	fun renewCredentialsTaskData(): RenewCredentialsTaskData?
 
-	fun setRenewCredentialsTaskData(dataSource: HikariDataSource,
-																	mountPath: String,
-																	databaseName: String,
-																	role: Role)
+	fun setRenewCredentialsTaskData(
+		dataSource: HikariDataSource,
+		mountPath: String,
+		databaseName: String,
+		role: Role
+	)
 }

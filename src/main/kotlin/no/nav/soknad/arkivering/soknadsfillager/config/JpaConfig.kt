@@ -2,14 +2,13 @@ package no.nav.soknad.arkivering.soknadsfillager.config
 
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.soknad.arkivering.soknadsfillager.db.Database
-import no.nav.soknad.arkivering.soknadsfillager.db.DbSupervision
 import no.nav.soknad.arkivering.soknadsfillager.db.EmbeddedDatabase
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class JpaConfig(private val appConfig: AppConfiguration, private val dbSupervision: DbSupervision) {
+class JpaConfig(private val appConfig: AppConfiguration) {
 
 	private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -24,8 +23,7 @@ class JpaConfig(private val appConfig: AppConfiguration, private val dbSupervisi
 		}
 		appConfig.applicationState.ready = true
 		appConfig.dbConfig.renewService.startRenewTasks(appConfig.applicationState)
-		dbSupervision.databaseSupervisionStart()
-		logger.info("Datasource er initialisert")
+		logger.info("Datasource is initialised")
 		return database.dataSource
 	}
 }

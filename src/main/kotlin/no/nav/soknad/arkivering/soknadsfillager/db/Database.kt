@@ -7,8 +7,10 @@ import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
 import java.sql.Connection
 
-class Database(private val env: AppConfiguration.DBConfig,
-							 private val vaultCredentialService: CredentialService) : DatabaseInterface {
+class Database(
+	private val env: AppConfiguration.DBConfig,
+	private val vaultCredentialService: CredentialService
+) : DatabaseInterface {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	override val dataSource: HikariDataSource
