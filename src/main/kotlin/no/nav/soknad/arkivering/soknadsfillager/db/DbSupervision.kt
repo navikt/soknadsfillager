@@ -3,16 +3,18 @@ package no.nav.soknad.arkivering.soknadsfillager.db
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
+@EnableScheduling
 class DbSupervision(private val filRepository: FilRepository,
 										private val fileMetrics: FileMetrics) {
 
 	private val logger = LoggerFactory.getLogger(javaClass)
 
-	@Scheduled(cron = everyFiveMinutes, initialDelay = 10_000)
+	@Scheduled(cron = everyFiveMinutes)
 	fun databaseSupervisionStart() {
 		try {
 			collectDbStat()
@@ -32,4 +34,4 @@ class DbSupervision(private val filRepository: FilRepository,
 	}
 }
 
-private const val everyFiveMinutes = "*/5 * * * *"
+private const val everyFiveMinutes = "0 */5 * * * *"
