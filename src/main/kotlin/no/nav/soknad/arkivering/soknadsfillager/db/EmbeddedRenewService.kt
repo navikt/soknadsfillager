@@ -16,7 +16,6 @@ class EmbeddedRenewService(private val credentialService: CredentialService) : R
 				credentialService.runRenewCredentialsTask(applicationState)
 			} catch (e: Exception) {
 				log.error("Noe gikk galt ved fornying av vault-credentials", e.message)
-			} finally {
 				applicationState.ready = false
 			}
 		}
