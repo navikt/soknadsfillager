@@ -28,7 +28,6 @@ spec:
       cpu: 200m
       memory: 256Mi
   ingresses:
-    - "https://soknadsfillager.nais.adeo.no"
     - "https://soknadsfillager.intern.nav.no"
     - "https://soknadsfillager.prod-fss.nais.io"
   vault:

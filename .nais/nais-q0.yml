@@ -29,7 +29,6 @@ spec:
       memory: 256Mi
   ingresses:
     - "https://soknadsfillager-q0.dev.intern.nav.no"
-    - "https://soknadsfillager-q0.dev.adeo.no"
   vault:
     enabled: true
     paths:
