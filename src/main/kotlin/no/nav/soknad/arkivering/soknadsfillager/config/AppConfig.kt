@@ -9,7 +9,6 @@ import java.io.File
 
 private val defaultProperties = ConfigurationMap(
 	mapOf(
-		"APP_VERSION" to "",
 		"APPLICATION_USERNAME" to "filehandler",
 		"APPLICATION_PASSWORD" to "",
 		"HENVENDELSE_URL" to "http://localhost:8081",
@@ -42,7 +41,6 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 	val applicationState = ApplicationState()
 
 	data class RestConfig(
-		val version: String = "APP_VERSION".configProperty(),
 		val username: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
 		val password: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "APPLICATION_PASSWORD".configProperty()),
 		val fileUser: String = "FILE_USER".configProperty(),

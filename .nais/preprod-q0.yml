@@ -2,7 +2,7 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: soknadsfillager
-  namespace: team-soknad
+  namespace: q0
   labels:
     team: team-soknad
 spec:
@@ -28,8 +28,7 @@ spec:
       cpu: 200m
       memory: 256Mi
   ingresses:
-    - "https://soknadsfillager.dev.intern.nav.no"
-    - "https://soknadsfillager.dev.adeo.no"
+    - "https://soknadsfillager-q0.dev.intern.nav.no"
   vault:
     enabled: true
     paths:
@@ -39,14 +38,12 @@ spec:
         kvPath: /apikey/appdynamics/dev
 
   env:
-    - name: APP_VERSION
-      value: {{ app_version }}
     - name: DATABASE_PORT
       value: "5432"
     - name: DATABASE_HOST
-      value: b27dbvl026.preprod.local
+      value: b27dbvl009.preprod.local
     - name: DATABASE_NAME
-      value: soknadsfillager-db-teamsoknad
+      value: soknadsfillager-db-q0
     - name: VAULT_DB_PATH
       value: postgresql/preprod-fss
     - name: APPLICATION_PROFILE
