@@ -9,7 +9,7 @@ import java.io.File
 
 private val defaultProperties = ConfigurationMap(
 	mapOf(
-		"BASICAUTH_USERNAME" to "avsender",
+		"BASICAUTH_USERNAME" to "sender",
 		"BASICAUTH_PASSWORD" to "password",
 
 		"APPLICATION_PROFILE" to "spring",
