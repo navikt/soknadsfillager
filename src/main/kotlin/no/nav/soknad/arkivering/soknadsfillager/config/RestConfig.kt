@@ -35,6 +35,10 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 	@Autowired
 	fun configureGlobal(auth: AuthenticationManagerBuilder) {
 		auth.inMemoryAuthentication()
+			.withUser(config.restConfig.username)
+			.password("{noop}${config.restConfig.password}")
+			.roles("USER")
+			.and()
 			.withUser(config.restConfig.fileWriter)
 			.password("{noop}${config.restConfig.fileWriterPassword}")
 			.roles("USER")
@@ -43,6 +47,6 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 			.password("{noop}${config.restConfig.fileUserPassword}")
 			.roles("USER")
 
-		logger.info("Konfigurert authenticationManager")
+		logger.debug("Configured authenticationManager")
 	}
 }

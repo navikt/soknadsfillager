@@ -9,21 +9,26 @@ import java.io.File
 
 private val defaultProperties = ConfigurationMap(
 	mapOf(
-		"APPLICATION_USERNAME" to "filehandler",
-		"APPLICATION_PASSWORD" to "",
-		"HENVENDELSE_URL" to "http://localhost:8081",
+		"BASICAUTH_USERNAME" to "avsender",
+		"BASICAUTH_PASSWORD" to "password",
+
 		"APPLICATION_PROFILE" to "spring",
 		"SHARED_PASSWORD" to "password",
-		"DATABASE_HOST" to "localhost",
-		"DATABASE_PORT" to "5432",
-		"DATABASE_NAME" to "soknadsfillager",
 		"FILE_USER" to "arkiverer",
 		"FILE_WRITER" to "avsender",
 		"FILE_WRITER_PASSWORD" to "password",
+
+		"DATABASE_HOST" to "localhost",
+		"DATABASE_PORT" to "5432",
+		"DATABASE_NAME" to "soknadsfillager",
 		"DATABASE_JDBC_URL" to "",
 		"VAULT_DB_PATH" to "",
+
+		"HENVENDELSE_USERNAME" to "filehandler",
+		"HENVENDELSE_PASSWORD" to "",
+		"HENVENDELSE_URL" to "http://localhost:8081",
 		"HENT_FRA_HENVENDELSE" to "false",
-		"MAX_FILE_SIZE" to (1024 * 1024 * 100).toString()
+		"HENVENDELSE_MAX_FILE_SIZE" to (1024 * 1024 * 100).toString()
 	)
 )
 
@@ -41,15 +46,19 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 	val applicationState = ApplicationState()
 
 	data class RestConfig(
-		val username: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "APPLICATION_USERNAME".configProperty()),
-		val password: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "APPLICATION_PASSWORD".configProperty()),
+		val username: String = readFileAsText("/secrets/innsending-data/username", "BASICAUTH_USERNAME".configProperty()),
+		val password: String = readFileAsText("/secrets/innsending-data/password", "BASICAUTH_PASSWORD".configProperty()),
+
 		val fileUser: String = "FILE_USER".configProperty(),
 		val fileUserPassword: String = "SHARED_PASSWORD".configProperty(),
 		val fileWriter: String = "FILE_WRITER".configProperty(),
 		val fileWriterPassword: String = "FILE_WRITER_PASSWORD".configProperty(),
-		val url: String = "HENVENDELSE_URL".configProperty(),
+
+		val henvendelseUsername: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "HENVENDELSE_USERNAME".configProperty()),
+		val henvendelsePassword: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "HENVENDELSE_PASSWORD".configProperty()),
+		val henvendelseUrl: String = "HENVENDELSE_URL".configProperty(),
 		val hentFraHenvendelse: Boolean = "HENT_FRA_HENVENDELSE".configProperty().toBoolean(),
-		val maxFileSize: Int = "MAX_FILE_SIZE".configProperty().toInt()
+		val henvendelseMaxFileSize: Int = "HENVENDELSE_MAX_FILE_SIZE".configProperty().toInt()
 	)
 
 	data class DBConfig(
