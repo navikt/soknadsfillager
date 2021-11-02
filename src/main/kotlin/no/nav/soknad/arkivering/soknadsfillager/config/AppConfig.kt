@@ -13,10 +13,6 @@ private val defaultProperties = ConfigurationMap(
 		"BASICAUTH_PASSWORD" to "password",
 
 		"APPLICATION_PROFILE" to "spring",
-		"SHARED_PASSWORD" to "password",
-		"FILE_USER" to "arkiverer",
-		"FILE_WRITER" to "avsender",
-		"FILE_WRITER_PASSWORD" to "password",
 
 		"DATABASE_HOST" to "localhost",
 		"DATABASE_PORT" to "5432",
@@ -48,11 +44,6 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 	data class RestConfig(
 		val username: String = readFileAsText("/secrets/innsending-data/username", "BASICAUTH_USERNAME".configProperty()),
 		val password: String = readFileAsText("/secrets/innsending-data/password", "BASICAUTH_PASSWORD".configProperty()),
-
-		val fileUser: String = "FILE_USER".configProperty(),
-		val fileUserPassword: String = "SHARED_PASSWORD".configProperty(),
-		val fileWriter: String = "FILE_WRITER".configProperty(),
-		val fileWriterPassword: String = "FILE_WRITER_PASSWORD".configProperty(),
 
 		val henvendelseUsername: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "HENVENDELSE_USERNAME".configProperty()),
 		val henvendelsePassword: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "HENVENDELSE_PASSWORD".configProperty()),
