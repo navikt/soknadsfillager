@@ -3,7 +3,7 @@ server:
 
 spring:
   codec:
-    max-in-memory-size=50MB
+    max-in-memory-size: 50MB
 
 management:
   endpoint:
