@@ -47,6 +47,6 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 			.password("{noop}${config.restConfig.fileUserPassword}")
 			.roles("USER")
 
-		logger.debug("Configured authenticationManager")
+		logger.debug("Configured authenticationManager.")
 	}
 }
