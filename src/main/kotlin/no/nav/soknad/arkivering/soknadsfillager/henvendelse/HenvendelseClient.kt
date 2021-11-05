@@ -48,7 +48,7 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 		return webClient.get().uri("/hent/$uuid")
 			.retrieve()
 			.onStatus({ obj: HttpStatus -> obj.is4xxClientError }) { response ->
-				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid. ")
+				logger.warn("Fikk 4xx feil ved forsøk på å hente uuid=$uuid")
 				val status = response.rawStatusCode()
 				logger.info("status code= $status")
 				Mono.error(RuntimeException("4xx"))
@@ -69,14 +69,15 @@ class HenvendelseClient(private val appConfig: AppConfiguration) : HenvendelseIn
 					.addHandlerLast(WriteTimeoutHandler(2))
 			}
 
+		val maxFileSize = appConfig.restConfig.henvendelseMaxFileSize
 		val exchangeStrategies = ExchangeStrategies.builder()
-			.codecs { configurer: ClientCodecConfigurer -> configurer.defaultCodecs().maxInMemorySize(appConfig.restConfig.maxFileSize) }.build()
+			.codecs { configurer: ClientCodecConfigurer -> configurer.defaultCodecs().maxInMemorySize(maxFileSize) }.build()
 		return WebClient.builder()
-			.baseUrl(config.url)
+			.baseUrl(config.henvendelseUrl)
 			.exchangeStrategies(exchangeStrategies)
 			.clientConnector(ReactorClientHttpConnector(HttpClient.from(tcpClient)))
 			.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-			.filter(ExchangeFilterFunctions.basicAuthentication(config.username, config.password))
+			.filter(ExchangeFilterFunctions.basicAuthentication(config.henvendelseUsername, config.henvendelsePassword))
 			.filter(logRequest())
 			.build()
 	}
