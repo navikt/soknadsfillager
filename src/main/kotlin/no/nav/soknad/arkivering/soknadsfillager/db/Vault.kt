@@ -9,10 +9,10 @@ import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
 import org.slf4j.LoggerFactory
 import java.io.File
 
-private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.vault")
+private val log = LoggerFactory.getLogger("no.nav.soknad.arkivering.soknadsfillager.Vault")
 
 object Vault {
-	private const val MIN_REFRESH_MARGIN = 600_000L // 10 minutes
+	private const val MIN_REFRESH_MARGIN = 10 * 60 * 1000L // 10 minutes
 	private val vaultToken: String = System.getenv("VAULT_TOKEN")
 		?: getTokenFromFile()
 		?: throw RuntimeException("Neither VAULT_TOKEN or VAULT_TOKEN_PATH is set")

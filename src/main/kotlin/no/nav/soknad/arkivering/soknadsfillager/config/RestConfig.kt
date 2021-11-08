@@ -38,14 +38,6 @@ class WebSecurityConfig(private val config: AppConfiguration) : WebSecurityConfi
 			.withUser(config.restConfig.username)
 			.password("{noop}${config.restConfig.password}")
 			.roles("USER")
-			.and()
-			.withUser(config.restConfig.fileWriter)
-			.password("{noop}${config.restConfig.fileWriterPassword}")
-			.roles("USER")
-			.and()
-			.withUser(config.restConfig.fileUser)
-			.password("{noop}${config.restConfig.fileUserPassword}")
-			.roles("USER")
 
 		logger.debug("Configured authenticationManager.")
 	}
