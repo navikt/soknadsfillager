@@ -2,8 +2,8 @@ package no.nav.soknad.arkivering.soknadsfillager.config
 
 import com.natpryce.konfig.*
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
-import no.nav.soknad.arkivering.soknadsfillager.db.*
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
+import no.nav.soknad.arkivering.soknadsfillager.db.*
 import org.springframework.context.annotation.Bean
 import java.io.File
 
@@ -18,13 +18,7 @@ private val defaultProperties = ConfigurationMap(
 		"DATABASE_PORT" to "5432",
 		"DATABASE_NAME" to "soknadsfillager",
 		"DATABASE_JDBC_URL" to "",
-		"VAULT_DB_PATH" to "",
-
-		"HENVENDELSE_USERNAME" to "filehandler",
-		"HENVENDELSE_PASSWORD" to "",
-		"HENVENDELSE_URL" to "http://localhost:8081",
-		"HENT_FRA_HENVENDELSE" to "false",
-		"HENVENDELSE_MAX_FILE_SIZE" to (1024 * 1024 * 100).toString()
+		"VAULT_DB_PATH" to ""
 	)
 )
 
@@ -43,13 +37,7 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 
 	data class RestConfig(
 		val username: String = readFileAsText("/secrets/innsending-data/username", "BASICAUTH_USERNAME".configProperty()),
-		val password: String = readFileAsText("/secrets/innsending-data/password", "BASICAUTH_PASSWORD".configProperty()),
-
-		val henvendelseUsername: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/username", "HENVENDELSE_USERNAME".configProperty()),
-		val henvendelsePassword: String = readFileAsText("/var/run/secrets/nais.io/serviceuser/password", "HENVENDELSE_PASSWORD".configProperty()),
-		val henvendelseUrl: String = "HENVENDELSE_URL".configProperty(),
-		val hentFraHenvendelse: Boolean = "HENT_FRA_HENVENDELSE".configProperty().toBoolean(),
-		val henvendelseMaxFileSize: Int = "HENVENDELSE_MAX_FILE_SIZE".configProperty().toInt()
+		val password: String = readFileAsText("/secrets/innsending-data/password", "BASICAUTH_PASSWORD".configProperty())
 	)
 
 	data class DBConfig(
