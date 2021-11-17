@@ -21,29 +21,22 @@ class ControllerExceptionsHandler {
 		NoResultException::class,
 		KotlinNullPointerException::class
 	)
-	fun notFoundException(e: Exception): ResponseEntity<ErrorResponse> {
-		return generateErrorResponse(HttpStatus.NOT_FOUND, "Resource not found", e)
-	}
+	fun notFoundException(e: Exception) = generateErrorResponse(HttpStatus.NOT_FOUND, "Resource not found", e)
 
-	@ExceptionHandler(
-		FileGoneException::class
-	)
-	fun resourceGoneException(e: Exception): ResponseEntity<ErrorResponse> {
-		return generateErrorResponse(HttpStatus.GONE, "Resource gone", e)
-	}
+	@ExceptionHandler(FileGoneException::class)
+	fun resourceGoneException(e: Exception) = generateErrorResponse(HttpStatus.GONE, "Resource gone", e)
+
+	@ExceptionHandler(FileNotSeenException::class)
+	fun resourceNotSeenException(e: Exception) =
+		generateErrorResponse(HttpStatus.NOT_FOUND, "Resource not found", e)
 
 	@ExceptionHandler(AuthenticationException::class)
-	fun forbiddenException(e: Exception): ResponseEntity<ErrorResponse> {
-		return generateErrorResponse(HttpStatus.UNAUTHORIZED, "You are not allowed to do this operation", e)
-	}
+	fun forbiddenException(e: Exception) =
+		generateErrorResponse(HttpStatus.UNAUTHORIZED, "You are not allowed to do this operation", e)
 
-	private fun generateErrorResponse(
-		status: HttpStatus,
-		message: String,
-		e: Exception
-	): ResponseEntity<ErrorResponse> {
+
+	private fun generateErrorResponse(status: HttpStatus, message: String, e: Exception): ResponseEntity<ErrorResponse> {
 		logger.warn(e.message)
 		return ResponseEntity(ErrorResponse(status, message), status)
 	}
-
 }
