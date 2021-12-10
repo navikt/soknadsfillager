@@ -35,6 +35,9 @@ For å rydde bort alle docker images som kjører lokalt:<br />
 `if [[ $(docker ps -qa) ]]; then docker stop $(docker ps -qa) ; docker rm $(docker ps -qa) ; fi; if [[ $(docker volume ls -qf dangling=true) ]]; then docker volume rm $(docker volume ls -qf dangling=true); fi`
 
 
+## Rest-API
+localhost:9042/swagger-ui/
+
 ## Henvendelser
 Spørsmål knyttet til koden eller prosjektet kan rettes mot:
 * [team-soknad@nav.no](mailto:team-soknad@nav.no)
