@@ -22,7 +22,7 @@
 
 		<konfig.version>1.6.10.0</konfig.version>
 		<coroutines.version>1.5.1</coroutines.version>
-		<prometheus-client.version>0.11.0</prometheus-client.version>
+		<prometheus-client.version>0.12.0</prometheus-client.version>
 		<logstash.version>6.6</logstash.version>
 
 		<mockito-kotlin.version>2.2.0</mockito-kotlin.version>
