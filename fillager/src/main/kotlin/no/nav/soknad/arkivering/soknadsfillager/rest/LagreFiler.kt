@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 class LagreFiler(private val lagreFilerService: LagreFilerService) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
+	@Deprecated("Replaced in favour of OpenAPI generated API code",
+		replaceWith = ReplaceWith("RestApi.addFiles()"))
 	@PostMapping("/filer")
 	fun lagreFiler(@RequestBody filer: List<FilElementDto>) {
 		logger.info("Skal lagre filer '${filer.map { "id: '" + it.uuid + "', size in bytes: " + it.fil?.size }}'")

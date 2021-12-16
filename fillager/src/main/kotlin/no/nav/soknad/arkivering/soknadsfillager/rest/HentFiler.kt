@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 class HentFiler(private val hentFilerService: HentFilerService) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
+	@Deprecated("Replaced in favour of OpenAPI generated API code",
+		replaceWith = ReplaceWith("RestApi.findFilesByIds()"))
 	@GetMapping("/filer")
 	fun hentFiler(@RequestParam ids: List<String>): List<FilElementDto> {
 		logger.info("Skal hente følgende filer: $ids")

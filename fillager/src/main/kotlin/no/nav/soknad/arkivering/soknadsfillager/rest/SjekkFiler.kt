@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController
 class SjekkFiler(private val sjekkFilerService: SjekkFilerService) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
+	@Deprecated("Replaced in favour of OpenAPI generated API code",
+		replaceWith = ReplaceWith("RestApi.checkFilesByIds()"))
 	@GetMapping("/filesExist")
 	fun sjekkFiler(@RequestParam ids: List<String>) {
 		logger.info("Will check if the following files exist: $ids")

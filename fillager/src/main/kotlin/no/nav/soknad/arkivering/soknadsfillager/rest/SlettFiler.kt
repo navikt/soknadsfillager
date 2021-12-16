@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController
 class SlettFiler(private val slettFilerService: SlettFilerService) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
+	@Deprecated("Replaced in favour of OpenAPI generated API code",
+		replaceWith = ReplaceWith("RestApi.deleteFiles()"))
 	@DeleteMapping("/filer")
 	fun slettFiler(@RequestParam ids: List<String>) {
 		logger.info("Skal slette '$ids'")
