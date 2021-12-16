@@ -1,46 +1,27 @@
 # Soknadsfillager
-Applikasjonen tilbyr tjeneste for å lagre filer, hente filer og slette filer.
+A file storage to which a client can upload, retrieve and delete files. The application stores files in a Postgres database, and provides a Rest interface that a client can interact with.
 
-Dokumentasjon av [hele arkiveringssystemet](https://github.com/navikt/archiving-infrastructure/wiki).
-
-
-### Produksjon
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy/badge.svg?branch=main)
-![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Prod/badge.svg?branch=main&event=deployment)
-
-#### Akseptanse
-##### q0-pipeline
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Pipelines/badge.svg?branch=q0-pipeline)
-![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Pipelines/badge.svg?branch=q0-pipeline&event=deployment)
-##### q1-pipeline
-![](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Pipelines/badge.svg?branch=q1-pipeline)
-![Build-Deploy-Prod](https://github.com/navikt/soknadsfillager/workflows/Build-Deploy-Pipelines/badge.svg?branch=q1-pipeline&event=deployment)
+For a description of the whole archiving system, see [the documentation](https://github.com/navikt/archiving-infrastructure/wiki).
 
 
-## Komme i gang
-
-### For lokal utvikling
-* Bygg med `mvn clean install`
-* Avhengig av at databasen kjører lokalt eller i docker<br />
-`$ docker run -e POSTGRES_PASSWORD=postgres --name local_postgres -p 5432:5432 postgres`<br />
-Legg til `-d` for å kjøre i bakgrunnen.
-
-### For å kjøre applikasjonen lokalt i docker
-`$ docker run --name soknadsfillager 9042:9042`
-
-[intelij dokumentasjon](https://www.jetbrains.com/help/idea/docker.html)
-
-### utviklerstøtte
-For å rydde bort alle docker images som kjører lokalt:<br />
-`if [[ $(docker ps -qa) ]]; then docker stop $(docker ps -qa) ; docker rm $(docker ps -qa) ; fi; if [[ $(docker volume ls -qf dangling=true) ]]; then docker volume rm $(docker volume ls -qf dangling=true); fi`
-
+## Building locally
+* Build with `mvn clean install`
+* Start application with `java -jar fillager/target/fillager.jar`
+* There are scripts to bring up postgres and the whole archiving system locally in [archiving-infrastructure](https://github.com/navikt/archiving-infrastructure/).
+  * Alternatively, you can run a database locally in docker:<br />
+  `docker run -e POSTGRES_PASSWORD=postgres --name local_postgres -p 5432:5432 postgres -d`
 
 ## Rest-API
-localhost:9042/swagger-ui/
+The Rest-API can be accessed here:
 
-## Henvendelser
-Spørsmål knyttet til koden eller prosjektet kan rettes mot:
-* [team-soknad@nav.no](mailto:team-soknad@nav.no)
+* [localhost](http://localhost:9042/swagger-ui/)
+* [q0](https://soknadsfillager-q0.dev.intern.nav.no/swagger-ui/)
+* [q1](https://soknadsfillager-q1.dev.intern.nav.no/swagger-ui/)
+* [teamsoknad (dev-fss)](https://soknadsfillager.dev.intern.nav.no/swagger-ui/)
+* [prod](https://soknadsfillager.intern.nav.no/swagger-ui/)
 
-## For NAV-ansatte
-Interne henvendelser kan sendes via Slack i kanalen #teamsoknad
+## Inquiries
+Questions regarding the code or the project can be asked to the team by [raising an issue on the repo](https://github.com/navikt/soknadsfillager/issues).
+
+### For NAV employees
+NAV employees can reach the team by Slack in the channel #teamsoknad
