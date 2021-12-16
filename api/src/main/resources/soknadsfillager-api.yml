@@ -19,9 +19,9 @@ paths:
         - files
       summary: Add new files to the file storage.
       description: Adds new files to the file storage. If a file already exists with the given id, the old file is overwritten.
-      operationId: addFile
+      operationId: addFiles
       requestBody:
-        description: File that will be added to the storage.
+        description: Files that will be added to the storage.
         content:
           application/json:
             schema:
@@ -55,7 +55,7 @@ paths:
         404:
           description: File Not Found, **NONE** of the requested files have ever been seen in the file storage.
         409:
-          description: Conflict, **AT LEAST ONE** of the requested files had a different status than the others, e.g. one requested file existed, but another was deleted, and a third was never seen. The client needs to perform one request per file id instead of multiple ids in one request, in order to find out the status of each file.
+          description: Conflict, **AT LEAST ONE** of the requested files had a different status than the others, e.g. one requested file exists, but another was deleted, and a third was never seen. The client needs to perform one request per file id instead of multiple ids in one request, in order to find out the status of each file.
         410:
           description: File Gone, **ALL** of the requested files have been present in the file storage but have since been deleted.
     get:
@@ -86,7 +86,7 @@ paths:
         404:
           description: File Not Found, **NONE** of the requested files have ever been seen in the file storage.
         409:
-          description: Conflict, **AT LEAST ONE** of the requested files had a different status than the others, e.g. one requested file existed, but another was deleted, and a third was never seen. The client needs to perform one request per file id instead of multiple ids in one request, in order to find out the status of each file.
+          description: Conflict, **AT LEAST ONE** of the requested files had a different status than the others, e.g. one requested file exists, but another was deleted, and a third was never seen. The client needs to perform one request per file id instead of multiple ids in one request, in order to find out the status of each file.
         410:
           description: File Gone, **ALL** of the requested files have been present in the file storage but have since been deleted.
     delete:

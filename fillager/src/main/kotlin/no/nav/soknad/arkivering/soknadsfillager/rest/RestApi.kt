@@ -22,9 +22,9 @@ class RestApi(
 ) : FilesApi {
 
 	/**
-	 * @see FilesApi#addFile
+	 * @see FilesApi#addFiles
 	 */
-	override fun addFile(fileData: List<FileData>): ResponseEntity<Unit> {
+	override fun addFiles(fileData: List<FileData>): ResponseEntity<Unit> {
 		lagreFilerService.lagreFiler(fileData.map { FilElementDto(it.id, it.content, it.createdAt.toLocalDateTime()) })
 		return ResponseEntity(HttpStatus.OK)
 	}
