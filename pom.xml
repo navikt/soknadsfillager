@@ -14,7 +14,7 @@
 	<version>1.1.0</version>
 	<packaging>pom</packaging>
 	<name>soknadsfillager</name>
-	<description>Midlertidig lagring av filer under ferdigstilling av søknad</description>
+	<description>Temporary file storage during archival of benefit applications</description>
 
 	<modules>
 		<module>api</module>

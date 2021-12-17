@@ -26,6 +26,10 @@ class ControllerExceptionsHandler {
 	@ExceptionHandler(FileGoneException::class)
 	fun resourceGoneException(e: Exception) = generateErrorResponse(HttpStatus.GONE, "Resource gone", e)
 
+	@ExceptionHandler(ConflictException::class)
+	fun conflictException(e: Exception) =
+		generateErrorResponse(HttpStatus.CONFLICT, "Requested ids had many different statuses", e)
+
 	@ExceptionHandler(FileNotSeenException::class)
 	fun resourceNotSeenException(e: Exception) =
 		generateErrorResponse(HttpStatus.NOT_FOUND, "Resource not found", e)

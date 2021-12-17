@@ -10,7 +10,7 @@
 
 	<artifactId>fillager</artifactId>
 	<name>${project.artifactId}</name>
-	<description>Midlertidig lagring av filer under ferdigstilling av søknad</description>
+	<description>Temporary file storage during archival of benefit applications</description>
 
 	<properties>
 		<otj-pg-embedded.version>0.13.4</otj-pg-embedded.version>
@@ -22,8 +22,8 @@
 		<coroutines.version>1.5.1</coroutines.version>
 		<prometheus-client.version>0.11.0</prometheus-client.version>
 		<logstash.version>6.6</logstash.version>
+		<mockk.version>1.12.1</mockk.version>
 
-		<mockito-kotlin.version>2.2.0</mockito-kotlin.version>
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
 		<kotlin.version>1.5.20</kotlin.version>
@@ -127,6 +127,12 @@
 			<version>${logstash.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.mockk</groupId>
+			<artifactId>mockk</artifactId>
+			<version>${mockk.version} </version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

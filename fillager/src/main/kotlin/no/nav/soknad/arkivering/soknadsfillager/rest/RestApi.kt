@@ -1,31 +1,30 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import no.nav.soknad.arkivering.soknadsfillager.api.FilesApi
-import no.nav.soknad.arkivering.soknadsfillager.dto.FilElementDto
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
-import no.nav.soknad.arkivering.soknadsfillager.service.HentFilerService
-import no.nav.soknad.arkivering.soknadsfillager.service.LagreFilerService
-import no.nav.soknad.arkivering.soknadsfillager.service.SjekkFilerService
-import no.nav.soknad.arkivering.soknadsfillager.service.SlettFilerService
+import no.nav.soknad.arkivering.soknadsfillager.service.DeleteFilesService
+import no.nav.soknad.arkivering.soknadsfillager.service.GetFilesService
+import no.nav.soknad.arkivering.soknadsfillager.service.StoreFilesService
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 
 @RestController
 class RestApi(
-	private val hentFilerService: HentFilerService,
-	private val sjekkFilerService: SjekkFilerService,
-	private val lagreFilerService: LagreFilerService,
-	private val slettFilerService: SlettFilerService
+	private val getFilesService: GetFilesService,
+	private val storeFilesService: StoreFilesService,
+	private val deleteFilesService: DeleteFilesService
 ) : FilesApi {
+	private val logger = LoggerFactory.getLogger(javaClass)
 
 	/**
 	 * @see FilesApi#addFiles
 	 */
 	override fun addFiles(fileData: List<FileData>): ResponseEntity<Unit> {
-		lagreFilerService.lagreFiler(fileData.map { FilElementDto(it.id, it.content, it.createdAt.toLocalDateTime()) })
+		logger.debug("Will add files with the following ids: ${fileData.map { it.id }}")
+
+		storeFilesService.storeFiles(fileData)
 		return ResponseEntity(HttpStatus.OK)
 	}
 
@@ -34,8 +33,10 @@ class RestApi(
 	 * @see FilesApi#checkFilesByIds
 	 */
 	override fun checkFilesByIds(ids: List<String>): ResponseEntity<Unit> {
-		sjekkFilerService.sjekkFiler(ids)
-		return ResponseEntity(HttpStatus.NOT_IMPLEMENTED) // TODO
+		logger.debug("Will check the status of the files with the following ids: $ids")
+
+		getFilesService.getFiles(ids)
+		return ResponseEntity(HttpStatus.OK)
 	}
 
 
@@ -43,7 +44,9 @@ class RestApi(
 	 * @see FilesApi#deleteFiles
 	 */
 	override fun deleteFiles(ids: List<String>): ResponseEntity<Unit> {
-		slettFilerService.slettFiler(ids)
+		logger.debug("Will delete the files with the following ids: $ids")
+
+		deleteFilesService.deleteFiles(ids)
 		return ResponseEntity(HttpStatus.OK)
 	}
 
@@ -52,9 +55,9 @@ class RestApi(
 	 * @see FilesApi#findFilesByIds
 	 */
 	override fun findFilesByIds(ids: List<String>): ResponseEntity<List<FileData>> {
-		val files = hentFilerService.hentFiler(ids).map { FileData(it.uuid, it.fil!!,
-			it.opprettet?.atOffset(ZoneOffset.UTC) ?: OffsetDateTime.now()) }
+		logger.debug("Will get files with the following ids: $ids")
 
-		return ResponseEntity(HttpStatus.NOT_IMPLEMENTED) // TODO
+		val files = getFilesService.getFiles(ids)
+		return ResponseEntity.ok(files)
 	}
 }
