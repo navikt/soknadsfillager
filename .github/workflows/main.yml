@@ -41,9 +41,7 @@ jobs:
           echo "docker.pkg.github.com"/"$GITHUB_REPOSITORY"/"$NAME" > .docker_image
           echo "$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" > .docker_tag
       - name: Build docker image
-        env:
-          SUBFOLDER: fillager
-        run: docker build ./"$SUBFOLDER" --pull -t $(cat .docker_image):$(cat .docker_tag)
+        run: docker build . --pull -t $(cat .docker_image):$(cat .docker_tag)
       - name: Login and push docker image
         run: |
           echo "$GITHUB_ACCESS_TOKEN" | docker login --username "x-access-token" --password-stdin https://docker.pkg.github.com
