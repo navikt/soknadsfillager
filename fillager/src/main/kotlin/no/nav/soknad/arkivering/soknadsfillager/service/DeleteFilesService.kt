@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service
 class DeleteFilesService(private val filRepository: FilRepository, private val fileMetrics: FileMetrics) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
-	fun deleteFiles(ids: List<String>) {
-		ids.distinct().forEach { deleteFile(it) }
+	fun deleteFiles(innsendingId: String?, ids: List<String>) {
+		ids.distinct().forEach { deleteFile(innsendingId, it) }
 	}
 
-	private fun deleteFile(id: String) {
+	private fun deleteFile(innsendingId: String?, id: String) {
 		val file = filRepository.findById(id)
 		if (!file.isPresent) {
-			logger.error("File with id '$id' was not found in the database")
+			logger.error("$innsendingId: File with id '$id' was not found in the database")
 			return
 		}
 

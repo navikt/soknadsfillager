@@ -148,7 +148,7 @@ class DeleteFilesTests {
 		val crashingDeleteFilesService = DeleteFilesService(crashingFilRepository, fileMetrics)
 
 		assertThrows<JpaSystemException> {
-			crashingDeleteFilesService.deleteFiles(listOf(UUID.randomUUID().toString()))
+			crashingDeleteFilesService.deleteFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString()))
 		}
 	}
 

@@ -135,7 +135,7 @@ class GetFilesTests {
 		val crashingGetFilesService = GetFilesService(crashingFilRepository, fileMetrics)
 
 		assertThrows<JpaSystemException> {
-			crashingGetFilesService.getFiles(listOf(UUID.randomUUID().toString()))
+			crashingGetFilesService.getFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString()))
 		}
 	}
 

@@ -17,12 +17,12 @@ import java.time.ZoneOffset
 class GetFilesService(private val filRepository: FilRepository, private val fileMetrics: FileMetrics) {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
-	fun getFiles(ids: List<String>): List<FileData> {
+	fun getFiles(innsendingId: String?, ids: List<String>): List<FileData> {
 
-		val files = ids.map { getFile(it) }
+		val files = ids.map { getFile(innsendingId, it) }
 
 		if (files.map { it.status }.distinct().size != 1) {
-			logger.error("Requested ids had different statuses: $files")
+			logger.error("$innsendingId: Requested ids had different statuses: $files")
 			throw ConflictException("Requested ids had different statuses")
 		} else if (files.first().status == Status.DELETED) {
 			throw FileGoneException("All the files have been deleted")
@@ -36,21 +36,21 @@ class GetFilesService(private val filRepository: FilRepository, private val file
 			.map { FileData(it.uuid, it.document!!, it.created?.atOffset(ZoneOffset.UTC) ?: OffsetDateTime.now()) }
 	}
 
-	private fun getFile(id: String): FileWithStatus {
+	private fun getFile(innsendingId: String?, id: String): FileWithStatus {
 		val timer = fileMetrics.filSummaryLatencyStart(Operations.FIND.name)
 		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.FIND.name)
 		try {
 
 			val dbData = filRepository.findById(id)
 			return if (!dbData.isPresent) {
-				failedToFindFile(id)
+				failedToFindFile(innsendingId, id)
 			} else {
-				foundFile(dbData.get())
+				foundFile(innsendingId, dbData.get())
 			}
 
 		} catch (e: Exception) {
 			fileMetrics.errorCounterInc(Operations.FIND.name)
-			logger.error("Failed to fetch file with id '$id'", e)
+			logger.error("$innsendingId: Failed to fetch file with id '$id'", e)
 			throw e
 		} finally {
 			fileMetrics.filSummaryLatencyEnd(timer)
@@ -58,18 +58,18 @@ class GetFilesService(private val filRepository: FilRepository, private val file
 		}
 	}
 
-	private fun failedToFindFile(id: String): FileWithStatus {
-		logger.info("Failed to find file with id '$id' in database")
+	private fun failedToFindFile(innsendingId: String?, id: String): FileWithStatus {
+		logger.info("$innsendingId: Failed to find file with id '$id' in database")
 		fileMetrics.filCounterInc(Operations.FIND_NOT_FOUND.name)
 		return FileWithStatus(id, Status.NOT_FOUND, null)
 	}
 
-	private fun foundFile(dbData: FilDbData): FileWithStatus {
+	private fun foundFile(innsendingId: String?, dbData: FilDbData): FileWithStatus {
 		fileMetrics.filCounterInc(Operations.FIND.name)
 		fileMetrics.filSummarySetSize(Operations.FIND.name, dbData.document?.size?.toDouble())
 		fileMetrics.filHistogramSetSize(Operations.FIND.name, dbData.document?.size?.toDouble())
 		if (dbData.document == null) {
-			logger.warn("File with id '${dbData.uuid}' did not have content, i.e. was deleted.")
+			logger.warn("$innsendingId: File with id '${dbData.uuid}' did not have content, i.e. was deleted.")
 			return FileWithStatus(dbData.uuid, Status.DELETED, dbData)
 		}
 		return FileWithStatus(dbData.uuid, Status.FOUND, dbData)

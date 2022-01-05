@@ -21,10 +21,16 @@ class RestApi(
 	/**
 	 * @see FilesApi#addFiles
 	 */
-	override fun addFiles(fileData: List<FileData>): ResponseEntity<Unit> {
-		logger.debug("Will add files with the following ids: ${fileData.map { it.id }}")
+	override fun addFiles(fileData: List<FileData>, xInnsendingId: String?): ResponseEntity<Unit> {
+		try {
+			storeFilesService.storeFiles(fileData)
 
-		storeFilesService.storeFiles(fileData)
+			logger.info("$xInnsendingId: Added files with the following ids: ${fileData.map { it.id }}")
+		} catch (e: Exception) {
+			logger.error("$xInnsendingId: Failed to add files with the following ids: ${fileData.map { it.id }}", e)
+			throw e
+		}
+
 		return ResponseEntity(HttpStatus.OK)
 	}
 
@@ -32,10 +38,10 @@ class RestApi(
 	/**
 	 * @see FilesApi#checkFilesByIds
 	 */
-	override fun checkFilesByIds(ids: List<String>): ResponseEntity<Unit> {
-		logger.debug("Will check the status of the files with the following ids: $ids")
+	override fun checkFilesByIds(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
+		logger.info("$xInnsendingId: Will check the status of the files with the following ids: $ids")
 
-		getFilesService.getFiles(ids)
+		getFilesService.getFiles(xInnsendingId, ids)
 		return ResponseEntity(HttpStatus.OK)
 	}
 
@@ -43,10 +49,10 @@ class RestApi(
 	/**
 	 * @see FilesApi#deleteFiles
 	 */
-	override fun deleteFiles(ids: List<String>): ResponseEntity<Unit> {
-		logger.debug("Will delete the files with the following ids: $ids")
+	override fun deleteFiles(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
+		logger.info("$xInnsendingId: Will delete the files with the following ids: $ids")
 
-		deleteFilesService.deleteFiles(ids)
+		deleteFilesService.deleteFiles(xInnsendingId, ids)
 		return ResponseEntity(HttpStatus.OK)
 	}
 
@@ -54,10 +60,10 @@ class RestApi(
 	/**
 	 * @see FilesApi#findFilesByIds
 	 */
-	override fun findFilesByIds(ids: List<String>): ResponseEntity<List<FileData>> {
-		logger.debug("Will get files with the following ids: $ids")
+	override fun findFilesByIds(ids: List<String>, xInnsendingId: String?): ResponseEntity<List<FileData>> {
+		logger.info("$xInnsendingId: Will get files with the following ids: $ids")
 
-		val files = getFilesService.getFiles(ids)
+		val files = getFilesService.getFiles(xInnsendingId, ids)
 		return ResponseEntity.ok(files)
 	}
 }
