@@ -37,8 +37,6 @@ spec:
         kvPath: /serviceuser/data/prod/srvsoknadsfillager
       - mountPath: /secrets/innsending-data
         kvPath: secret/team-soknad/innsending/basicauth
-      - mountPath: /var/run/secrets/nais.io/appdynamics
-        kvPath: /apikey/appdynamics/prod
 
   env:
     - name: DATABASE_PORT
