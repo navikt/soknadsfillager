@@ -89,7 +89,6 @@
 								<gradleBuildFile>false</gradleBuildFile>
 								<exceptionHandler>false</exceptionHandler>
 								<interfaceOnly>true</interfaceOnly>
-								<generateApiDocumentation>true</generateApiDocumentation>
 								<swaggerAnnotations>true</swaggerAnnotations>
 							</configOptions>
 						</configuration>
