@@ -1,20 +1,60 @@
 package no.nav.soknad.arkivering.soknadsfillager.supervision
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import no.nav.soknad.arkivering.soknadsfillager.api.HealthApi
 import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(value = ["/internal"])
-class HealthCheck(private val config: AppConfiguration) {
+class HealthCheck(private val config: AppConfiguration) : HealthApi {
 
-	@GetMapping(value = ["/isAlive"])
-	fun isAlive() = if (config.applicationState.ready) "OK" else throw RuntimeException("NOT ALIVE")
+	/**
+	 * The following annotations are copied from [HealthApi.isAlive].
+	 */
+	@Operation(
+		summary = "Checks if the application and its dependencies up",
+		description = "Checks if the application and its dependencies are up and running.")
+	@ApiResponses(
+		value = [ApiResponse(responseCode = "200", description = "Successful operation; application is alive"), ApiResponse(responseCode = "500", description = "The application or one of its dependencies are not up and running.")])
+	@RequestMapping(
+		method = [RequestMethod.GET],
+		value = ["/health/isAlive"]
+	)
+	override fun isAlive(): ResponseEntity<Unit> =
+		if (config.applicationState.alive) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
 
-	@GetMapping(value = ["/ping"])
-	fun ping(): String = "pong"
+	/**
+	 * The following annotations are copied from [HealthApi.ping].
+	 */
+	@Operation(
+		summary = "Pings the application to see if it responds",
+		description = "Pings the application to see if it responds")
+	@ApiResponses(
+		value = [ApiResponse(responseCode = "200", description = "Successful operation; application is responding")])
+	@RequestMapping(
+		method = [RequestMethod.GET],
+		value = ["/health/ping"]
+	)
+	override fun ping() = ResponseEntity<Unit>(HttpStatus.OK)
 
-	@GetMapping(value = ["/isReady"])
-	fun isReady() = if (config.applicationState.ready) "Holla, si Ready" else throw RuntimeException("NOT READY")
+	/**
+	 * The following annotations are copied from [HealthApi.isReady].
+	 */
+	@Operation(
+		summary = "Checks if the application is ready to accept traffic",
+		description = "Checks if the application is ready to accept traffic.")
+	@ApiResponses(
+		value = [ApiResponse(responseCode = "200", description = "Successful operation; application is ready"),ApiResponse(responseCode = "503", description = "The application or one of its dependencies are not ready")])
+	@RequestMapping(
+		method = [RequestMethod.GET],
+		value = ["/health/isReady"]
+	)
+	override fun isReady(): ResponseEntity<Unit> =
+		if (config.applicationState.ready) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.SERVICE_UNAVAILABLE)
 }

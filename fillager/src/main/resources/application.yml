@@ -17,3 +17,6 @@ management:
     export:
       prometheus:
         enabled: true
+
+springdoc:
+  packagesToScan: no.nav.soknad.arkivering.soknadsfillager
