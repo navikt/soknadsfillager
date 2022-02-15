@@ -10,6 +10,7 @@ import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class HentFilerService(private val filRepository: FilRepository,
@@ -54,7 +55,11 @@ class HentFilerService(private val filRepository: FilRepository,
 				fileMetrics.filCounterInc(Operations.FIND_HENVENDELSE.name)
 				fileMetrics.filSummarySetSize(Operations.FIND_HENVENDELSE.name, filElementDto.fil?.size?.toDouble())
 				fileMetrics.filHistogramSetSize(Operations.FIND_HENVENDELSE.name, filElementDto.fil?.size?.toDouble())
-				logger.info("Hentet fil med id='$uuid', size= ${filElementDto.fil?.size}  fra Henvendelse")
+				logger.info("Hentet fil med id='$uuid', size= ${filElementDto.fil?.size} fra Henvendelse")
+
+				val created = filElementDto.opprettet ?: LocalDateTime.now()
+				filRepository.save(FilDbData(filElementDto.uuid, filElementDto.fil, created))
+
 				filElementDto
 			}
 		} else {

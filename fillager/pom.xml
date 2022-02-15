@@ -27,7 +27,7 @@
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
 		<kotlin.version>1.6.10</kotlin.version>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>
