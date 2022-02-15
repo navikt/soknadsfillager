@@ -22,7 +22,7 @@
 		<jackson-databind-nullable.version>0.2.2</jackson-databind-nullable.version>
 
 		<kotlin.version>1.6.10</kotlin.version>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>
