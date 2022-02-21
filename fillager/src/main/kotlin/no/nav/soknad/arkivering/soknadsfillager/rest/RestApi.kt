@@ -8,16 +8,19 @@ import no.nav.soknad.arkivering.soknadsfillager.api.FilesApi
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.service.DeleteFilesService
 import no.nav.soknad.arkivering.soknadsfillager.service.GetFilesService
+import no.nav.soknad.arkivering.soknadsfillager.service.HentFilerService
 import no.nav.soknad.arkivering.soknadsfillager.service.StoreFilesService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.ZoneOffset
 import javax.validation.Valid
 
 @Suppress("UastIncorrectHttpHeaderInspection")
 @RestController
 class RestApi(
+	private val hentFilerService: HentFilerService,
 	private val getFilesService: GetFilesService,
 	private val storeFilesService: StoreFilesService,
 	private val deleteFilesService: DeleteFilesService
@@ -133,7 +136,14 @@ class RestApi(
 	): ResponseEntity<List<FileData>> {
 		logger.info("$xInnsendingId: Will get files with the following ids: $ids")
 
-		val files = getFilesService.getFiles(xInnsendingId, ids)
+		val files = try {
+			getFilesService.getFiles(xInnsendingId, ids)
+
+		} catch (e: Exception) {
+			// Fallback: Use old endpoint, which will also fetch from Henvendelse
+			hentFilerService.hentFiler(ids)
+				.map { FileData(it.uuid, it.fil!!, it.opprettet!!.atOffset(ZoneOffset.UTC)) }
+		}
 		return ResponseEntity.ok(files)
 	}
 }
