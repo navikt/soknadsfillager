@@ -22,7 +22,8 @@ class GetFilesService(private val filRepository: FilRepository, private val file
 		val files = ids.map { getFile(innsendingId, it) }
 
 		if (files.map { it.status }.distinct().size != 1) {
-			logger.error("$innsendingId: Requested ids had different statuses: $files")
+			logger.error("$innsendingId: Requested ids had different statuses: " +
+				"${files.map { "File[id=${it.id}, status=${it.status}, created=${it.file?.created}]" } }")
 			throw ConflictException("Requested ids had different statuses")
 		} else if (files.first().status == Status.DELETED) {
 			throw FileGoneException("All the files have been deleted")
