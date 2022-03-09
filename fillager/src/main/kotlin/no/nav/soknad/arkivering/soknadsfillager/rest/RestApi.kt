@@ -141,8 +141,10 @@ class RestApi(
 
 		} catch (e: Exception) {
 			// Fallback: Use old endpoint, which will also fetch from Henvendelse
-			hentFilerService.hentFiler(ids)
-				.map { FileData(it.uuid, it.fil!!, it.opprettet!!.atOffset(ZoneOffset.UTC)) }
+			val filer = hentFilerService.hentFiler(ids)
+			if (filer.any { it.fil == null || it.opprettet == null })
+				throw e
+			filer.map { FileData(it.uuid, it.fil!!, it.opprettet!!.atOffset(ZoneOffset.UTC)) }
 		}
 		return ResponseEntity.ok(files)
 	}
