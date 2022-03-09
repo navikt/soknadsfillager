@@ -16,10 +16,10 @@ class SjekkFiler(private val sjekkFilerService: SjekkFilerService) {
 		replaceWith = ReplaceWith("RestApi.checkFilesByIds()"))
 	@GetMapping("/filesExist")
 	fun sjekkFiler(@RequestParam ids: List<String>) {
-		logger.info("Will check if the following files exist: $ids")
+		logger.info("Skal sjekke hvis disse filer finnes: $ids")
 
 		sjekkFilerService.sjekkFiler(ids)
 
-		logger.info("All files exists: $ids")
+		logger.info("Alle filer finnes: $ids")
 	}
 }
