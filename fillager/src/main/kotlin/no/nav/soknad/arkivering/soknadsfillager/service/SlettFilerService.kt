@@ -15,7 +15,7 @@ class SlettFilerService(private val filRepository: FilRepository, private val fi
 		filListe.distinct().forEach { slettFil(it) }
 	}
 
-	private fun loggAtFilenMangler(uuid: String) = logger.error("$uuid er ikke i basen")
+	private fun loggAtFilenMangler(uuid: String) = logger.warn("$uuid er ikke i basen")
 
 	private fun slettFil(uuid: String) {
 		val fil = filRepository.findById(uuid)

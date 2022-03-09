@@ -18,7 +18,7 @@ class DeleteFilesService(private val filRepository: FilRepository, private val f
 	private fun deleteFile(innsendingId: String?, id: String) {
 		val file = filRepository.findById(id)
 		if (!file.isPresent) {
-			logger.error("$innsendingId: File with id '$id' was not found in the database")
+			logger.error("$innsendingId: Unable to find file with this id in the database: '$id'")
 			return
 		}
 

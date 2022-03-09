@@ -13,7 +13,7 @@ class SjekkFilerService(private val filRepository: FilRepository) {
 		val nonExistentFiles = fileIds.filter { !filRepository.existsById(it) }
 
 		if (nonExistentFiles.isNotEmpty()) {
-			logger.info("These files do not exist: $nonExistentFiles")
+			logger.info("Disse filer finnes ikke: $nonExistentFiles")
 			throw FileNotSeenException(nonExistentFiles.toString())
 		}
 	}

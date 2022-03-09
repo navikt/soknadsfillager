@@ -75,7 +75,7 @@ class HentFilerService(private val filRepository: FilRepository,
 		fileMetrics.filHistogramSetSize(Operations.FIND.name, filDbData.document?.size?.toDouble())
 		if (filDbData.document == null) {
 			logger.warn("Hentet fil med id='$uuid', size= null. Kaster 410 - GONE")
-			throw FileGoneException("File with id $uuid is deleted")
+			throw FileGoneException("Fil med id $uuid er slettet")
 		}
 		return FilElementDto(uuid, filDbData.document, filDbData.created)
 	}
