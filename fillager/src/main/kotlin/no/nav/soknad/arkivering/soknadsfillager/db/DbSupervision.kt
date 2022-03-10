@@ -23,7 +23,7 @@ class DbSupervision(
 		try {
 			collectDbStat()
 		} catch (e: Exception) {
-			logger.error("Something went wrong when performing database supervision", e.message)
+			logger.error("Something went wrong when performing database supervision", e)
 			appConfiguration.applicationState.alive = false
 		}
 	}
