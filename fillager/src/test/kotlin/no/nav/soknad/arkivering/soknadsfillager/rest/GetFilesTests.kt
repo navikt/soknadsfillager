@@ -11,7 +11,6 @@ import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -60,7 +59,6 @@ class GetFilesTests {
 		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 3.0)
 	}
 
-	@Disabled // Disabled while the fallback in [RestApi.findFilesByIds] is in place
 	@Test
 	fun `Get files - ids do not exist - throws NotFound`() {
 		val fileCounter = fileMetrics.filCounterGet(Operations.FIND.name)
@@ -79,7 +77,6 @@ class GetFilesTests {
 		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 1.0)
 	}
 
-	@Disabled // Disabled while the fallback in [RestApi.findFilesByIds] is in place
 	@Test
 	fun `Get files - all were deleted - throws Gone`() {
 		val fileCounter = fileMetrics.filCounterGet(Operations.FIND.name)
@@ -105,7 +102,6 @@ class GetFilesTests {
 		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 1.0)
 	}
 
-	@Disabled // Disabled while the fallback in [RestApi.findFilesByIds] is in place
 	@Test
 	fun `Get files - mixed status - throws Conflict`() {
 		val fileCounter = fileMetrics.filCounterGet(Operations.FIND.name)

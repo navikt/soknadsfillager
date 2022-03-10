@@ -12,7 +12,6 @@ import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -116,7 +115,6 @@ class DeleteFilesTests {
 		}
 	}
 
-	@Disabled // Disabled while the fallback in [RestApi.findFilesByIds] is in place
 	@Test
 	fun `Deleting files - return even if one ids does not exist`() {
 		val filesToStore = listOf(
