@@ -83,7 +83,8 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           PRINT_PAYLOAD: true
           CLUSTER: dev-fss
-          RESOURCE: .nais/preprod-teamsoknad.yml
+          RESOURCE: .nais/soknadsfillager.yml
+          VARS: .nais/config-teamsoknad.json
           DRY_RUN: false
           IMAGE: docker.pkg.github.com/${{ github.repository }}/soknadsfillager:${{env.TAG}}
 
@@ -116,7 +117,8 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           PRINT_PAYLOAD: true
           CLUSTER: dev-fss
-          RESOURCE: .nais/preprod-q0.yml
+          RESOURCE: .nais/soknadsfillager.yml
+          VARS: .nais/config-q0.json
           DRY_RUN: false
           IMAGE: docker.pkg.github.com/${{ github.repository }}/soknadsfillager:${{env.TAG}}
 
@@ -149,7 +151,8 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           PRINT_PAYLOAD: true
           CLUSTER: dev-fss
-          RESOURCE: .nais/preprod-q1.yml
+          RESOURCE: .nais/soknadsfillager.yml
+          VARS: .nais/config-q1.json
           DRY_RUN: false
           IMAGE: docker.pkg.github.com/${{ github.repository }}/soknadsfillager:${{env.TAG}}
 
@@ -182,6 +185,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           PRINT_PAYLOAD: true
           CLUSTER: prod-fss
-          RESOURCE: .nais/nais.yml
+          RESOURCE: .nais/soknadsfillager.yml
+          VARS: .nais/config-p.json
           DRY_RUN: false
           IMAGE: docker.pkg.github.com/${{ github.repository }}/soknadsfillager:${{env.TAG}}

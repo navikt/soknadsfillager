@@ -2,7 +2,7 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: soknadsfillager
-  namespace: team-soknad
+  namespace: {{namespace}}
   labels:
     team: team-soknad
 spec:
@@ -28,13 +28,14 @@ spec:
       cpu: 200m
       memory: 256Mi
   ingresses:
-    - "https://soknadsfillager.intern.nav.no"
-    - "https://soknadsfillager.prod-fss.nais.io"
+  {{#each ingress}}
+    - "{{this}}"
+  {{/each}}
   vault:
     enabled: true
     paths:
       - mountPath: /var/run/secrets/nais.io/serviceuser
-        kvPath: /serviceuser/data/prod/srvsoknadsfillager
+        kvPath: {{service-user-path}}
       - mountPath: /secrets/innsending-data
         kvPath: secret/team-soknad/innsending/basicauth
 
@@ -42,10 +43,10 @@ spec:
     - name: DATABASE_PORT
       value: "5432"
     - name: DATABASE_HOST
-      value: A01DBVL020.adeo.no
+      value: {{database-host}}
     - name: DATABASE_NAME
-      value: soknadsfillager-db
+      value: {{database-name}}
     - name: VAULT_DB_PATH
-      value: postgresql/prod-fss
+      value: {{vault-db-path}}
     - name: APPLICATION_PROFILE
-      value: prod
+      value: {{profile}}
