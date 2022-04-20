@@ -18,7 +18,7 @@ class DbSupervision(
 
 	private val logger = LoggerFactory.getLogger(javaClass)
 
-	@Scheduled(cron = everyFiveMinutes)
+	@Scheduled(cron = everyMinute)
 	fun databaseSupervisionStart() {
 		try {
 			collectDbStat()
@@ -39,4 +39,4 @@ class DbSupervision(
 	}
 }
 
-private const val everyFiveMinutes = "0 */5 * * * *"
+private const val everyMinute = "0 */1 * * * *"
