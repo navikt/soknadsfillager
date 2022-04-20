@@ -1,0 +1,11 @@
+{
+	"namespace": "team-soknad",
+	"ingress": [
+		"https://soknadsfillager.dev.intern.nav.no"
+	],
+	"service-user-path": "/serviceuser/data/dev/srvsoknadsfillager",
+	"database-host": "b27dbvl026.preprod.local",
+	"database-name": "soknadsfillager-db-teamsoknad",
+	"vault-db-path": "postgresql/preprod-fss",
+	"profile": "dev"
+}
