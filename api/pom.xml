@@ -13,7 +13,7 @@
 	<description>API for soknadsfillager</description>
 
 	<properties>
-		<spring-web.version>5.3.15</spring-web.version>
+		<spring-web.version>5.3.18</spring-web.version>
 		<javax-servlet-api.version>4.0.1</javax-servlet-api.version>
 		<javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
 		<openapi-generator-maven-plugin.version>5.4.0</openapi-generator-maven-plugin.version>
