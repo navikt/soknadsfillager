@@ -1,4 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.config
+/*
 
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.soknad.arkivering.soknadsfillager.db.Database
@@ -27,3 +28,4 @@ class JpaConfig(private val appConfig: AppConfiguration) {
 		return database.dataSource
 	}
 }
+*/

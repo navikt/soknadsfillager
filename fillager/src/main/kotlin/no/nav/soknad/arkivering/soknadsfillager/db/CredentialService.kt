@@ -1,4 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
+/*
 
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.soknad.arkivering.soknadsfillager.ApplicationState
@@ -18,3 +19,4 @@ interface CredentialService {
 		role: Role
 	)
 }
+*/

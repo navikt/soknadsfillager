@@ -1,10 +1,6 @@
 server:
   port: 9042
 
-spring:
-  codec:
-    max-in-memory-size: 50MB
-
 management:
   endpoint:
     health:
@@ -20,3 +16,58 @@ management:
 
 springdoc:
   packagesToScan: no.nav.soknad.arkivering.soknadsfillager
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test | default | spring
+
+  codec:
+    max-in-memory-size: 50MB
+
+  flyway:
+    enabled: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres
+
+restconfig:
+  version: 1.0.0
+  username: srv
+  password: passord
+  sharedUsername: shared
+  sharedPassword: passord
+  maxFileSize: 300
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev | prod | docker
+
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+
+  flyway:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_DATABASE}?user=${DATABASE_USERNAME}&password=${DATABASE_PASSWORD}
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 10
+      connection-timeout: 10000
+      idle-timeout: 10001
+      max-lifetime: 30001
+      leak-detection-threshold: 30000
+
+restconfig:
+  version: ${APP_VERSION}
+  username: ${APPLICATION_USERNAME}
+  password: ${APPLICATION_PASSWORD}
+  sharedUsername: ${SHARED_USERNAME}
+  sharedPassword: ${SHARED_PASSWORD}
+  maxFileSize: ${MAX_FILE_SIZE}

@@ -1,4 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
+/*
 
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.delay
@@ -46,3 +47,4 @@ class EmbeddedCredentialService : CredentialService {
 		renewCredentialsTaskData = RenewCredentialsTaskData(dataSource, mountPath, databaseName, role)
 	}
 }
+*/

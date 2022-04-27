@@ -13,8 +13,9 @@
 	<description>Temporary file storage during archival of benefit applications</description>
 
 	<properties>
-		<otj-pg-embedded.version>1.0.0</otj-pg-embedded.version>
-		<flyway.version>8.5.8</flyway.version>
+		<otj-pg-embedded.version>0.13.4</otj-pg-embedded.version>
+		<embedded-postgres.version>1.3.1</embedded-postgres.version>
+		<flyway.version>8.5.7</flyway.version>
 		<vault-java-driver.version>5.1.0</vault-java-driver.version>
 
 		<konfig.version>1.6.10.0</konfig.version>

@@ -50,9 +50,7 @@ data class AppConfiguration(val restConfig: RestConfig = RestConfig(), val dbCon
 			requireNotNull("DATABASE_PORT".configProperty()) { "database port must be set if jdbc url is not provided" },
 			requireNotNull("DATABASE_NAME".configProperty()) { "database name must be set if jdbc url is not provided" }),
 		val embedded: Boolean = "spring" == profiles,
-		val useVault: Boolean = profiles == "dev" || profiles == "prod",
-		val credentialService: CredentialService = if (useVault) VaultCredentialService() else EmbeddedCredentialService(),
-		val renewService: RenewService = if (useVault) RenewVaultService(credentialService) else EmbeddedRenewService(credentialService)
+		val useVault: Boolean = profiles == "dev" || profiles == "prod"
 	)
 }
 

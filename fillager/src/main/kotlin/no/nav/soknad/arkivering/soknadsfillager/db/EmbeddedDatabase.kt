@@ -1,4 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
+/*
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres
 import com.zaxxer.hikari.HikariConfig
@@ -66,3 +67,4 @@ class EmbeddedDatabase(
 		load().migrate()
 	}
 }
+*/

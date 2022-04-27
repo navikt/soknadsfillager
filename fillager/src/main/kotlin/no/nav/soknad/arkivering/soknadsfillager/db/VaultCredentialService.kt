@@ -1,4 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
+/*
 
 import com.bettercloud.vault.VaultException
 import com.zaxxer.hikari.HikariDataSource
@@ -63,3 +64,4 @@ class VaultCredentialService : CredentialService {
 		renewCredentialsTaskData = RenewCredentialsTaskData(dataSource, mountPath, databaseName, role)
 	}
 }
+*/

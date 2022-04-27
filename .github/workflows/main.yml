@@ -7,6 +7,7 @@ on:
 jobs:
   bygg-app:
     name: Bygg app/image, push til github
+    if: github.ref != 'refs/heads/preprod-gcp-pipeline'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

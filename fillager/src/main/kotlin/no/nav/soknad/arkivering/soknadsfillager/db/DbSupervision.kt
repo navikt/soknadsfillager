@@ -1,4 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
+/*
 
 import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
@@ -38,5 +39,6 @@ class DbSupervision(
 		fileMetrics.filesInDbGaugeSet(documentCount)
 	}
 }
-
-private const val everyMinute = "0 */1 * * * *"
+*/
+/*
+*/

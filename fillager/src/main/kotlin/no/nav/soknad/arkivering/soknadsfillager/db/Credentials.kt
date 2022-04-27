@@ -1,4 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
+/*
 
 import com.zaxxer.hikari.HikariDataSource
 
@@ -14,3 +15,4 @@ data class Credentials(
 	val username: String,
 	val password: String
 )
+*/

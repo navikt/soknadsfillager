@@ -1,4 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
+/*
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,3 +22,4 @@ class EmbeddedRenewService(private val credentialService: CredentialService) : R
 		}
 	}
 }
+*/
