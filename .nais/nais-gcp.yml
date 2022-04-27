@@ -1,0 +1,62 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: soknadsfillager
+  namespace: {{namespace}}
+  labels:
+    team: team-soknad
+  annotations:
+    nais.io/read-only-file-system: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+
+spec:
+  image: {{image}}
+  port: 9042
+  liveness:
+    path: /health/isAlive
+    initialDelay: 20
+  readiness:
+    path: /health/isReady
+    initialDelay: 20
+  prometheus:
+    enabled: true
+    path: /internal/prometheus
+  replicas:
+    min: 2
+    max: 4
+  resources:
+    limits:
+      cpu: 3000m
+      memory: 4Gi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  ingresses:
+  {{#each ingress}}
+     - "{{this}}"
+         {{/each}}
+  vault:
+    enabled: false
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_14
+        databases:
+          - name: {{ database-name }}
+            envVarPrefix: DATABASE
+  accessPolicy:
+    inbound:
+      rules:
+        - application: innsending-api
+        - application: sendsoknad
+        - application: soknadsarkiverer
+
+  envFrom:
+    - secret: basicauth
+      metadata:
+        annotations:
+          reloader.stakater.com/match: "true"
+
+  env:
+    - name: APPLICATION_PROFILE
+      value: {{profile}}
