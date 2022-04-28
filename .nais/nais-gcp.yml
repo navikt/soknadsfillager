@@ -58,5 +58,5 @@ spec:
           reloader.stakater.com/match: "true"
 
   env:
-    - name: APPLICATION_PROFILE
+    - name: SPRING_PROFILES_ACTIVE
       value: {{profile}}
