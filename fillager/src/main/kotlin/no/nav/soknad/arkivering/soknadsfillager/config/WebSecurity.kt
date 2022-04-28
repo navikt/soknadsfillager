@@ -21,7 +21,7 @@ class WebSecurityConfig(private val restConfig: RestConfig) : WebSecurityConfigu
 			.csrf().disable()
 			.authorizeRequests()
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-			.antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+			.antMatchers(HttpMethod.POST, "/login", "/register", "/health/isReady").permitAll()
 			.antMatchers("/filer").hasAnyRole("USER", "ADMIN")
 			.antMatchers("/filer").authenticated()
 			.and()
