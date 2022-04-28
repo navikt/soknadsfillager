@@ -63,6 +63,7 @@ class HealthCheck(private val filRepository: FilRepository) : HealthApi {
 
 	private fun checkDatabase(): Boolean {
 		try {
+			logger.debug("Sjekk at databasen er tilgjengelig")
 			return filRepository.documentCount() >= 0
 		} catch (e: Exception) {
 			logger.warn("CheckDatabase feilet med ${e.message}")
