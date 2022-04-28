@@ -4,7 +4,8 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import no.nav.soknad.arkivering.soknadsfillager.api.HealthApi
-import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
+import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class HealthCheck(private val config: AppConfiguration) : HealthApi {
+class HealthCheck(private val filRepository: FilRepository) : HealthApi {
+
+	private val logger = LoggerFactory.getLogger(javaClass)
 
 	/**
 	 * The following annotations are copied from [HealthApi.isAlive].
@@ -27,7 +30,7 @@ class HealthCheck(private val config: AppConfiguration) : HealthApi {
 		value = ["/health/isAlive"]
 	)
 	override fun isAlive(): ResponseEntity<Unit> =
-		if (config.applicationState.alive) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+		if (checkDatabase()) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
 
 	/**
 	 * The following annotations are copied from [HealthApi.ping].
@@ -56,5 +59,14 @@ class HealthCheck(private val config: AppConfiguration) : HealthApi {
 		value = ["/health/isReady"]
 	)
 	override fun isReady(): ResponseEntity<Unit> =
-		if (config.applicationState.ready) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.SERVICE_UNAVAILABLE)
+		if (checkDatabase()) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.SERVICE_UNAVAILABLE)
+
+	private fun checkDatabase(): Boolean {
+		try {
+			return filRepository.documentCount() >= 0
+		} catch (e: Exception) {
+			logger.warn("CheckDatabase feilet med ${e.message}")
+			return false
+		}
+	}
 }
