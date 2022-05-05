@@ -60,3 +60,5 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: {{profile}}
+    - name: MAX_FILE_SIZE
+      value: 300
