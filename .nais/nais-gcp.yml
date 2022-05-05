@@ -52,7 +52,7 @@ spec:
         - application: soknadsarkiverer
 
   envFrom:
-    - secret: basicauth
+    - secret: shared-innsending-secret
       metadata:
         annotations:
           reloader.stakater.com/match: "true"
