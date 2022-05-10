@@ -39,7 +39,6 @@ restconfig:
   password: passord
   sharedUsername: shared
   sharedPassword: passord
-  maxFileSize: 300
 
 ---
 spring:
@@ -70,4 +69,3 @@ restconfig:
   password: ${APPLICATION_PASSWORD}
   sharedUsername: ${INNSENDING_USERNAME}
   sharedPassword: ${INNSENDING_PASSWORD}
-  maxFileSize: ${MAX_FILE_SIZE}

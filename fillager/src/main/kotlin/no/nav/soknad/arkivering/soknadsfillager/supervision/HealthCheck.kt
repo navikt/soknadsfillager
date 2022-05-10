@@ -62,12 +62,12 @@ class HealthCheck(private val filRepository: FilRepository) : HealthApi {
 		if (checkDatabase()) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.SERVICE_UNAVAILABLE)
 
 	private fun checkDatabase(): Boolean {
-		try {
-			logger.debug("Sjekk at databasen er tilgjengelig")
-			return filRepository.documentCount() >= 0
+		return try {
+			logger.debug("Check that the database is available")
+			filRepository.documentCount() >= 0
 		} catch (e: Exception) {
-			logger.warn("CheckDatabase feilet med ${e.message}")
-			return false
+			logger.warn("The database check failed with ${e.message}", e)
+			false
 		}
 	}
 }

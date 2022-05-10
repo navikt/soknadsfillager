@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface FilRepository : JpaRepository<FilDbData, String> {
 
-	@Query(value = "SELECT count(id) FROM documents where document is not null", nativeQuery=true)
+	@Query(value = "SELECT count(id) FROM documents where document is not null", nativeQuery = true)
 	fun documentCount(): Long
 }

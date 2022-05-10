@@ -1,27 +1,17 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
 
-
 import com.opentable.db.postgres.embedded.EmbeddedPostgres
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import javax.annotation.PostConstruct
 import javax.sql.DataSource
 
 @Profile("test | default | spring")
 @Configuration
 class StartDb {
 
-	private lateinit var embeddedPostgres: EmbeddedPostgres
-
-	init {
-		embeddedPostgres = EmbeddedPostgres.builder().start()
-	}
+	private var embeddedPostgres: EmbeddedPostgres = EmbeddedPostgres.builder().start()
 
 	@Bean
-	fun embeddedPostgres(): DataSource {
-		return embeddedPostgres.getPostgresDatabase()
-	}
-
+	fun embeddedPostgres(): DataSource = embeddedPostgres.postgresDatabase
 }
-
