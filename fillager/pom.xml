@@ -13,21 +13,16 @@
 	<description>Temporary file storage during archival of benefit applications</description>
 
 	<properties>
-		<otj-pg-embedded.version>0.13.4</otj-pg-embedded.version>
-		<embedded-postgres.version>1.3.1</embedded-postgres.version>
-		<flyway.version>8.5.7</flyway.version>
-		<vault-java-driver.version>5.1.0</vault-java-driver.version>
-
-		<konfig.version>1.6.10.0</konfig.version>
-		<coroutines.version>1.6.1</coroutines.version>
-		<springdoc.version>1.6.7</springdoc.version>
+		<otj-pg-embedded.version>1.0.1</otj-pg-embedded.version>
+		<flyway.version>8.5.10</flyway.version>
+		<springdoc.version>1.6.8</springdoc.version>
 		<prometheus-client.version>0.15.0</prometheus-client.version>
 		<logstash.version>7.1.1</logstash.version>
 		<mockk.version>1.12.3</mockk.version>
 
 		<maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
 
-		<kotlin.version>1.6.20</kotlin.version>
+		<kotlin.version>1.6.21</kotlin.version>
 		<java.version>17</java.version>
 	</properties>
 
@@ -97,12 +92,6 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.natpryce</groupId>
-			<artifactId>konfig</artifactId>
-			<version>${konfig.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 			<version>${flyway.version}</version>
@@ -112,17 +101,7 @@
 			<artifactId>otj-pg-embedded</artifactId>
 			<version>${otj-pg-embedded.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.bettercloud</groupId>
-			<artifactId>vault-java-driver</artifactId>
-			<version>${vault-java-driver.version}</version>
-		</dependency>
 
-		<dependency>
-			<groupId>org.jetbrains.kotlinx</groupId>
-			<artifactId>kotlinx-coroutines-slf4j</artifactId>
-			<version>${coroutines.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
@@ -132,7 +111,7 @@
 		<dependency>
 			<groupId>io.mockk</groupId>
 			<artifactId>mockk</artifactId>
-			<version>${mockk.version} </version>
+			<version>${mockk.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
