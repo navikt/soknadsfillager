@@ -44,9 +44,7 @@ spec:
       value: "5432"
     - name: DATABASE_HOST
       value: {{database-host}}
-    - name: DATABASE_NAME
-      value: {{database-name}}
     - name: VAULT_DB_PATH
       value: {{vault-db-path}}
-    - name: APPLICATION_PROFILE
+    - name: SPRING_PROFILES_ACTIVE
       value: {{profile}}
