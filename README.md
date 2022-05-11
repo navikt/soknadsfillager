@@ -5,6 +5,7 @@ For a description of the whole archiving system, see [the documentation](https:/
 
 
 ## Building locally
+* Docker needs to be installed on the local computer in order to start a local test database for running tests.
 * Build with `mvn clean install`
 * Start application with `java -jar fillager/target/fillager.jar`
 * There are scripts to bring up postgres and the whole archiving system locally in [archiving-infrastructure](https://github.com/navikt/archiving-infrastructure/).
