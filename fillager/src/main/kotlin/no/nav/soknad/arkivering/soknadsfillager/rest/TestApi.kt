@@ -5,10 +5,9 @@ import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.stereotype.Controller
 
-@Suppress("UastIncorrectHttpHeaderInspection")
-@RestController
+@Controller
 class TestApi : FilesTestApi {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
