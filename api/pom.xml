@@ -13,15 +13,16 @@
 	<description>API for soknadsfillager</description>
 
 	<properties>
-		<spring-web.version>5.3.18</spring-web.version>
+		<springdoc-openapi.version>1.6.9</springdoc-openapi.version>
+		<swagger-annotations.version>2.2.0</swagger-annotations.version>
+		<spring-web.version>5.3.20</spring-web.version>
 		<javax-servlet-api.version>4.0.1</javax-servlet-api.version>
 		<javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
-		<openapi-generator-maven-plugin.version>5.4.0</openapi-generator-maven-plugin.version>
-
-		<springfox.version>3.0.0</springfox.version>
+		<jakarta-annotation.version>2.1.0</jakarta-annotation.version>
 		<jackson-databind-nullable.version>0.2.2</jackson-databind-nullable.version>
+		<openapi-generator-maven-plugin.version>6.0.0</openapi-generator-maven-plugin.version>
 
-		<kotlin.version>1.6.10</kotlin.version>
+		<kotlin.version>1.6.21</kotlin.version>
 		<java.version>17</java.version>
 	</properties>
 
@@ -47,6 +48,16 @@
 			<artifactId>javax.annotation-api</artifactId>
 			<version>${javax-annotation.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>${jakarta-annotation.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${swagger-annotations.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
@@ -60,9 +71,9 @@
 			<version>${jackson-databind-nullable.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${springfox.version}</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc-openapi.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -89,7 +100,6 @@
 								<gradleBuildFile>false</gradleBuildFile>
 								<exceptionHandler>false</exceptionHandler>
 								<interfaceOnly>true</interfaceOnly>
-								<swaggerAnnotations>true</swaggerAnnotations>
 							</configOptions>
 						</configuration>
 					</execution>
@@ -112,7 +122,17 @@
 				</executions>
 				<configuration>
 					<jvmTarget>${java.version}</jvmTarget>
+					<compilerPlugins>
+						<plugin>spring</plugin>
+					</compilerPlugins>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.jetbrains.kotlin</groupId>
+						<artifactId>kotlin-maven-allopen</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
