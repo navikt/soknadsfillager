@@ -14,11 +14,11 @@
 
 	<properties>
 		<otj-pg-embedded.version>1.0.1</otj-pg-embedded.version>
-		<flyway.version>8.5.10</flyway.version>
-		<springdoc.version>1.6.8</springdoc.version>
+		<flyway.version>8.5.11</flyway.version>
+		<springdoc.version>1.6.9</springdoc.version>
 		<prometheus-client.version>0.15.0</prometheus-client.version>
-		<logstash.version>7.1.1</logstash.version>
-		<mockk.version>1.12.3</mockk.version>
+		<logstash.version>7.2</logstash.version>
+		<mockk.version>1.12.4</mockk.version>
 
 		<maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
 
