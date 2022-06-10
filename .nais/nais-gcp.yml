@@ -34,10 +34,8 @@ spec:
       memory: 256Mi
   ingresses:
   {{#each ingress}}
-     - "{{this}}"
-         {{/each}}
-  vault:
-    enabled: false
+    - "{{this}}"
+  {{/each}}
   gcp:
     sqlInstances:
       - type: POSTGRES_14

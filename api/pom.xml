@@ -22,7 +22,7 @@
 		<jackson-databind-nullable.version>0.2.2</jackson-databind-nullable.version>
 		<openapi-generator-maven-plugin.version>6.0.0</openapi-generator-maven-plugin.version>
 
-		<kotlin.version>1.6.21</kotlin.version>
+		<kotlin.version>1.7.0</kotlin.version>
 		<java.version>17</java.version>
 	</properties>
 
