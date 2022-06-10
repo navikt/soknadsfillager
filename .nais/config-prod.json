@@ -1,0 +1,8 @@
+{
+	"ingress": [
+		"https://soknadsfillager-gcp.intern.nav.no"
+	],
+	"service-user-path": "/serviceuser/data/prod/srvsoknadsfillager",
+	"database-name": "soknadsfillager-db",
+	"profile": "prod"
+}

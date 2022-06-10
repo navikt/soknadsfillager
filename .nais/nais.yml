@@ -2,7 +2,7 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: soknadsfillager
-  namespace: {{namespace}}
+  namespace: team-soknad
   labels:
     team: team-soknad
   annotations:

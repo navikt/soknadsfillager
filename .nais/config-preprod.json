@@ -1,10 +1,8 @@
 {
-	"namespace": "team-soknad",
 	"ingress": [
-		"https://soknadsfillager-gcp.dev.nav.no",
 		"https://soknadsfillager-gcp.dev.intern.nav.no"
 	],
 	"service-user-path": "/serviceuser/data/dev/srvsoknadsfillager",
-	"database-name": "soknadsfillager-db",
+	"database-name": "soknadsfillager-db-preprod",
 	"profile": "dev"
 }
