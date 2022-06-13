@@ -1,4 +1,5 @@
 {
+	"appname": "soknadsfillager-loadtests",
 	"ingress": [
 		"https://soknadsfillager-gcp-loadtests.dev.intern.nav.no"
 	],
