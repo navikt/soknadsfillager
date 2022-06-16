@@ -18,6 +18,17 @@ env:
   docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
 jobs:
+  print-info:
+    name: Print info
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print info
+        shell: bash
+        run: |
+          branch=${GITHUB_REF##*/}
+          env=${{ github.event.inputs.environment }}
+          echo "Deploying branch ${branch} to environment ${env}"
+
   build:
     name: Build and push Docker container
     runs-on: ubuntu-latest
