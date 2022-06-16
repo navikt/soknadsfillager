@@ -4,6 +4,6 @@
 		"https://soknadsfillager-gcp.intern.nav.no"
 	],
 	"service-user-path": "/serviceuser/data/prod/srvsoknadsfillager",
-	"database-name": "soknadsfillager-db",
+	"database-name": "db-soknadsfillager",
 	"profile": "prod"
 }
