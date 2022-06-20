@@ -16,10 +16,9 @@ For a description of the whole archiving system, see [the documentation](https:/
 The Rest-API can be accessed here:
 
 * [localhost](http://localhost:9042/swagger-ui/index.html)
-* [q0](https://soknadsfillager-q0.dev.intern.nav.no/swagger-ui/index.html)
-* [q1](https://soknadsfillager-q1.dev.intern.nav.no/swagger-ui/index.html)
-* [teamsoknad (dev-fss)](https://soknadsfillager.dev.intern.nav.no/swagger-ui/index.html)
-* [prod](https://soknadsfillager.intern.nav.no/swagger-ui/index.html)
+* [preprod](https://soknadsfillager-gcp.dev.intern.nav.no/swagger-ui/index.html)
+* [loadtests (preprod)](https://soknadsfillager-gcp-loadtests.dev.intern.nav.no/swagger-ui/index.html)
+* [prod](https://soknadsfillager-gcp.intern.nav.no/swagger-ui/index.html)
 
 ## Inquiries
 Questions regarding the code or the project can be asked to the team by [raising an issue on the repo](https://github.com/navikt/soknadsfillager/issues).
