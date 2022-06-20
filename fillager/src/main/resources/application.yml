@@ -34,7 +34,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres
 
 restconfig:
-  sharedUsername: sender
+  sharedUsername: innsending
   sharedPassword: password
 
 ---
