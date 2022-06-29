@@ -21,13 +21,15 @@ class TestApi : FilesTestApi {
 
 	override fun checkFilesByIdsTest(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
 		logger.info("$xInnsendingId: TEST ENDPOINT - Checking to see if files with these ids are present: $ids")
-		val idsPresent = ids.map { seenFiles.contains(it) }
-		val returnCode = if (idsPresent.all { it })
+		val idsPresent = ids.map { it to seenFiles.contains(it) }
+		val returnCode = if (idsPresent.all { it.second })
 			HttpStatus.OK
-		else if (idsPresent.none())
+		else if (idsPresent.none { it.second })
 			HttpStatus.NOT_FOUND
-		else
+		else {
+			logger.warn("$xInnsendingId: TEST ENDPOINT - Conflict $idsPresent")
 			HttpStatus.CONFLICT
+		}
 		logger.info("$xInnsendingId: TEST ENDPOINT - Returning HttpStatus $returnCode")
 		return ResponseEntity(returnCode)
 	}

@@ -23,8 +23,8 @@ spec:
     enabled: true
     path: /internal/prometheus
   replicas:
-    min: 2
-    max: 4
+    min: 1 # TODO: change to 2 when the consistency check is completed
+    max: 1 # TODO: change to 4 when the consistency check is completed
   resources:
     limits:
       cpu: 3000m
@@ -48,6 +48,7 @@ spec:
         - application: innsending-api
         - application: sendsoknad
         - application: soknadsarkiverer
+        - application: soknadsmottaker # TODO: This is a temporary consistency check
 
   envFrom:
     - secret: shared-innsending-secret
