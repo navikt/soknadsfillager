@@ -46,9 +46,9 @@ class DeleteFilesTests {
 		val fileCounter = fileMetrics.filCounterGet(Operations.DELETE.name)
 		val errorCounter = fileMetrics.errorCounterGet(Operations.DELETE.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content ="1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content ="2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 
 		postFiles(filesToStore)
@@ -70,9 +70,9 @@ class DeleteFilesTests {
 	@Test
 	fun `Deleting files - delete one file`() {
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 		val idToDelete = filesToStore[1].id
 
@@ -94,9 +94,9 @@ class DeleteFilesTests {
 	@Test
 	fun `Deleting files - delete same file twice`() {
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 		val idToDelete = filesToStore[1].id
 
@@ -118,9 +118,9 @@ class DeleteFilesTests {
 	@Test
 	fun `Deleting files - return even if one ids does not exist`() {
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 		val nonExistentId = UUID.randomUUID().toString()
 
@@ -142,7 +142,7 @@ class DeleteFilesTests {
 	@Test
 	fun `Deleting files - error saving`() {
 		val crashingFilRepository = mockk<FilRepository>()
-		every { crashingFilRepository.saveAndFlush(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
+		every { crashingFilRepository.save(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
 		every { crashingFilRepository.findById(any()) }
 			.returns(Optional.of(FilDbData(UUID.randomUUID().toString(), "0".toByteArray(), LocalDateTime.now())))
 		val crashingDeleteFilesService = DeleteFilesService(crashingFilRepository, fileMetrics)

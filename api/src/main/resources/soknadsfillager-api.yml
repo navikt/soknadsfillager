@@ -166,7 +166,12 @@ paths:
             items:
               type: string
           style: simple
-
+        - name: metadataOnly
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Fetches only metadata of the File
         - in: header
           name: X-innsendingId
           description: Tracing id that will be used in logging statements.
@@ -274,8 +279,6 @@ components:
       type: object
       required:
         - id
-        - content
-        - createdAt
       properties:
         id:
           type: string
@@ -290,8 +293,12 @@ components:
         createdAt:
           type: string
           format: date-time
+          nullable: true
           description: Creation date and time in UTC
           example: 2021-12-03T14:10:00Z
+        status:
+          type: string
+          description: current state of the file DELETED,NOT_FOUND,OK
   securitySchemes:
     basicAuth:
       type: http

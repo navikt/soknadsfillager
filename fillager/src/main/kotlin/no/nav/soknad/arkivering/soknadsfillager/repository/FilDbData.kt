@@ -10,9 +10,12 @@ import javax.persistence.Table
 @Table(name = "documents")
 data class FilDbData(
 	@Id @Column(name = "id") val uuid: String,
-	@Column(name = "document", columnDefinition = "bytea") val document: ByteArray?,
-	@Column(name = "created", columnDefinition = "TIMESTAMP WITH TIME ZONE") val created: LocalDateTime?
+	@Column(name = "document", columnDefinition = "bytea")
+	val document: ByteArray?,
+	@Column(name = "created", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+	val created: LocalDateTime?
 ) {
+
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
 		if (javaClass != other?.javaClass) return false

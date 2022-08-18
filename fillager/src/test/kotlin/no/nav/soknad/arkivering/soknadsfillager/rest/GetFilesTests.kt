@@ -45,9 +45,9 @@ class GetFilesTests {
 		val errorCounter = fileMetrics.errorCounterGet(Operations.FIND.name)
 		val fileNotFoundCounter = fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now().minusHours(1)),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now().minusMinutes(2)),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now().minusSeconds(3))
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
 		)
 
 		postFiles(filesToStore)
@@ -84,9 +84,9 @@ class GetFilesTests {
 		val fileNotFoundCounter = fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
 
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 
 		postFiles(filesToStore)
@@ -109,8 +109,8 @@ class GetFilesTests {
 		val fileNotFoundCounter = fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
 
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 		val idThatDoesNotExist = UUID.randomUUID().toString()
 

@@ -2,6 +2,7 @@ package no.nav.soknad.arkivering.soknadsfillager.service
 
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
+import no.nav.soknad.arkivering.soknadsfillager.repository.FilMetadata
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.rest.exception.ConflictException
 import no.nav.soknad.arkivering.soknadsfillager.rest.exception.FileGoneException
@@ -16,6 +17,12 @@ import java.time.ZoneOffset
 @Service
 class GetFilesService(private val filRepository: FilRepository, private val fileMetrics: FileMetrics) {
 	private val logger = LoggerFactory.getLogger(javaClass)
+
+	fun getFilesMetadata(innsendingId: String?, ids: List<String>) : List<FileData>{
+		val filMetadata = filRepository.findFilesMetadata(ids)
+		val filData =  ids.map { id -> filMetadata.firstOrNull { it.id == id } ?: FilMetadata(id, status ="not-found") }
+		return filData.map { FileData(id = it.id,status = it.status) }
+	}
 
 	fun getFiles(innsendingId: String?, ids: List<String>): List<FileData> {
 
@@ -34,7 +41,7 @@ class GetFilesService(private val filRepository: FilRepository, private val file
 		return files
 			.filter { it.file != null }
 			.map { it.file!! }
-			.map { FileData(it.uuid, it.document!!, it.created?.atOffset(ZoneOffset.UTC) ?: OffsetDateTime.now()) }
+			.map { FileData(it.uuid,  createdAt = it.created?.atOffset(ZoneOffset.UTC) ?: OffsetDateTime.now(), content = it.document) }
 	}
 
 	private fun getFile(innsendingId: String?, id: String): FileWithStatus {

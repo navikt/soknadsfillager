@@ -44,6 +44,6 @@ fun assertFilesEqual(expectedFiles: List<FileData>, actualFiles: List<FileData>)
 	expectedFiles.forEach { expected ->
 		val actual = actualFiles.first { it.id == expected.id }
 		assertArrayEquals(expected.content, actual.content)
-		assertEquals(expected.createdAt.toEpochSecond(), actual.createdAt.toEpochSecond())
+		assertEquals(expected.createdAt?.toEpochSecond(), actual.createdAt?.toEpochSecond())
 	}
 }

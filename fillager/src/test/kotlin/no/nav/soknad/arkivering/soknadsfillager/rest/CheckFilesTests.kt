@@ -39,9 +39,9 @@ class CheckFilesTests {
 	@Test
 	fun `Check files - happy case`() {
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 
 		postFiles(filesToStore)
@@ -63,9 +63,9 @@ class CheckFilesTests {
 	@Test
 	fun `Check files - all were deleted - throws Gone`() {
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content =  "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 
 		postFiles(filesToStore)
@@ -79,8 +79,8 @@ class CheckFilesTests {
 	@Test
 	fun `Check files - mixed status - throws Conflict`() {
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 		val idThatDoesNotExist = UUID.randomUUID().toString()
 

@@ -28,7 +28,7 @@ class DeleteFilesService(private val filRepository: FilRepository, private val f
 		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.DELETE.name)
 
 		try {
-			filRepository.saveAndFlush(oppdatertFil)
+			filRepository.save(oppdatertFil)
 
 			fileMetrics.filCounterInc(Operations.DELETE.name)
 		} catch (error: Exception) {
