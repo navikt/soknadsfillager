@@ -51,7 +51,7 @@ class RestApi(
 	override fun findFilesByIds(ids: List<String>,metadataOnly : Boolean?, xInnsendingId: String? ): ResponseEntity<List<FileData>> {
 		logger.info("$xInnsendingId: Will get files with the following ids: $ids")
     if (metadataOnly == true) {
-
+			return ResponseEntity.ok(getFilesService.getFilesMetadata(xInnsendingId,ids))
 		}
 		return ResponseEntity.ok(getFilesService.getFiles(xInnsendingId, ids))
 	}

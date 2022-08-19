@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.orm.jpa.JpaSystemException
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import java.io.File
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -28,8 +29,10 @@ class GetFilesTests {
 
 	@Autowired
 	private lateinit var filRepository: FilRepository
+
 	@Autowired
-	private lateinit var fileMetrics: FileMetrics
+	private lateinit var filService: GetFilesService
+
 	@Autowired
 	private lateinit var mapper: ObjectMapper
 	@Autowired
@@ -41,9 +44,7 @@ class GetFilesTests {
 
 	@Test
 	fun `Get files - happy case`() {
-		val fileCounter = fileMetrics.filCounterGet(Operations.FIND.name)
-		val errorCounter = fileMetrics.errorCounterGet(Operations.FIND.name)
-		val fileNotFoundCounter = fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
+
 		val filesToStore = listOf(
 			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
 			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
@@ -52,36 +53,25 @@ class GetFilesTests {
 
 		postFiles(filesToStore)
 		assertFilesEqual(filesToStore, getFiles(filesToStore.ids()))
-		assertEquals(fileCounter!! + 3.0, fileMetrics.filCounterGet(Operations.FIND.name)!!)
-		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(Operations.FIND.name)!!)
-		assertEquals(fileNotFoundCounter!! + 0.0, fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name))
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0)
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 3.0)
+		assertTrue( getFiles(filesToStore.ids()).all { it.status == "ok" } )
+
 	}
 
 	@Test
-	fun `Get files - ids do not exist - throws NotFound`() {
-		val fileCounter = fileMetrics.filCounterGet(Operations.FIND.name)
-		val errorCounter = fileMetrics.errorCounterGet(Operations.FIND.name)
-		val fileNotFoundCounter = fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
+	fun `Get files - ids do not exist - all statuses are not-found`() {
 
 		val nonExistentIds = "${UUID.randomUUID()},${UUID.randomUUID()}"
+	  val nonExistentFiles = getFiles(nonExistentIds)
 
-		mockMvc.get("/files/$nonExistentIds").andExpect {
-			status { isNotFound() }
-		}
-		assertEquals(fileCounter!! + 0.0, fileMetrics.filCounterGet(Operations.FIND.name)!!)
-		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(Operations.FIND.name)!!)
-		assertEquals(fileNotFoundCounter!! + 2.0, fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name))
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0)
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 1.0)
+		assertEquals( nonExistentIds , nonExistentFiles.ids())
+		assertTrue( nonExistentFiles.all { it.status == "not-found" } )
+
+
 	}
 
 	@Test
-	fun `Get files - all were deleted - throws Gone`() {
-		val fileCounter = fileMetrics.filCounterGet(Operations.FIND.name)
-		val errorCounter = fileMetrics.errorCounterGet(Operations.FIND.name)
-		val fileNotFoundCounter = fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
+	fun `Get files - all were deleted - all statuses are deleted `() {
+
 
 		val filesToStore = listOf(
 			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
@@ -91,48 +81,21 @@ class GetFilesTests {
 
 		postFiles(filesToStore)
 		deleteFiles(filesToStore.ids())
+		val allFilesDeleted = getFiles(filesToStore.ids()).all { t->t.status == "deleted"  }
+		assertTrue(allFilesDeleted)
 
 		mockMvc.get("/files/${filesToStore.ids()}").andExpect {
-			status { isGone() }
-		}
-		assertEquals(fileCounter!! + 3.0, fileMetrics.filCounterGet(Operations.FIND.name)!!)
-		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(Operations.FIND.name)!!)
-		assertEquals(fileNotFoundCounter!! + 0.0, fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name))
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0)
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 1.0)
-	}
-
-	@Test
-	fun `Get files - mixed status - throws Conflict`() {
-		val fileCounter = fileMetrics.filCounterGet(Operations.FIND.name)
-		val errorCounter = fileMetrics.errorCounterGet(Operations.FIND.name)
-		val fileNotFoundCounter = fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name)
-
-		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now())
-		)
-		val idThatDoesNotExist = UUID.randomUUID().toString()
-
-		postFiles(filesToStore)
-		deleteFiles(filesToStore[1].id)
-
-		mockMvc.get("/files/${filesToStore.ids() + "," + idThatDoesNotExist}").andExpect {
-			status { isConflict() }
+			status { isOk() }
 		}
 
-		assertEquals(fileCounter!! + 2.0, fileMetrics.filCounterGet(Operations.FIND.name)!!)
-		assertEquals(errorCounter!! + 0.0, fileMetrics.errorCounterGet(Operations.FIND.name)!!)
-		assertEquals(fileNotFoundCounter!! + 1.0, fileMetrics.filCounterGet(Operations.FIND_NOT_FOUND.name))
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).sum > 0)
-		assertTrue(fileMetrics.filSummaryLatencyGet(Operations.FIND.name).count >= fileCounter + 1.0)
 	}
 
 	@Test
 	fun `Get files - error retrieving`() {
 		val crashingFilRepository = mockk<FilRepository>()
-		every { crashingFilRepository.findById(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
-		val crashingGetFilesService = GetFilesService(crashingFilRepository, fileMetrics)
+		val mockFileMetrics = mockk<FileMetrics>()
+		every { crashingFilRepository.findAllById(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
+		val crashingGetFilesService = GetFilesService(crashingFilRepository, mockFileMetrics)
 
 		assertThrows<JpaSystemException> {
 			crashingGetFilesService.getFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString()))
