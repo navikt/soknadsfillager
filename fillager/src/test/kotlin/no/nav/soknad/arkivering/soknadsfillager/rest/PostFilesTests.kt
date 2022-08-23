@@ -26,10 +26,13 @@ class PostFilesTests {
 
 	@Autowired
 	private lateinit var filRepository: FilRepository
+
 	@Autowired
 	private lateinit var fileMetrics: FileMetrics
+
 	@Autowired
 	private lateinit var mapper: ObjectMapper
+
 	@Autowired
 	private lateinit var mockMvc: MockMvc
 
@@ -42,7 +45,7 @@ class PostFilesTests {
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 		val errorCounter = fileMetrics.errorCounterGet(Operations.SAVE.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), content =  "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
 			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
 			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
 		)
@@ -59,7 +62,7 @@ class PostFilesTests {
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 		val errorCounter = fileMetrics.errorCounterGet(Operations.SAVE.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), content =  "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
 			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
 			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
 		)
@@ -80,7 +83,7 @@ class PostFilesTests {
 		val crashingFilRepository = mockk<FilRepository>()
 		every { crashingFilRepository.save(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
 		val crashingStoreFilesService = StoreFilesService(crashingFilRepository, fileMetrics)
-		val files = listOf(FileData(UUID.randomUUID().toString(), content =  "0".toByteArray(), createdAt = OffsetDateTime.now()))
+		val files = listOf(FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()))
 
 		assertThrows<JpaSystemException> {
 			crashingStoreFilesService.storeFiles(files)
