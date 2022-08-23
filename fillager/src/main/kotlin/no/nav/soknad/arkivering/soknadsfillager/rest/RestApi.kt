@@ -32,14 +32,6 @@ class RestApi(
 	}
 
 
-	override fun checkFilesByIds(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
-		logger.info("$xInnsendingId: Will check the status of the files with the following ids: $ids")
-
-		getFilesService.getFiles(xInnsendingId, ids)
-		return ResponseEntity(HttpStatus.OK)
-	}
-
-
 	override fun deleteFiles(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
 		logger.info("$xInnsendingId: Will delete the files with the following ids: $ids")
 
@@ -48,7 +40,7 @@ class RestApi(
 	}
 
 
-	override fun findFilesByIds(ids: List<String>,metadataOnly : Boolean?, xInnsendingId: String? ): ResponseEntity<List<FileData>> {
+	override fun findFilesByIds(ids: List<String>, metadataOnly: Boolean?, xInnsendingId: String?): ResponseEntity<List<FileData>> {
 		logger.info("$xInnsendingId: Will get files with the following ids: $ids")
     if (metadataOnly == true) {
 			return ResponseEntity.ok(getFilesService.getFilesMetadata(xInnsendingId,ids))
