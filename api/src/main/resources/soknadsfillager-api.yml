@@ -261,8 +261,8 @@ components:
           example: 2021-12-03T14:10:00Z
         status:
           type: string
-          description: current state of the file. Can be `deleted`, `not_found`, `ok`
-          example: not_found
+          description: current state of the file. Can be `deleted`, `not-found`, `ok`
+          example: not-found
   securitySchemes:
     basicAuth:
       type: http
