@@ -9,7 +9,6 @@ metadata:
     nais.io/read-only-file-system: "false"
     nginx.ingress.kubernetes.io/proxy-body-size: "320M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-
 spec:
   image: {{image}}
   port: 9042
@@ -42,12 +41,15 @@ spec:
         databases:
           - name: {{ database-name }}
             envVarPrefix: DATABASE
+  azure:
+    application:
+      enabled: true
   accessPolicy:
     inbound:
       rules:
-        - application: innsending-api
-        - application: sendsoknad
-        - application: soknadsarkiverer
+        {{#each inbound}}
+        - application: "{{this}}"
+        {{/each}}
         - application: soknadsmottaker # TODO: This is a temporary consistency check
 
   envFrom:

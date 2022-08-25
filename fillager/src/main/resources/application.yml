@@ -63,3 +63,9 @@ spring:
 restconfig:
   sharedUsername: ${INNSENDING_USERNAME}
   sharedPassword: ${INNSENDING_PASSWORD}
+no.nav.security.jwt:
+  issuer:
+    azure:
+      discoveryurl: ${AZURE_APP_WELL_KNOWN_URL}
+      #https://soknad-oauth2-mock.dev.nav.no/default/.well-known/openid-configuration
+      accepted_audience: ${AZURE_APP_CLIENT_ID}
