@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
+import no.nav.security.token.support.core.api.Protected
 import no.nav.soknad.arkivering.soknadsfillager.api.FilesApi
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.service.DeleteFilesService
@@ -18,6 +19,7 @@ class RestApi(
 ) : FilesApi {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
+	@Protected
 	override fun addFiles(fileData: List<FileData>, xInnsendingId: String?): ResponseEntity<Unit> {
 		try {
 			storeFilesService.storeFiles(fileData)
@@ -31,7 +33,7 @@ class RestApi(
 		return ResponseEntity(HttpStatus.OK)
 	}
 
-
+	@Protected
 	override fun deleteFiles(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
 		logger.info("$xInnsendingId: Will delete the files with the following ids: $ids")
 
@@ -39,7 +41,7 @@ class RestApi(
 		return ResponseEntity(HttpStatus.OK)
 	}
 
-
+	@Protected
 	override fun findFilesByIds(ids: List<String>, metadataOnly: Boolean?, xInnsendingId: String?): ResponseEntity<List<FileData>> {
 		logger.info("$xInnsendingId: Will get files with the following ids: $ids")
     if (metadataOnly == true) {
