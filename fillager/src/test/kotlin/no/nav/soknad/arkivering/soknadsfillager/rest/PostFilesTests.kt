@@ -26,10 +26,13 @@ class PostFilesTests {
 
 	@Autowired
 	private lateinit var filRepository: FilRepository
+
 	@Autowired
 	private lateinit var fileMetrics: FileMetrics
+
 	@Autowired
 	private lateinit var mapper: ObjectMapper
+
 	@Autowired
 	private lateinit var mockMvc: MockMvc
 
@@ -42,9 +45,9 @@ class PostFilesTests {
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 		val errorCounter = fileMetrics.errorCounterGet(Operations.SAVE.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now().minusHours(1)),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now().minusMinutes(2)),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now().minusSeconds(3))
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
 		)
 
 		postFiles(filesToStore)
@@ -59,11 +62,11 @@ class PostFilesTests {
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 		val errorCounter = fileMetrics.errorCounterGet(Operations.SAVE.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now().minusHours(1)),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now().minusMinutes(2)),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now().minusSeconds(3))
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
 		)
-		val newFile = FileData(filesToStore[1].id, "new".toByteArray(), OffsetDateTime.now())
+		val newFile = FileData(filesToStore[1].id, content = "new".toByteArray(), createdAt = OffsetDateTime.now())
 
 		postFiles(filesToStore)
 		assertFilesEqual(filesToStore, getFiles(filesToStore.ids()))
@@ -80,7 +83,7 @@ class PostFilesTests {
 		val crashingFilRepository = mockk<FilRepository>()
 		every { crashingFilRepository.save(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
 		val crashingStoreFilesService = StoreFilesService(crashingFilRepository, fileMetrics)
-		val files = listOf(FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()))
+		val files = listOf(FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()))
 
 		assertThrows<JpaSystemException> {
 			crashingStoreFilesService.storeFiles(files)

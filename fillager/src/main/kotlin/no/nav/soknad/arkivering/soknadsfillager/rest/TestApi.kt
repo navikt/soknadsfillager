@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller
 @Controller
 class TestApi : FilesTestApi {
 	private val logger = LoggerFactory.getLogger(javaClass)
-
 	private val seenFiles = hashSetOf<String>()
+
 	override fun addFilesTest(fileData: List<FileData>, xInnsendingId: String?): ResponseEntity<Unit> {
 
 		seenFiles.addAll(fileData.map { it.id })
@@ -19,7 +19,8 @@ class TestApi : FilesTestApi {
 		return ResponseEntity(HttpStatus.OK)
 	}
 
-	override fun checkFilesByIdsTest(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
+
+	override fun checkFilesByIdsTest(ids: List<String>, metadataOnly: Boolean?, xInnsendingId: String?): ResponseEntity<Unit> {
 		logger.info("$xInnsendingId: TEST ENDPOINT - Checking to see if files with these ids are present: $ids")
 		val idsPresent = ids.map { it to seenFiles.contains(it) }
 		val returnCode = if (idsPresent.all { it.second })

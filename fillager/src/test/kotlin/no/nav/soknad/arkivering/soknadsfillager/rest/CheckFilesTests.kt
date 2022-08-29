@@ -1,21 +1,19 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.mockk.every
-import io.mockk.mockk
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
-import no.nav.soknad.arkivering.soknadsfillager.service.GetFilesService
-import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
+import no.nav.soknad.arkivering.soknadsfillager.service.statusDeleted
+import no.nav.soknad.arkivering.soknadsfillager.service.statusNotFound
+import no.nav.soknad.arkivering.soknadsfillager.service.statusOk
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.orm.jpa.JpaSystemException
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.head
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -25,10 +23,10 @@ class CheckFilesTests {
 
 	@Autowired
 	private lateinit var filRepository: FilRepository
-	@Autowired
-	private lateinit var fileMetrics: FileMetrics
+
 	@Autowired
 	private lateinit var mapper: ObjectMapper
+
 	@Autowired
 	private lateinit var mockMvc: MockMvc
 
@@ -37,72 +35,48 @@ class CheckFilesTests {
 
 
 	@Test
-	fun `Check files - happy case`() {
+	fun `Check files - with ok status`() {
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 
 		postFiles(filesToStore)
 
-		mockMvc.head("/files/${filesToStore.ids()}").andExpect {
-			status { isOk() }
-		}
+		val persistedFiles = getFileMetadata(filesToStore.ids())
+		assertTrue(persistedFiles.all { it.status == statusOk })
+		assertTrue(persistedFiles.all { it.content == null })
 	}
 
 	@Test
-	fun `Check files - ids do not exist - throws NotFound`() {
+	fun `Check files - with status not-found`() {
+
 		val nonExistentIds = "${UUID.randomUUID()},${UUID.randomUUID()}"
+		val nonExistentFiles = getFileMetadata(nonExistentIds)
 
-		mockMvc.head("/files/$nonExistentIds").andExpect {
-			status { isNotFound() }
-		}
+		assertEquals(nonExistentIds, nonExistentFiles.ids())
+		assertTrue(nonExistentFiles.all { it.status == statusNotFound })
 	}
 
 	@Test
-	fun `Check files - all were deleted - throws Gone`() {
+	fun `Check files - with deleted status`() {
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "2".toByteArray(), OffsetDateTime.now())
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now()),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now())
 		)
 
 		postFiles(filesToStore)
 		deleteFiles(filesToStore.ids())
 
-		mockMvc.head("/files/${filesToStore.ids()}").andExpect {
-			status { isGone() }
-		}
+		val persistedFiles = getFileMetadata(filesToStore.ids())
+		assertTrue(persistedFiles.all { it.content == null })
+		assertTrue(persistedFiles.all { it.status == statusDeleted })
 	}
 
-	@Test
-	fun `Check files - mixed status - throws Conflict`() {
-		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), "0".toByteArray(), OffsetDateTime.now()),
-			FileData(UUID.randomUUID().toString(), "1".toByteArray(), OffsetDateTime.now())
-		)
-		val idThatDoesNotExist = UUID.randomUUID().toString()
 
-		postFiles(filesToStore)
-		deleteFiles(filesToStore[1].id)
-
-		mockMvc.head("/files/${filesToStore.ids() + "," + idThatDoesNotExist}").andExpect {
-			status { isConflict() }
-		}
-	}
-
-	@Test
-	fun `Check files - error retrieving`() {
-		val crashingFilRepository = mockk<FilRepository>()
-		every { crashingFilRepository.findById(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
-		val crashingGetFilesService = GetFilesService(crashingFilRepository, fileMetrics)
-
-		assertThrows<JpaSystemException> {
-			crashingGetFilesService.getFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString()))
-		}
-	}
-
+	private fun getFileMetadata(ids: String) = getFiles(mockMvc, mapper, ids, true)
 
 	private fun deleteFiles(ids: String) = deleteFiles(mockMvc, ids)
 

@@ -17,11 +17,11 @@ class StoreFilesService(private val filRepository: FilRepository, private val fi
 		val start = fileMetrics.filSummaryLatencyStart(Operations.SAVE.name)
 		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.SAVE.name)
 		try {
-			filRepository.save(FilDbData(file.id, file.content, file.createdAt.toLocalDateTime()))
+			filRepository.save(FilDbData(file.id, file.content, file.createdAt?.toLocalDateTime()))
 
 			fileMetrics.filCounterInc(Operations.SAVE.name)
-			fileMetrics.filSummarySetSize(Operations.SAVE.name, file.content.size.toDouble())
-			fileMetrics.filHistogramSetSize(Operations.SAVE.name, file.content.size.toDouble())
+			fileMetrics.filSummarySetSize(Operations.SAVE.name, file.content?.size?.toDouble())
+			fileMetrics.filHistogramSetSize(Operations.SAVE.name, file.content?.size?.toDouble())
 		} catch (error: Exception) {
 			fileMetrics.errorCounterInc(Operations.SAVE.name)
 			throw error
