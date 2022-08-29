@@ -6,5 +6,5 @@
 	"service-user-path": "/serviceuser/data/dev/srvsoknadsfillager",
 	"database-name": "db-soknadsfillager-loadtests",
 	"profile": "dev",
-	"inbound":["innsending-system-tests","soknadsarkiver-loadtests"]
+	"inbound":["innsending-system-tests","soknadsarkiverer-loadtests"]
 }

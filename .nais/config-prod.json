@@ -6,5 +6,5 @@
 	"service-user-path": "/serviceuser/data/prod/srvsoknadsfillager",
 	"database-name": "db-soknadsfillager",
 	"profile": "prod",
-	"inbound":["sendsoknad","innsending-api","soknadsarkiver"]
+	"inbound":["sendsoknad","innsending-api","soknadsarkiverer"]
 }

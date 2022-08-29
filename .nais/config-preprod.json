@@ -6,5 +6,5 @@
 	"service-user-path": "/serviceuser/data/dev/srvsoknadsfillager",
 	"database-name": "db-soknadsfillager-preprod",
 	"profile": "dev",
-	"inbound":["sendsoknad-q1","innsending-api","soknadsarkiver"]
+	"inbound":["sendsoknad-q1","innsending-api","soknadsarkiverer"]
 }
