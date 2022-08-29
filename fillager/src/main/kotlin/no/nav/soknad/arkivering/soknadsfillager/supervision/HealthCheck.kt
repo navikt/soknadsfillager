@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.supervision
 
+import no.nav.security.token.support.core.api.Unprotected
 import no.nav.soknad.arkivering.soknadsfillager.api.HealthApi
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.slf4j.LoggerFactory
@@ -12,11 +13,14 @@ class HealthCheck(private val filRepository: FilRepository) : HealthApi {
 
 	private val logger = LoggerFactory.getLogger(javaClass)
 
+	@Unprotected
 	override fun isAlive(): ResponseEntity<Unit> =
 		if (checkDatabase()) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
 
+	@Unprotected
 	override fun ping() = ResponseEntity<Unit>(HttpStatus.OK)
 
+	@Unprotected
 	override fun isReady(): ResponseEntity<Unit> =
 		if (checkDatabase()) ResponseEntity(HttpStatus.OK) else ResponseEntity(HttpStatus.SERVICE_UNAVAILABLE)
 
