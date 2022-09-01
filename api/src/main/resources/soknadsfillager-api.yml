@@ -162,7 +162,7 @@ paths:
         - files
 
     delete:
-      summary: Deletes files with given id  s.
+      summary: Deletes files with given ids.
       description: Deletes the files with the given ids from the file storage. References to the files will still be kept, indicating that they once existed, but their content will be deleted. If any id provided does not match a file in the file storage, the response will still be 200.
       operationId: deleteFiles
 
