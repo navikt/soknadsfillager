@@ -40,6 +40,15 @@ paths:
           required: false
           schema:
             type: string
+        - in: header
+          name: X-dryRun
+          description: >
+            If set to "enabled" or if omitted, the service will not store files to the database.
+            Set to "disabled" to enable proper storing.
+          example: enabled
+          required: false
+          schema:
+            type: string
 
       responses:
         200:

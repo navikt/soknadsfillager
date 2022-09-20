@@ -20,7 +20,11 @@ class RestApi(
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	@Protected
-	override fun addFiles(fileData: List<FileData>, xInnsendingId: String?): ResponseEntity<Unit> {
+	override fun addFiles(fileData: List<FileData>, xInnsendingId: String?, xDryRun: String?): ResponseEntity<Unit> {
+		if (xDryRun == "disabled") {
+			logger.info("$xInnsendingId: Not storing files, because xDryRun is set to '$xDryRun' instead of 'disabled'")
+			return ResponseEntity(HttpStatus.OK)
+		}
 		try {
 			storeFilesService.storeFiles(fileData)
 
