@@ -52,7 +52,6 @@ spec:
         {{#each inbound}}
         - application: "{{this}}"
         {{/each}}
-        - application: soknadsmottaker # TODO: This is a temporary consistency check
 
   envFrom:
     - secret: shared-innsending-secret
