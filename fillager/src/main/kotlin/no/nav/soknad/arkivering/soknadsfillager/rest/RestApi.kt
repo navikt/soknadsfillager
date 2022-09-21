@@ -21,7 +21,7 @@ class RestApi(
 
 	@Protected
 	override fun addFiles(fileData: List<FileData>, xInnsendingId: String?, xDryRun: String?): ResponseEntity<Unit> {
-		if (xDryRun == "disabled") {
+		if (xDryRun != "disabled") {
 			logger.info("$xInnsendingId: Not storing files, because xDryRun is set to '$xDryRun' instead of 'disabled'")
 			return ResponseEntity(HttpStatus.OK)
 		}
