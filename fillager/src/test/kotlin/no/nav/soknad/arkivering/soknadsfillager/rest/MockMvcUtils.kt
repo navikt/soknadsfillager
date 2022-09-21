@@ -25,6 +25,7 @@ fun getFiles(mockMvc: MockMvc, mapper: ObjectMapper, ids: String, metadataOnly: 
 
 fun postFiles(mockMvc: MockMvc, mapper: ObjectMapper, input: List<FileData>) {
 	mockMvc.post("/files") {
+		header("X-dryRun", 	"disabled") //TODO: Remove once the dryRun flag is removed from the API
 		contentType = MediaType.APPLICATION_JSON
 		content = mapper.writeValueAsString(input)
 	}.andExpect {
