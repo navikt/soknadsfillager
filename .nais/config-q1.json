@@ -1,5 +1,6 @@
 {
-	"namespace": "q1",
+	"appname": "soknadsfillager",
+	"namespace": "team-soknad",
 	"ingress": [
 		"https://soknadsfillager-q1.dev.intern.nav.no"
 	],

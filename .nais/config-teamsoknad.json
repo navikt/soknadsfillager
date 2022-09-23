@@ -1,4 +1,5 @@
 {
+	"appname": "soknadsfillager-loadtests",
 	"namespace": "team-soknad",
 	"ingress": [
 		"https://soknadsfillager.dev.intern.nav.no"
