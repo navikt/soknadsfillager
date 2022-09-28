@@ -21,8 +21,8 @@ class RestApi(
 
 	@Protected
 	override fun addFiles(fileData: List<FileData>, xInnsendingId: String?, xDryRun: String?): ResponseEntity<Unit> {
-		if (xDryRun != "disabled") {
-			logger.info("$xInnsendingId: Not storing files, because xDryRun is set to '$xDryRun' instead of 'disabled'")
+		if (xDryRun.isDryRunEnabled()) {
+			logger.info("$xInnsendingId: Not storing the files ${fileData.map { it.id }}, because xDryRun is set to '$xDryRun'")
 			return ResponseEntity(HttpStatus.OK)
 		}
 		try {
@@ -53,4 +53,7 @@ class RestApi(
 		}
 		return ResponseEntity.ok(getFilesService.getFiles(xInnsendingId, ids))
 	}
+
+
+	private fun String?.isDryRunEnabled() = this != null
 }
