@@ -22,7 +22,7 @@ fun getFiles(mockMvc: MockMvc, mapper: ObjectMapper, ids: String, metadataOnly: 
 
 	return mapper.readValue(result.response.contentAsString, object : TypeReference<List<FileData>>() {})
 }
-*
+
 fun postFiles(mockMvc: MockMvc, mapper: ObjectMapper, input: List<FileData>) {
 	mockMvc.post("/files") {
 		contentType = MediaType.APPLICATION_JSON
