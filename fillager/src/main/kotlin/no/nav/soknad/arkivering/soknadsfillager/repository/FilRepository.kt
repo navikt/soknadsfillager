@@ -14,7 +14,7 @@ interface FilRepository : CrudRepository<FilDbData, String> {
 	@Query(value = "SELECT count(id) FROM documents where document is not null", nativeQuery = true)
 	fun documentCount(): Long
 
-	@Query("select new no.nav.soknad.arkivering.soknadsfillager.repository.FilMetadata(p.uuid, case when (p.document is not null) then '$statusOk' else '$statusDeleted' end, p.created) from FilDbData p where p.uuid in :ids")
+	@Query("select new no.nav.soknad.arkivering.soknadsfillager.repository.FilMetadata(p.uuid, case when (p.document is null) then '$statusDeleted' else '$statusOk' end, p.created) from FilDbData p where p.uuid in :ids")
 	fun findFilesMetadata(ids: List<String>): List<FilMetadata>
 
 	@Modifying
