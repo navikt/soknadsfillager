@@ -1,0 +1,2 @@
+ALTER TABLE documents
+	ADD COLUMN status VARCHAR(10)  NOT NULL  DEFAULT 'deleted';

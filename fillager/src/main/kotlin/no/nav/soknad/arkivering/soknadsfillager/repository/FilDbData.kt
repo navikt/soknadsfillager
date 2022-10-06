@@ -8,12 +8,14 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "documents")
-data class FilDbData(
+class FilDbData(
 	@Id @Column(name = "id") val uuid: String,
 	@Column(name = "document", columnDefinition = "bytea")
 	val document: ByteArray?,
 	@Column(name = "created", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-	val created: LocalDateTime?
+	val created: LocalDateTime?,
+	@Column(name = "status")
+	val status: String,
 ) {
 
 	override fun equals(other: Any?): Boolean {
