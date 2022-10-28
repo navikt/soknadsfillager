@@ -9,6 +9,7 @@ import no.nav.soknad.arkivering.soknadsfillager.service.GetFilesService
 import no.nav.soknad.arkivering.soknadsfillager.service.statusDeleted
 import no.nav.soknad.arkivering.soknadsfillager.service.statusNotFound
 import no.nav.soknad.arkivering.soknadsfillager.service.statusOk
+import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -86,8 +87,9 @@ class GetFilesTests {
 	@Test
 	fun `Get files - error retrieving`() {
 		val crashingFilRepository = mockk<FilRepository>()
+		val fileMetrics = mockk<FileMetrics>(relaxed = true)
 		every { crashingFilRepository.findAllById(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
-		val crashingGetFilesService = GetFilesService(crashingFilRepository)
+		val crashingGetFilesService = GetFilesService(crashingFilRepository, fileMetrics)
 
 		assertThrows<JpaSystemException> {
 			crashingGetFilesService.getFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString()))
