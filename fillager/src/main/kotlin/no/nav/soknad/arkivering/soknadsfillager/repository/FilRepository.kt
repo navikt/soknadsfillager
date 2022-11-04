@@ -20,4 +20,7 @@ interface FilRepository : CrudRepository<FilDbData, String> {
 	@Query("update FilDbData f set f.document=null, f.status='$statusDeleted' where f.uuid in :ids")
 	@Transactional
 	fun deleteFiles(ids: List<String>): Int
+
+	@Query(value = "SELECT sum(pg_database_size(pg_database.datname)) FROM pg_database", nativeQuery = true)
+	fun totalDbSize(): Long
 }

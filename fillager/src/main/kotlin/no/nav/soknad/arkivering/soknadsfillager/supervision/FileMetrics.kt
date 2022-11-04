@@ -27,6 +27,8 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	private val latencyHistogramHelp = "File latency distribution"
 	private val filenumberGauge = "antall_filer_i_db_gauge"
 	private val filenumberGaugeHelp = "Number of rows with documents in the database"
+	private val databaseSizeGauge = "database_size"
+	private val databaseSizeGaugeHelp = "Database size"
 
 	private val filCounter = registerCounter(name, help, label)
 	private val errorCounter = registerCounter(errorName, errorHelp, label)
@@ -38,6 +40,7 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	private val fileLatencyHistogram = registerLatencyHistogram(latencyHistogram, latencyHistogramHelp, label)
 
 	private val filesInDb = registerGauge(filenumberGauge, filenumberGaugeHelp, label)
+	private val databaseSize = registerGauge(databaseSizeGauge, databaseSizeGaugeHelp, label)
 
 	private fun registerGauge(name: String, help: String, label: String): Gauge =
 		Gauge
@@ -92,16 +95,17 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	fun filCounterInc(operation: String) = filCounter.labels(operation, app).inc()
 	fun filCounterGet(operation: String) = filCounter.labels(operation, app)?.get()
 
-	fun filesInDbGaugeSet(number: Long?) {
-		if (number != null) filesInDb.labels("FIND", app).set(number.toDouble())
+	fun filesInDbGaugeSet(number: Long) {
+		filesInDb.labels("FIND", app).set(number.toDouble())
 	}
-
 	fun filesInDbGaugeGet() = filesInDb.labels("FIND", app)?.get()
+
+	fun databaseSizeSet(number: Long) = databaseSize.labels("dbsize", app).set(number.toDouble())
+	fun databaseSizeGet() = databaseSize.labels("dbsize", app)?.get()
 
 	fun errorCounterInc(operation: String) {
 		errorCounter.labels(operation, app).inc()
 	}
-
 	fun errorCounterGet(operation: String) = errorCounter.labels(operation, app)?.get()
 
 	fun filSummarySetSize(operation: String, size: Double?) {
@@ -121,6 +125,5 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	fun filSummaryLatencyEnd(start: Summary.Timer) {
 		start.observeDuration()
 	}
-
 	fun filSummaryLatencyGet(operation: String): Summary.Child.Value = filLatencySummary.labels(operation, app).get()
 }

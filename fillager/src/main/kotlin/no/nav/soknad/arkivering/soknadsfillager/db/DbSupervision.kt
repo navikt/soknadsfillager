@@ -33,6 +33,11 @@ class DbSupervision(
 		logger.info("Number of rows in the database with documents: $documentCount")
 
 		fileMetrics.filesInDbGaugeSet(documentCount)
+
+		val databaseSize = filRepository.totalDbSize()
+		logger.info("Total database size: $databaseSize")
+
+		fileMetrics.databaseSizeSet(databaseSize)
 	}
 }
 
