@@ -13,17 +13,17 @@
 	<description>Temporary file storage during archival of benefit applications</description>
 
 	<properties>
-		<token-support.version>2.1.7</token-support.version>
+		<token-support.version>3.0.0</token-support.version>
 
 		<otj-pg-embedded.version>1.0.1</otj-pg-embedded.version>
-		<flyway.version>9.6.0</flyway.version>
-		<springdoc.version>1.6.12</springdoc.version>
+		<flyway.version>9.10.1</flyway.version>
+		<springdoc.version>1.6.14</springdoc.version>
 		<prometheus-client.version>0.16.0</prometheus-client.version>
 		<logstash.version>7.2</logstash.version>
-		<mockk.version>1.13.2</mockk.version>
+		<mockk.version>1.13.3</mockk.version>
 
 		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
-		<kotlin.version>1.7.20</kotlin.version>
+		<kotlin.version>1.7.22</kotlin.version>
 		<java.version>17</java.version>
 	</properties>
 

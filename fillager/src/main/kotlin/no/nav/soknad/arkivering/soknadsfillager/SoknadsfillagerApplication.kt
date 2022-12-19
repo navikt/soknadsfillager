@@ -11,6 +11,6 @@ import org.springframework.context.annotation.Import
 @ConfigurationPropertiesScan
 class SoknadsfillagerApplication
 
-	fun main(args: Array<String>) {
-		runApplication<SoknadsfillagerApplication>(*args)
-	}
+fun main(args: Array<String>) {
+	runApplication<SoknadsfillagerApplication>(*args)
+}

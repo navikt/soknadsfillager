@@ -13,16 +13,16 @@
 	<description>API for soknadsfillager</description>
 
 	<properties>
-		<springdoc-openapi.version>1.6.12</springdoc-openapi.version>
-		<swagger-annotations.version>2.2.4</swagger-annotations.version>
-		<spring-web.version>5.3.23</spring-web.version>
+		<springdoc-openapi.version>1.6.13</springdoc-openapi.version>
+		<swagger-annotations.version>2.2.7</swagger-annotations.version>
+		<spring-web.version>6.0.2</spring-web.version>
 		<javax-servlet-api.version>4.0.1</javax-servlet-api.version>
 		<javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
 		<jakarta-annotation.version>2.1.1</jakarta-annotation.version>
 		<jackson-databind-nullable.version>0.2.4</jackson-databind-nullable.version>
-		<openapi-generator-maven-plugin.version>6.2.0</openapi-generator-maven-plugin.version>
+		<openapi-generator-maven-plugin.version>6.2.1</openapi-generator-maven-plugin.version>
 
-		<kotlin.version>1.7.20</kotlin.version>
+		<kotlin.version>1.7.22</kotlin.version>
 		<java.version>17</java.version>
 	</properties>
 
@@ -42,11 +42,6 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>${javax-validation-api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<version>${javax-annotation.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.annotation</groupId>
