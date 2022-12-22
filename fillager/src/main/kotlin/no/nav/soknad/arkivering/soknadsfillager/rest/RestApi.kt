@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
+import no.nav.security.token.support.core.api.Protected
 import no.nav.soknad.arkivering.soknadsfillager.api.FilesApi
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.service.DeleteFilesService
@@ -18,7 +19,12 @@ class RestApi(
 ) : FilesApi {
 	private val logger = LoggerFactory.getLogger(javaClass)
 
-	override fun addFiles(fileData: List<FileData>, xInnsendingId: String?): ResponseEntity<Unit> {
+	@Protected
+	override fun addFiles(fileData: List<FileData>, xInnsendingId: String?, xDryRun: String?): ResponseEntity<Unit> {
+		if (xDryRun.isDryRunEnabled()) {
+			logger.info("$xInnsendingId: Not storing the files ${fileData.map { it.id }}, because xDryRun is set to '$xDryRun'")
+			return ResponseEntity(HttpStatus.OK)
+		}
 		try {
 			storeFilesService.storeFiles(fileData)
 
@@ -31,15 +37,7 @@ class RestApi(
 		return ResponseEntity(HttpStatus.OK)
 	}
 
-
-	override fun checkFilesByIds(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
-		logger.info("$xInnsendingId: Will check the status of the files with the following ids: $ids")
-
-		getFilesService.getFiles(xInnsendingId, ids)
-		return ResponseEntity(HttpStatus.OK)
-	}
-
-
+	@Protected
 	override fun deleteFiles(ids: List<String>, xInnsendingId: String?): ResponseEntity<Unit> {
 		logger.info("$xInnsendingId: Will delete the files with the following ids: $ids")
 
@@ -47,10 +45,19 @@ class RestApi(
 		return ResponseEntity(HttpStatus.OK)
 	}
 
-
-	override fun findFilesByIds(ids: List<String>, xInnsendingId: String?): ResponseEntity<List<FileData>> {
+	@Protected
+	override fun findFilesByIds(ids: List<String>, metadataOnly: Boolean?, xInnsendingId: String?): ResponseEntity<List<FileData>> {
 		logger.info("$xInnsendingId: Will get files with the following ids: $ids")
+
+    if (metadataOnly == true) {
+			val filesMetadata = getFilesService.getFilesMetadata(xInnsendingId, ids)
+			logger.info("$xInnsendingId: The files queried have these statuses: ${filesMetadata.map { "${it.id}: ${it.status}" }}")
+			return ResponseEntity.ok(filesMetadata)
+		}
 
 		return ResponseEntity.ok(getFilesService.getFiles(xInnsendingId, ids))
 	}
+
+
+	private fun String?.isDryRunEnabled() = this != null
 }

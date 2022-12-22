@@ -13,20 +13,17 @@
 	<description>Temporary file storage during archival of benefit applications</description>
 
 	<properties>
+		<token-support.version>2.1.7</token-support.version>
+
 		<otj-pg-embedded.version>1.0.1</otj-pg-embedded.version>
-		<flyway.version>8.5.11</flyway.version>
-		<vault-java-driver.version>5.1.0</vault-java-driver.version>
-
-		<konfig.version>1.6.10.0</konfig.version>
-		<coroutines.version>1.6.2</coroutines.version>
-		<springdoc.version>1.6.9</springdoc.version>
-		<prometheus-client.version>0.15.0</prometheus-client.version>
+		<flyway.version>9.6.0</flyway.version>
+		<springdoc.version>1.6.12</springdoc.version>
+		<prometheus-client.version>0.16.0</prometheus-client.version>
 		<logstash.version>7.2</logstash.version>
-		<mockk.version>1.12.4</mockk.version>
+		<mockk.version>1.13.2</mockk.version>
 
-		<maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
-
-		<kotlin.version>1.6.21</kotlin.version>
+		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+		<kotlin.version>1.7.20</kotlin.version>
 		<java.version>17</java.version>
 	</properties>
 
@@ -34,6 +31,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -54,6 +55,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>no.nav.security</groupId>
+			<artifactId>token-validation-spring</artifactId>
+			<version>${token-support.version}</version>
 		</dependency>
 
 		<dependency>
@@ -96,12 +103,6 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.natpryce</groupId>
-			<artifactId>konfig</artifactId>
-			<version>${konfig.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 			<version>${flyway.version}</version>
@@ -111,17 +112,7 @@
 			<artifactId>otj-pg-embedded</artifactId>
 			<version>${otj-pg-embedded.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.bettercloud</groupId>
-			<artifactId>vault-java-driver</artifactId>
-			<version>${vault-java-driver.version}</version>
-		</dependency>
 
-		<dependency>
-			<groupId>org.jetbrains.kotlinx</groupId>
-			<artifactId>kotlinx-coroutines-slf4j</artifactId>
-			<version>${coroutines.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
@@ -131,7 +122,13 @@
 		<dependency>
 			<groupId>io.mockk</groupId>
 			<artifactId>mockk</artifactId>
-			<version>${mockk.version} </version>
+			<version>${mockk.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.mockk</groupId>
+			<artifactId>mockk-jvm</artifactId>
+			<version>${mockk.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

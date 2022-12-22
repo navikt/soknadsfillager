@@ -11,8 +11,9 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
-fun getFiles(mockMvc: MockMvc, mapper: ObjectMapper, ids: String): List<FileData> {
-	val result = mockMvc.get("/files/$ids") {
+fun getFiles(mockMvc: MockMvc, mapper: ObjectMapper, ids: String, metadataOnly: Boolean = false): List<FileData> {
+	val metadataOnlyString = if (metadataOnly) "?metadataOnly=true" else ""
+	val result = mockMvc.get("/files/$ids$metadataOnlyString") {
 		accept = MediaType.APPLICATION_JSON
 	}.andExpect {
 		status { isOk() }
@@ -44,6 +45,6 @@ fun assertFilesEqual(expectedFiles: List<FileData>, actualFiles: List<FileData>)
 	expectedFiles.forEach { expected ->
 		val actual = actualFiles.first { it.id == expected.id }
 		assertArrayEquals(expected.content, actual.content)
-		assertEquals(expected.createdAt.toEpochSecond(), actual.createdAt.toEpochSecond())
+		assertEquals(expected.createdAt?.toEpochSecond(), actual.createdAt?.toEpochSecond())
 	}
 }

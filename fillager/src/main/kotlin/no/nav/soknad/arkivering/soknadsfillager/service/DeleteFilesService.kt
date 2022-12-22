@@ -1,6 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.service
 
-import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
@@ -12,28 +11,22 @@ class DeleteFilesService(private val filRepository: FilRepository, private val f
 	private val logger = LoggerFactory.getLogger(javaClass)
 
 	fun deleteFiles(innsendingId: String?, ids: List<String>) {
-		ids.distinct().forEach { deleteFile(innsendingId, it) }
-	}
-
-	private fun deleteFile(innsendingId: String?, id: String) {
-		val file = filRepository.findById(id)
-		if (!file.isPresent) {
-			logger.warn("$innsendingId: Unable to find file with this id in the database: '$id'")
-			return
-		}
-
-		val oppdatertFil = FilDbData(id, null, file.get().created)
-
 		val start = fileMetrics.filSummaryLatencyStart(Operations.DELETE.name)
 		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.DELETE.name)
 
 		try {
-			filRepository.saveAndFlush(oppdatertFil)
+			val countDelRecords = filRepository.deleteFiles(ids)
+			if (ids.size != countDelRecords)
+				logger.warn(
+					"$innsendingId: Number of deleted records ($countDelRecords) does not match the number of " +
+						"requested deletions (${ids.size}). Ids: $ids"
+				)
 
-			fileMetrics.filCounterInc(Operations.DELETE.name)
-		} catch (error: Exception) {
+			(0 until countDelRecords).forEach { _ -> fileMetrics.filCounterInc(Operations.DELETE.name) }
+			(0 until ids.size - countDelRecords).forEach { _ -> fileMetrics.errorCounterInc(Operations.DELETE.name) }
+		} catch (e: Exception) {
 			fileMetrics.errorCounterInc(Operations.DELETE.name)
-			throw error
+			throw e
 		} finally {
 			fileMetrics.filSummaryLatencyEnd(start)
 			fileMetrics.fileHistogramLatencyEnd(histogramTimer)

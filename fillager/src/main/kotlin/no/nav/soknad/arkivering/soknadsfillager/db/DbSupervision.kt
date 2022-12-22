@@ -1,6 +1,5 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
 
-import no.nav.soknad.arkivering.soknadsfillager.config.AppConfiguration
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import org.slf4j.LoggerFactory
@@ -11,20 +10,18 @@ import org.springframework.stereotype.Component
 @Component
 @EnableScheduling
 class DbSupervision(
-	private val appConfiguration: AppConfiguration,
 	private val filRepository: FilRepository,
 	private val fileMetrics: FileMetrics
 ) {
 
 	private val logger = LoggerFactory.getLogger(javaClass)
 
-	@Scheduled(cron = everyMinute)
+	@Scheduled(cron = everyFiveMinutes)
 	fun databaseSupervisionStart() {
 		try {
 			collectDbStat()
 		} catch (e: Exception) {
 			logger.error("Something went wrong when performing database supervision", e)
-			appConfiguration.applicationState.alive = false
 		}
 	}
 
@@ -36,7 +33,12 @@ class DbSupervision(
 		logger.info("Number of rows in the database with documents: $documentCount")
 
 		fileMetrics.filesInDbGaugeSet(documentCount)
+
+		val databaseSize = filRepository.totalDbSize()
+		logger.info("Total database size: $databaseSize")
+
+		fileMetrics.databaseSizeSet(databaseSize)
 	}
 }
 
-private const val everyMinute = "0 */1 * * * *"
+private const val everyFiveMinutes = "0 */5 * * * *"

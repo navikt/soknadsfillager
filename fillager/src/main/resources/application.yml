@@ -1,10 +1,6 @@
 server:
   port: 9042
 
-spring:
-  codec:
-    max-in-memory-size: 50MB
-
 management:
   endpoint:
     health:
@@ -20,3 +16,56 @@ management:
 
 springdoc:
   packagesToScan: no.nav.soknad.arkivering.soknadsfillager
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test | default | spring
+
+  codec:
+    max-in-memory-size: 50MB
+
+  flyway:
+    enabled: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres
+
+restconfig:
+  sharedUsername: innsending
+  sharedPassword: password
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev | prod | docker
+
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+
+  flyway:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_DATABASE}?user=${DATABASE_USERNAME}&password=${DATABASE_PASSWORD}
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 10
+      connection-timeout: 10000
+      idle-timeout: 10001
+      max-lifetime: 30001
+      leak-detection-threshold: 30000
+
+restconfig:
+  sharedUsername: ${INNSENDING_USERNAME}
+  sharedPassword: ${INNSENDING_PASSWORD}
+no.nav.security.jwt:
+  issuer:
+    azure:
+      discoveryurl: ${AZURE_APP_WELL_KNOWN_URL}
+      #https://soknad-oauth2-mock.dev.nav.no/default/.well-known/openid-configuration
+      accepted_audience: ${AZURE_APP_CLIENT_ID}

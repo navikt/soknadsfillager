@@ -4,5 +4,5 @@ enum class Operations(name: String) {
 	FIND("find"),
 	FIND_NOT_FOUND("find_not_found"),
 	SAVE("save"),
-	DELETE("saveAndFlush_clear")
+	DELETE("delete")
 }
