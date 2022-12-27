@@ -17,6 +17,9 @@ class StoreFilesService(private val filRepository: FilRepository, private val fi
 		val start = fileMetrics.filSummaryLatencyStart(Operations.SAVE.name)
 		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.SAVE.name)
 		try {
+			if (file.content == null || file.content!!.isEmpty() ) {
+				throw  RuntimeException("${file.id}: is empty")
+			}
 			filRepository.save(FilDbData(file.id, file.content, file.createdAt?.toLocalDateTime(), statusOk))
 
 			fileMetrics.filCounterInc(Operations.SAVE.name)
