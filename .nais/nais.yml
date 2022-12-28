@@ -40,6 +40,7 @@ spec:
   gcp:
     sqlInstances:
       - type: POSTGRES_14
+        cascadingDelete: true
         databases:
           - name: {{ database-name }}
             envVarPrefix: DATABASE
