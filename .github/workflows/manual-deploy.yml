@@ -82,7 +82,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.yml
-          VARS: .nais/config-loadtests.json
+          VARS: .nais/config-teamsoknad.json
           VAR: image=${{ env.docker_image }}
 
   deploy:
