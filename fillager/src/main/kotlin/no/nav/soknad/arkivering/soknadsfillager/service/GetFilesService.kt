@@ -44,7 +44,7 @@ class GetFilesService(private val filRepository: FilRepository, private val file
 		val timer = fileMetrics.filSummaryLatencyStart(Operations.FIND.name)
 		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.FIND.name)
 
-		logger.info("$innsendingId: Skal hente ${ids.joinToString { ", " }}")
+		logger.info("$innsendingId: Skal hente ${ids.joinToString ( "," )}")
 		try {
 			val filer = filRepository.findAllById(ids)
 
@@ -65,7 +65,7 @@ class GetFilesService(private val filRepository: FilRepository, private val file
 					fileMetrics.filCounterInc(Operations.FIND_NOT_FOUND.name)
 				} }
 
-			val hentet = idResult.map{it.id+ "-" +  it.status}.joinToString { ", "}
+			val hentet = idResult.map{it.id+ "-" +  it.status}.joinToString( ",")
 			logger.info("$innsendingId: Hentet $hentet")
 			return idResult
 
