@@ -66,6 +66,22 @@ class GetFilesTests {
 	}
 
 	@Test
+	fun `Get files - one id do not exist`() {
+
+		val filesToStore = listOf(
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
+		)
+
+		postFiles(filesToStore)
+		val existingAndNotExistingIds = filesToStore.ids() + ", ${UUID.randomUUID()}"
+		val fileList = getFiles(existingAndNotExistingIds)
+
+		assertTrue(fileList.any { it.status == statusNotFound } && fileList.any { it.status == statusOk })
+	}
+
+	@Test
 	fun `Get files - all were deleted - all statuses are deleted `() {
 
 		val filesToStore = listOf(
@@ -92,7 +108,7 @@ class GetFilesTests {
 		val crashingGetFilesService = GetFilesService(crashingFilRepository, fileMetrics)
 
 		assertThrows<JpaSystemException> {
-			crashingGetFilesService.getFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString()))
+			crashingGetFilesService.getFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString(), UUID.randomUUID().toString()))
 		}
 	}
 

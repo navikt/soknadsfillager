@@ -5,6 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import no.nav.soknad.arkivering.soknadsfillager.rest.exception.EmptyContentException
 import no.nav.soknad.arkivering.soknadsfillager.service.StoreFilesService
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
@@ -90,10 +91,29 @@ class PostFilesTests {
 		}
 	}
 
+	@Test
+	fun `Posting file entry - empty file`() {
+		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
+		val filesToStore = listOf(
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
+			FileData(UUID.randomUUID().toString(), content = null, createdAt = OffsetDateTime.now().minusSeconds(3))
+		)
+
+		postWithEmptyFiles(filesToStore)
+		val filesStored = filesToStore.filter {it.content != null}
+
+		assertFilesEqual(filesStored, getFiles(filesStored.ids()))
+		assertEquals(fileCounter!! + filesStored.size.toDouble(), fileMetrics.filCounterGet(Operations.SAVE.name))
+	}
+
+
 
 	private fun getFiles(ids: String) = getFiles(mockMvc, mapper, ids)
 
 	private fun postFiles(files: List<FileData>) = postFiles(mockMvc, mapper, files)
+
+	private fun postWithEmptyFiles(files: List<FileData>) = postWithEmptyFiles(mockMvc, mapper, files)
 
 
 	private fun List<FileData>.ids() = this.joinToString(",") { it.id }
