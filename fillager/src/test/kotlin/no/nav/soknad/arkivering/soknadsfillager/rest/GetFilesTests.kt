@@ -79,6 +79,15 @@ class GetFilesTests {
 		val fileList = getFiles(existingAndNotExistingIds)
 
 		assertTrue(fileList.any { it.status == statusNotFound } && fileList.any { it.status == statusOk })
+
+		val metaFileList = getFiles(existingAndNotExistingIds, true)
+		assertTrue(fileList.all {equalState(it, metaFileList)})
+	}
+
+	private fun equalState(withFiles: FileData, metaFileList: List<FileData>): Boolean {
+		if (metaFileList == null || metaFileList.isEmpty()) return false
+		val metaFile = metaFileList.find { it.id == withFiles.id }
+		return if (metaFile == null) false else withFiles.status == metaFile.status
 	}
 
 	@Test
@@ -108,12 +117,13 @@ class GetFilesTests {
 		val crashingGetFilesService = GetFilesService(crashingFilRepository, fileMetrics)
 
 		assertThrows<JpaSystemException> {
-			crashingGetFilesService.getFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString(), UUID.randomUUID().toString()))
+			crashingGetFilesService.getFiles(UUID.randomUUID().toString(), listOf(UUID.randomUUID().toString()))
 		}
 	}
 
 
 	private fun getFiles(ids: String) = getFiles(mockMvc, mapper, ids)
+	private fun getFiles(ids: String, metadataOnly: Boolean) = getFiles(mockMvc, mapper, ids, metadataOnly)
 
 	private fun deleteFiles(ids: String) = deleteFiles(mockMvc, ids)
 
