@@ -38,6 +38,10 @@ class ControllerExceptionsHandler {
 	fun forbiddenException(e: Exception) =
 		generateErrorResponse(HttpStatus.UNAUTHORIZED, "You are not allowed to do this operation", e)
 
+	@ExceptionHandler(EmptyContentException::class)
+	fun emptyContentException(e: Exception) =
+		generateErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, "${e.message}", e)
+
 
 	private fun generateErrorResponse(status: HttpStatus, message: String, e: Exception): ResponseEntity<ErrorResponse> {
 		logger.warn(e.message)

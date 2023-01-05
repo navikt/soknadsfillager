@@ -3,6 +3,7 @@ package no.nav.soknad.arkivering.soknadsfillager.service
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilDbData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
+import no.nav.soknad.arkivering.soknadsfillager.rest.exception.EmptyContentException
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
 import org.springframework.stereotype.Service
@@ -10,7 +11,14 @@ import org.springframework.stereotype.Service
 @Service
 class StoreFilesService(private val filRepository: FilRepository, private val fileMetrics: FileMetrics) {
 
-	fun storeFiles(files: List<FileData>) = files.forEach { storeFile(it) }
+	fun storeFiles(files: List<FileData>) {
+		files.filter{it.content != null && it.content!!.isNotEmpty()}.forEach { storeFile(it) }
+
+		val emptyFileContent = files.filter { it.content == null || it.content!!.isEmpty()}
+		if (emptyFileContent.isNotEmpty()) {
+			throw EmptyContentException("The following file(s): ${emptyFileContent.map{it.id}.joinToString{ "," }} has(have) empty content")
+		}
+	}
 
 	private fun storeFile(file: FileData) {
 

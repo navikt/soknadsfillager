@@ -66,6 +66,31 @@ class GetFilesTests {
 	}
 
 	@Test
+	fun `Get files - one id do not exist`() {
+
+		val filesToStore = listOf(
+			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
+			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
+			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
+		)
+
+		postFiles(filesToStore)
+		val existingAndNotExistingIds = filesToStore.ids() + ", ${UUID.randomUUID()}"
+		val fileList = getFiles(existingAndNotExistingIds)
+
+		assertTrue(fileList.any { it.status == statusNotFound } && fileList.any { it.status == statusOk })
+
+		val metaFileList = getFiles(existingAndNotExistingIds, true)
+		assertTrue(fileList.all {equalState(it, metaFileList)})
+	}
+
+	private fun equalState(withFiles: FileData, metaFileList: List<FileData>): Boolean {
+		if (metaFileList == null || metaFileList.isEmpty()) return false
+		val metaFile = metaFileList.find { it.id == withFiles.id }
+		return if (metaFile == null) false else withFiles.status == metaFile.status
+	}
+
+	@Test
 	fun `Get files - all were deleted - all statuses are deleted `() {
 
 		val filesToStore = listOf(
@@ -98,6 +123,7 @@ class GetFilesTests {
 
 
 	private fun getFiles(ids: String) = getFiles(mockMvc, mapper, ids)
+	private fun getFiles(ids: String, metadataOnly: Boolean) = getFiles(mockMvc, mapper, ids, metadataOnly)
 
 	private fun deleteFiles(ids: String) = deleteFiles(mockMvc, ids)
 

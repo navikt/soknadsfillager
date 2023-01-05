@@ -3,6 +3,7 @@ package no.nav.soknad.arkivering.soknadsfillager.rest
 import no.nav.security.token.support.core.api.Protected
 import no.nav.soknad.arkivering.soknadsfillager.api.FilesApi
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
+import no.nav.soknad.arkivering.soknadsfillager.rest.exception.EmptyContentException
 import no.nav.soknad.arkivering.soknadsfillager.service.DeleteFilesService
 import no.nav.soknad.arkivering.soknadsfillager.service.GetFilesService
 import no.nav.soknad.arkivering.soknadsfillager.service.StoreFilesService
@@ -29,6 +30,9 @@ class RestApi(
 			storeFilesService.storeFiles(fileData)
 
 			logger.info("$xInnsendingId: Added files with the following ids: ${fileData.map { it.id }}")
+		} catch (e: EmptyContentException) {
+			logger.error("$xInnsendingId: ${e.message}. The rest of the files are added")
+			throw e
 		} catch (e: Exception) {
 			logger.error("$xInnsendingId: Failed to add files with the following ids: ${fileData.map { it.id }}", e)
 			throw e
