@@ -19,7 +19,7 @@ paths:
   /files:
     post:
       summary: Add new files to the file storage.
-      description: Adds new files to the file storage. If a file already exists with the given id, the old file is overwritten.
+      description: Adds new files to the file storage. If a file already exists with the given id, the old file is overwritten. A file entry with no file content is not added
       operationId: addFiles
 
       requestBody:

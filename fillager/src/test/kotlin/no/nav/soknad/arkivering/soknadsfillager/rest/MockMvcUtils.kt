@@ -32,6 +32,15 @@ fun postFiles(mockMvc: MockMvc, mapper: ObjectMapper, input: List<FileData>) {
 	}
 }
 
+fun postWithEmptyFiles(mockMvc: MockMvc, mapper: ObjectMapper, input: List<FileData>) {
+	mockMvc.post("/files") {
+		contentType = MediaType.APPLICATION_JSON
+		content = mapper.writeValueAsString(input)
+	}.andExpect {
+		status { isUnprocessableEntity() }
+	}
+}
+
 fun deleteFiles(mockMvc: MockMvc, ids: String) {
 	mockMvc.delete("/files/$ids")
 		.andExpect {

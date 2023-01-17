@@ -65,9 +65,9 @@ jobs:
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
-          RESOURCE: .nais/soknadsfillager.yml
-          VARS: .nais/config-q1.json
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yml
+          VARS: .nais/config-preprod.json
           VAR: image=${{ env.docker_image }}
 
   deploy-loadtests:
@@ -80,8 +80,8 @@ jobs:
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
-          RESOURCE: .nais/soknadsfillager.yml
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yml
           VARS: .nais/config-teamsoknad.json
           VAR: image=${{ env.docker_image }}
 
@@ -95,7 +95,7 @@ jobs:
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-fss
-          RESOURCE: .nais/soknadsfillager.yml
-          VARS: .nais/config-p.json
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/nais.yml
+          VARS: .nais/config-prod.json
           VAR: image=${{ env.docker_image }}
