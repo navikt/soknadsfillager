@@ -1,5 +1,6 @@
 package no.nav.soknad.arkivering.soknadsfillager.db
 
+import no.nav.soknad.arkivering.soknadsfillager.LeaderSelectionUtility
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import org.slf4j.LoggerFactory
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component
 @EnableScheduling
 class DbSupervision(
 	private val filRepository: FilRepository,
-	private val fileMetrics: FileMetrics
+	private val fileMetrics: FileMetrics,
+	private val leaderSelectionUtility: LeaderSelectionUtility
 ) {
 
 	private val logger = LoggerFactory.getLogger(javaClass)
@@ -19,7 +21,9 @@ class DbSupervision(
 	@Scheduled(cron = everyFiveMinutes)
 	fun databaseSupervisionStart() {
 		try {
-			collectDbStat()
+			if (leaderSelectionUtility.isLeader()) {
+				collectDbStat()
+			}
 		} catch (e: Exception) {
 			logger.error("Something went wrong when performing database supervision", e)
 		}
