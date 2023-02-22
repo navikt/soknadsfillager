@@ -21,6 +21,7 @@
 		<prometheus-client.version>0.16.0</prometheus-client.version>
 		<logstash.version>7.2</logstash.version>
 		<mockk.version>1.13.2</mockk.version>
+		<kotlin-serialization.version>1.4.1</kotlin-serialization.version>
 
 		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 		<kotlin.version>1.7.20</kotlin.version>
@@ -78,6 +79,11 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-kotlin</artifactId>
 			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlinx</groupId>
+			<artifactId>kotlinx-serialization-json</artifactId>
+			<version>${kotlin-serialization.version}</version>
 		</dependency>
 
 
@@ -174,6 +180,7 @@
 					<compilerPlugins>
 						<plugin>spring</plugin>
 						<plugin>jpa</plugin>
+						<plugin>kotlinx-serialization</plugin>
 					</compilerPlugins>
 				</configuration>
 				<dependencies>
