@@ -33,6 +33,7 @@ spec:
     requests:
       cpu: 200m
       memory: 256Mi
+  leaderElection: true
   ingresses:
   {{#each ingress}}
     - "{{this}}"
