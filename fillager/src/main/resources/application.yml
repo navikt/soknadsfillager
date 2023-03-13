@@ -54,11 +54,13 @@ spring:
     url: jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_DATABASE}?user=${DATABASE_USERNAME}&password=${DATABASE_PASSWORD}
     hikari:
       minimum-idle: 1
-      maximum-pool-size: 10
+      maximum-pool-size: 20
       connection-timeout: 10000
-      idle-timeout: 10001
-      max-lifetime: 30001
-      leak-detection-threshold: 30000
+      max-lifetime: 60001
+      leak-detection-threshold: 60000
+    dbcp2:
+      test-on-borrow: true
+      validation-query: "SELECT 1"
 
 restconfig:
   sharedUsername: ${INNSENDING_USERNAME}
