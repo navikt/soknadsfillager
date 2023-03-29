@@ -1,10 +1,13 @@
 {
 	"appname": "soknadsfillager-loadtests",
 	"ingress": [
-		"https://soknadsfillager-gcp-loadtests.dev.intern.nav.no"
+		"https://soknadsfillager-gcp-loadtests.intern.dev.nav.no"
 	],
 	"service-user-path": "/serviceuser/data/dev/srvsoknadsfillager",
 	"database-name": "db-soknadsfillager-loadtests2",
 	"profile": "dev",
-	"inbound":["innsending-system-tests","soknadsarkiverer-loadtests"]
+	"inbound": [
+		"innsending-system-tests",
+		"soknadsarkiverer-loadtests"
+	]
 }
