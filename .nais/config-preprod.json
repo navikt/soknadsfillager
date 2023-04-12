@@ -1,10 +1,14 @@
 {
 	"appname": "soknadsfillager",
 	"ingress": [
-		"https://soknadsfillager-gcp.dev.intern.nav.no"
+		"https://soknadsfillager-gcp.intern.dev.nav.no"
 	],
 	"service-user-path": "/serviceuser/data/dev/srvsoknadsfillager",
 	"database-name": "db-soknadsfillager-preprod",
 	"profile": "dev",
-	"inbound":["sendsoknad-q1","innsending-api","soknadsarkiverer"]
+	"inbound": [
+		"sendsoknad-q1",
+		"innsending-api",
+		"soknadsarkiverer"
+	]
 }
