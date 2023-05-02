@@ -9,7 +9,7 @@ spec:
   groups:
     - name: {{common-labels.service}}-alerts
       rules:
-        - alert: Low number of soknadsarkiverer pods
+        - alert: Low number of soknadsfillager pods
           expr: count(kube_pod_container_status_running{container="{{common-labels.service}}", namespace="team-soknad"}) < {{ number_of_pods }}
           for: 5m
           annotations:
