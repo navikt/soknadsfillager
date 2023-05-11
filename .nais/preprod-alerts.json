@@ -1,0 +1,12 @@
+{
+	"env-name": "dev-gcp",
+	"number_of_errors": 2,
+	"number_of_pods": 2,
+	"error_log_url": "https://logs.adeo.no/app/discover#/view/d8bc6c40-e8c2-11ed-be11-d159f65225af",
+	"common-labels": {
+		"service": "soknadsfillager",
+		"namespace": "fyllut-sendinn",
+		"special_type_to_use_in_alertmanager_config": "fyllut-sendinn-alerts-dev",
+		"alert_type": "custom"
+	}
+}
