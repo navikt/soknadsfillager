@@ -1,14 +1,14 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest.exception
 
+import jakarta.persistence.EntityNotFoundException
+import jakarta.persistence.NoResultException
+import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
+import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import javax.naming.AuthenticationException
-
-import javax.persistence.EntityNotFoundException
-import javax.persistence.NoResultException
 
 @ControllerAdvice
 class ControllerExceptionsHandler {
@@ -34,7 +34,7 @@ class ControllerExceptionsHandler {
 	fun resourceNotSeenException(e: Exception) =
 		generateErrorResponse(HttpStatus.NOT_FOUND, "Resource not found", e)
 
-	@ExceptionHandler(AuthenticationException::class)
+	@ExceptionHandler(value = [JwtTokenMissingException::class, JwtTokenUnauthorizedException::class])
 	fun forbiddenException(e: Exception) =
 		generateErrorResponse(HttpStatus.UNAUTHORIZED, "You are not allowed to do this operation", e)
 

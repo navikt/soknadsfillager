@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.5</version>
+		<version>3.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -16,10 +16,105 @@
 	<name>soknadsfillager</name>
 	<description>Temporary file storage during archival of benefit applications</description>
 
+	<properties>
+		<java.version>17</java.version>
+		<spring-boot.version>3.1.1</spring-boot.version>
+		<kotlin.version>1.8.22</kotlin.version>
+		<maven.version>3.2.5</maven.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!--NAV-->
+		<token-support.version>3.1.0</token-support.version>
+
+		<!--Database-->
+		<otj-pg-embedded.version>1.0.1</otj-pg-embedded.version>
+		<flyway.version>9.19.4</flyway.version> <!-- Not latest -->
+
+		<!--Jakarta-->
+		<jakarta-annotation.version>2.1.1</jakarta-annotation.version>
+		<jakarta-validation-api.version>3.0.2</jakarta-validation-api.version>
+		<jakarta-servlet-api.version>6.0.0</jakarta-servlet-api.version>
+
+		<!--Logging-->
+		<prometheus-client.version>0.16.0</prometheus-client.version>
+		<logstash.version>7.4</logstash.version>
+
+		<!--Testing-->
+		<mockk.version>1.13.5</mockk.version>
+
+		<!--Spring-->
+		<springdoc-openapi.version>1.7.0</springdoc-openapi.version>
+		<spring-web.version>6.0.10</spring-web.version>
+
+		<!--Serialization-->
+		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+		<kotlin-serialization.version>1.5.1</kotlin-serialization.version>
+
+		<!--Other-->
+		<swagger-annotations.version>2.2.14</swagger-annotations.version>
+
+		<!--Plugins-->
+		<versions-maven-plugin.version>2.16.0</versions-maven-plugin.version>
+		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+		<openapi-generator-maven-plugin.version>6.6.0</openapi-generator-maven-plugin.version>
+		<cyclonedx-maven-plugin.version>2.7.9</cyclonedx-maven-plugin.version>
+		<maven-enforcer.version>3.3.0</maven-enforcer.version>
+	</properties>
+
 	<modules>
 		<module>api</module>
 		<module>fillager</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>${versions-maven-plugin.version}</version>
+				<configuration>
+					<rulesUri>file://${user.dir}/maven-version-rules.xml</rulesUri>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>${maven-enforcer.version}</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<banDuplicatePomDependencyVersions/>
+								<requireMavenVersion>
+									<version>${maven.version}</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- https://docs.nais.io/security/salsa/salsa/#known-limitations-->
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+				<version>${cyclonedx-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>makeAggregateBom</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 	<repositories>
 		<repository>

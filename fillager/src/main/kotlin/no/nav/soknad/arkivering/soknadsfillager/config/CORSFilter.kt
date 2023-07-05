@@ -1,14 +1,14 @@
 package no.nav.soknad.arkivering.soknadsfillager.config
 
+import jakarta.servlet.Filter
+import jakarta.servlet.FilterChain
+import jakarta.servlet.ServletRequest
+import jakarta.servlet.ServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.io.IOException
-import javax.servlet.Filter
-import javax.servlet.FilterChain
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @Component
 class CORSFilter : Filter {
@@ -20,7 +20,10 @@ class CORSFilter : Filter {
 
 		httpServletResponse.setHeader("Access-Control-Allow-Origin", "*")
 		httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-		httpServletResponse.setHeader("Access-Control-Allow-Headers", "accept, authorization, X-requested with, content-type")
+		httpServletResponse.setHeader(
+			"Access-Control-Allow-Headers",
+			"accept, authorization, X-requested with, content-type"
+		)
 
 		if (httpServletRequest.method == "OPTIONS")
 			try {

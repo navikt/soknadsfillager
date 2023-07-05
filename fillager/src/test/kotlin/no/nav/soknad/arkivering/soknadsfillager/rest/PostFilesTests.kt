@@ -3,9 +3,9 @@ package no.nav.soknad.arkivering.soknadsfillager.rest
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.soknad.arkivering.soknadsfillager.ApplicationTest
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
-import no.nav.soknad.arkivering.soknadsfillager.rest.exception.EmptyContentException
 import no.nav.soknad.arkivering.soknadsfillager.service.StoreFilesService
 import no.nav.soknad.arkivering.soknadsfillager.supervision.FileMetrics
 import no.nav.soknad.arkivering.soknadsfillager.supervision.Operations
@@ -14,16 +14,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.orm.jpa.JpaSystemException
 import org.springframework.test.web.servlet.MockMvc
 import java.time.OffsetDateTime
 import java.util.*
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class PostFilesTests {
+class PostFilesTests : ApplicationTest() {
 
 	@Autowired
 	private lateinit var filRepository: FilRepository
@@ -46,9 +42,21 @@ class PostFilesTests {
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 		val errorCounter = fileMetrics.errorCounterGet(Operations.SAVE.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
-			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
-			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "0".toByteArray(),
+				createdAt = OffsetDateTime.now().minusHours(1)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "1".toByteArray(),
+				createdAt = OffsetDateTime.now().minusMinutes(2)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "2".toByteArray(),
+				createdAt = OffsetDateTime.now().minusSeconds(3)
+			)
 		)
 
 		postFiles(filesToStore)
@@ -63,9 +71,21 @@ class PostFilesTests {
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 		val errorCounter = fileMetrics.errorCounterGet(Operations.SAVE.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
-			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
-			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "0".toByteArray(),
+				createdAt = OffsetDateTime.now().minusHours(1)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "1".toByteArray(),
+				createdAt = OffsetDateTime.now().minusMinutes(2)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "2".toByteArray(),
+				createdAt = OffsetDateTime.now().minusSeconds(3)
+			)
 		)
 		val newFile = FileData(filesToStore[1].id, content = "new".toByteArray(), createdAt = OffsetDateTime.now())
 
@@ -84,7 +104,8 @@ class PostFilesTests {
 		val crashingFilRepository = mockk<FilRepository>()
 		every { crashingFilRepository.save(any()) }.throws(JpaSystemException(RuntimeException("Mocked exception")))
 		val crashingStoreFilesService = StoreFilesService(crashingFilRepository, fileMetrics)
-		val files = listOf(FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()))
+		val files =
+			listOf(FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now()))
 
 		assertThrows<JpaSystemException> {
 			crashingStoreFilesService.storeFiles(files)
@@ -95,18 +116,25 @@ class PostFilesTests {
 	fun `Posting file entry - empty file`() {
 		val fileCounter = fileMetrics.filCounterGet(Operations.SAVE.name)
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
-			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "0".toByteArray(),
+				createdAt = OffsetDateTime.now().minusHours(1)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "1".toByteArray(),
+				createdAt = OffsetDateTime.now().minusMinutes(2)
+			),
 			FileData(UUID.randomUUID().toString(), content = null, createdAt = OffsetDateTime.now().minusSeconds(3))
 		)
 
 		postWithEmptyFiles(filesToStore)
-		val filesStored = filesToStore.filter {it.content != null}
+		val filesStored = filesToStore.filter { it.content != null }
 
 		assertFilesEqual(filesStored, getFiles(filesStored.ids()))
 		assertEquals(fileCounter!! + filesStored.size.toDouble(), fileMetrics.filCounterGet(Operations.SAVE.name))
 	}
-
 
 
 	private fun getFiles(ids: String) = getFiles(mockMvc, mapper, ids)

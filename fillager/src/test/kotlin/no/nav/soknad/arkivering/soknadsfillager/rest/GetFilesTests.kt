@@ -3,6 +3,7 @@ package no.nav.soknad.arkivering.soknadsfillager.rest
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.soknad.arkivering.soknadsfillager.ApplicationTest
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.service.GetFilesService
@@ -16,17 +17,13 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.orm.jpa.JpaSystemException
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import java.time.OffsetDateTime
 import java.util.*
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class GetFilesTests {
+class GetFilesTests : ApplicationTest() {
 
 	@Autowired
 	private lateinit var filRepository: FilRepository
@@ -45,9 +42,21 @@ class GetFilesTests {
 	fun `Get files - happy case`() {
 
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
-			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
-			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "0".toByteArray(),
+				createdAt = OffsetDateTime.now().minusHours(1)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "1".toByteArray(),
+				createdAt = OffsetDateTime.now().minusMinutes(2)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "2".toByteArray(),
+				createdAt = OffsetDateTime.now().minusSeconds(3)
+			)
 		)
 
 		postFiles(filesToStore)
@@ -69,9 +78,21 @@ class GetFilesTests {
 	fun `Get files - one id do not exist`() {
 
 		val filesToStore = listOf(
-			FileData(UUID.randomUUID().toString(), content = "0".toByteArray(), createdAt = OffsetDateTime.now().minusHours(1)),
-			FileData(UUID.randomUUID().toString(), content = "1".toByteArray(), createdAt = OffsetDateTime.now().minusMinutes(2)),
-			FileData(UUID.randomUUID().toString(), content = "2".toByteArray(), createdAt = OffsetDateTime.now().minusSeconds(3))
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "0".toByteArray(),
+				createdAt = OffsetDateTime.now().minusHours(1)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "1".toByteArray(),
+				createdAt = OffsetDateTime.now().minusMinutes(2)
+			),
+			FileData(
+				UUID.randomUUID().toString(),
+				content = "2".toByteArray(),
+				createdAt = OffsetDateTime.now().minusSeconds(3)
+			)
 		)
 
 		postFiles(filesToStore)
@@ -81,7 +102,7 @@ class GetFilesTests {
 		assertTrue(fileList.any { it.status == statusNotFound } && fileList.any { it.status == statusOk })
 
 		val metaFileList = getFiles(existingAndNotExistingIds, true)
-		assertTrue(fileList.all {equalState(it, metaFileList)})
+		assertTrue(fileList.all { equalState(it, metaFileList) })
 	}
 
 	private fun equalState(withFiles: FileData, metaFileList: List<FileData>): Boolean {

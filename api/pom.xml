@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -12,20 +12,6 @@
 	<name>${project.artifactId}</name>
 	<description>API for soknadsfillager</description>
 
-	<properties>
-		<springdoc-openapi.version>1.6.12</springdoc-openapi.version>
-		<swagger-annotations.version>2.2.4</swagger-annotations.version>
-		<spring-web.version>5.3.23</spring-web.version>
-		<javax-servlet-api.version>4.0.1</javax-servlet-api.version>
-		<javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
-		<jakarta-annotation.version>2.1.1</jakarta-annotation.version>
-		<jackson-databind-nullable.version>0.2.4</jackson-databind-nullable.version>
-		<openapi-generator-maven-plugin.version>6.2.0</openapi-generator-maven-plugin.version>
-
-		<kotlin.version>1.7.20</kotlin.version>
-		<java.version>17</java.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -33,20 +19,15 @@
 			<version>${spring-web.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${javax-servlet-api.version}</version>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>${jakarta-servlet-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>${javax-validation-api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<version>${javax-annotation.version}</version>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>${jakarta-validation-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.annotation</groupId>
@@ -97,6 +78,7 @@
 							<apiPackage>no.nav.soknad.arkivering.soknadsfillager.api</apiPackage>
 							<modelPackage>no.nav.soknad.arkivering.soknadsfillager.model</modelPackage>
 							<configOptions>
+								<useSpringBoot3>true</useSpringBoot3>
 								<gradleBuildFile>false</gradleBuildFile>
 								<exceptionHandler>false</exceptionHandler>
 								<interfaceOnly>true</interfaceOnly>

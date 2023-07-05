@@ -50,10 +50,14 @@ class RestApi(
 	}
 
 	@Protected
-	override fun findFilesByIds(ids: List<String>, metadataOnly: Boolean?, xInnsendingId: String?): ResponseEntity<List<FileData>> {
+	override fun findFilesByIds(
+		ids: List<String>,
+		metadataOnly: Boolean?,
+		xInnsendingId: String?
+	): ResponseEntity<List<FileData>> {
 		logger.info("$xInnsendingId: Will get files with the following ids: $ids")
 
-    if (metadataOnly == true) {
+		if (metadataOnly == true) {
 			val filesMetadata = getFilesService.getFilesMetadata(xInnsendingId, ids)
 			logger.info("$xInnsendingId: The files queried have these statuses: ${filesMetadata.map { "${it.id}: ${it.status}" }}")
 			return ResponseEntity.ok(filesMetadata)

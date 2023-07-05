@@ -12,11 +12,15 @@ import org.springframework.stereotype.Service
 class StoreFilesService(private val filRepository: FilRepository, private val fileMetrics: FileMetrics) {
 
 	fun storeFiles(files: List<FileData>) {
-		files.filter{it.content != null && it.content!!.isNotEmpty()}.forEach { storeFile(it) }
+		files.filter { it.content != null && it.content!!.isNotEmpty() }.forEach { storeFile(it) }
 
-		val emptyFileContent = files.filter { it.content == null || it.content!!.isEmpty()}
+		val emptyFileContent = files.filter { it.content == null || it.content!!.isEmpty() }
 		if (emptyFileContent.isNotEmpty()) {
-			throw EmptyContentException("The following file(s): ${emptyFileContent.map{it.id}.joinToString{ "," }} has(have) empty content")
+			throw EmptyContentException(
+				"The following file(s): ${
+					emptyFileContent.map { it.id }.joinToString { "," }
+				} has(have) empty content"
+			)
 		}
 	}
 
@@ -25,8 +29,8 @@ class StoreFilesService(private val filRepository: FilRepository, private val fi
 		val start = fileMetrics.filSummaryLatencyStart(Operations.SAVE.name)
 		val histogramTimer = fileMetrics.fileHistogramLatencyStart(Operations.SAVE.name)
 		try {
-			if (file.content == null || file.content!!.isEmpty() ) {
-				throw  RuntimeException("${file.id}: is empty")
+			if (file.content == null || file.content!!.isEmpty()) {
+				throw RuntimeException("${file.id}: is empty")
 			}
 			filRepository.save(FilDbData(file.id, file.content, file.createdAt?.toLocalDateTime(), statusOk))
 
