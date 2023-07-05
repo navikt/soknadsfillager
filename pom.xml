@@ -52,6 +52,7 @@
 
 		<!--Other-->
 		<swagger-annotations.version>2.2.14</swagger-annotations.version>
+		<snakeyaml.version>2.0</snakeyaml.version>
 
 		<!--Plugins-->
 		<versions-maven-plugin.version>2.16.0</versions-maven-plugin.version>
@@ -65,6 +66,17 @@
 		<module>api</module>
 		<module>fillager</module>
 	</modules>
+
+	<!-- Dependencies that might be used as transitive dependencies and have security issues-->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.yaml</groupId>
+				<artifactId>snakeyaml</artifactId>
+				<version>${snakeyaml.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
