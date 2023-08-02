@@ -51,7 +51,7 @@
 		<kotlin-serialization.version>1.5.1</kotlin-serialization.version>
 
 		<!--Other-->
-		<swagger-annotations.version>2.2.14</swagger-annotations.version>
+		<swagger-annotations.version>2.2.15</swagger-annotations.version>
 		<snakeyaml.version>2.0</snakeyaml.version>
 
 		<!--Plugins-->
