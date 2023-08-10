@@ -5,6 +5,8 @@
 	],
 	"service-user-path": "/serviceuser/data/prod/srvsoknadsfillager",
 	"database-name": "db-soknadsfillager",
+	"disk-size": "20",
+	"tier": "db-custom-1-3840",
 	"profile": "prod",
 	"inbound":["sendsoknad","innsending-api","soknadsarkiverer"]
 }
