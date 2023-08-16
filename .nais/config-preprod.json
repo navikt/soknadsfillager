@@ -5,6 +5,8 @@
 	],
 	"service-user-path": "/serviceuser/data/dev/srvsoknadsfillager",
 	"database-name": "db-soknadsfillager-preprod",
+	"disk-size": "10",
+	"tier": "db-f1-micro",
 	"profile": "dev",
 	"inbound": [
 		"sendsoknad-q1",
