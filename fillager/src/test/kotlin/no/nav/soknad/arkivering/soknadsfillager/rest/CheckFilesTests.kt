@@ -1,6 +1,7 @@
 package no.nav.soknad.arkivering.soknadsfillager.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import no.nav.soknad.arkivering.soknadsfillager.ApplicationTest
 import no.nav.soknad.arkivering.soknadsfillager.model.FileData
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import no.nav.soknad.arkivering.soknadsfillager.service.statusDeleted
@@ -11,15 +12,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import java.time.OffsetDateTime
 import java.util.*
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class CheckFilesTests {
+class CheckFilesTests : ApplicationTest() {
 
 	@Autowired
 	private lateinit var filRepository: FilRepository

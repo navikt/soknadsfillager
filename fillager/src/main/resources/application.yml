@@ -22,7 +22,7 @@ springdoc:
 spring:
   config:
     activate:
-      on-profile: test | default | spring
+      on-profile: test | local
 
   codec:
     max-in-memory-size: 50MB
@@ -33,9 +33,6 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres
 
-restconfig:
-  sharedUsername: innsending
-  sharedPassword: password
 
 ---
 spring:
@@ -62,9 +59,6 @@ spring:
       test-on-borrow: true
       validation-query: "SELECT 1"
 
-restconfig:
-  sharedUsername: ${INNSENDING_USERNAME}
-  sharedPassword: ${INNSENDING_PASSWORD}
 no.nav.security.jwt:
   issuer:
     azure:

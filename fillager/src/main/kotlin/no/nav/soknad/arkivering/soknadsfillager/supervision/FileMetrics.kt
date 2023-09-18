@@ -98,6 +98,7 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	fun filesInDbGaugeSet(number: Long) {
 		filesInDb.labels("FIND", app).set(number.toDouble())
 	}
+
 	fun filesInDbGaugeGet() = filesInDb.labels("FIND", app)?.get()
 
 	fun databaseSizeSet(number: Long) = databaseSize.labels("dbsize", app).set(number.toDouble())
@@ -106,6 +107,7 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	fun errorCounterInc(operation: String) {
 		errorCounter.labels(operation, app).inc()
 	}
+
 	fun errorCounterGet(operation: String) = errorCounter.labels(operation, app)?.get()
 
 	fun filSummarySetSize(operation: String, size: Double?) {
@@ -116,7 +118,9 @@ class FileMetrics(private val registry: CollectorRegistry) {
 		if (size != null) filSizeHistogram.labels(operation, app).observe(size / 1024)
 	}
 
-	fun fileHistogramLatencyStart(operation: String): Histogram.Timer = fileLatencyHistogram.labels(operation, app).startTimer()
+	fun fileHistogramLatencyStart(operation: String): Histogram.Timer =
+		fileLatencyHistogram.labels(operation, app).startTimer()
+
 	fun fileHistogramLatencyEnd(timer: Histogram.Timer) {
 		timer.observeDuration()
 	}
@@ -125,5 +129,6 @@ class FileMetrics(private val registry: CollectorRegistry) {
 	fun filSummaryLatencyEnd(start: Summary.Timer) {
 		start.observeDuration()
 	}
+
 	fun filSummaryLatencyGet(operation: String): Summary.Child.Value = filLatencySummary.labels(operation, app).get()
 }
