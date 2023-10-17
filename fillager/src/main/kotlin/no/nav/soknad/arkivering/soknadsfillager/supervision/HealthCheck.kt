@@ -2,14 +2,19 @@ package no.nav.soknad.arkivering.soknadsfillager.supervision
 
 import no.nav.security.token.support.core.api.Unprotected
 import no.nav.soknad.arkivering.soknadsfillager.api.HealthApi
+import no.nav.soknad.arkivering.soknadsfillager.model.ApplicationStatus
+import no.nav.soknad.arkivering.soknadsfillager.model.ApplicationStatusType
 import no.nav.soknad.arkivering.soknadsfillager.repository.FilRepository
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 
 @Controller
-class HealthCheck(private val filRepository: FilRepository) : HealthApi {
+class HealthCheck(
+	private val filRepository: FilRepository, @Value("\${status_log_url}") private val statusLogUrl: String
+) : HealthApi {
 
 	private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -32,5 +37,12 @@ class HealthCheck(private val filRepository: FilRepository) : HealthApi {
 			logger.warn("The database check failed with ${e.message}", e)
 			false
 		}
+	}
+
+	override fun getStatus(): ResponseEntity<ApplicationStatus> {
+		return ResponseEntity(
+			ApplicationStatus(status = ApplicationStatusType.OK, description = "OK", logLink = statusLogUrl),
+			HttpStatus.OK
+		)
 	}
 }

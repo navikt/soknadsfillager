@@ -71,3 +71,5 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: {{profile}}
+    - name: STATUS_LOG_URL
+      value: {{status_log_url}}

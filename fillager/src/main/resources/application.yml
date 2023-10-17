@@ -33,6 +33,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres
 
+status_log_url: "https://logs.adeo.no"
 
 ---
 spring:
@@ -58,6 +59,8 @@ spring:
     dbcp2:
       test-on-borrow: true
       validation-query: "SELECT 1"
+
+status_log_url: ${STATUS_LOG_URL}
 
 no.nav.security.jwt:
   issuer:
