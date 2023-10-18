@@ -40,7 +40,7 @@ spec:
   {{/each}}
   gcp:
     sqlInstances:
-      - type: POSTGRES_14
+      - type: POSTGRES_15
         tier: {{ tier }}
         diskType: SSD
         highAvailability: true
@@ -56,6 +56,8 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: statuspoll
+          namespace: navdig
         {{#each inbound}}
         - application: "{{this}}"
         {{/each}}
