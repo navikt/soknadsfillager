@@ -39,10 +39,23 @@ class HealthCheck(
 		}
 	}
 
+	@Unprotected
 	override fun getStatus(): ResponseEntity<ApplicationStatus> {
-		return ResponseEntity(
-			ApplicationStatus(status = ApplicationStatusType.OK, description = "OK", logLink = statusLogUrl),
-			HttpStatus.OK
-		)
+		return if (checkDatabase()) {
+			ResponseEntity(
+				ApplicationStatus(status = ApplicationStatusType.OK, description = "OK", logLink = statusLogUrl),
+				HttpStatus.OK
+			)
+		} else {
+			ResponseEntity(
+				ApplicationStatus(
+					status = ApplicationStatusType.DOWN,
+					description = "Database is not responding",
+					logLink = statusLogUrl
+				),
+				HttpStatus.OK
+			)
+		}
+
 	}
 }
