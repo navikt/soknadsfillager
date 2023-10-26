@@ -5,6 +5,10 @@ on:
 
 jobs:
   run-end-to-end-tests:
+    permissions:
+       contents: "read"
+       id-token: "write"
+       packages: "read"
     runs-on: ubuntu-latest
     steps:
       - name: Read/save .m2 cache
@@ -20,6 +24,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Build the code for soknadsmottaker'
         uses: navikt/archiving-infrastructure/.github/checkout-and-build@main
