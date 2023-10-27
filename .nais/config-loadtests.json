@@ -4,7 +4,8 @@
 		"https://soknadsfillager-gcp-loadtests.intern.dev.nav.no"
 	],
 	"service-user-path": "/serviceuser/data/dev/srvsoknadsfillager",
-	"database-name": "db-soknadsfillager-loadtests2",
+	"database-name": "db-soknadsfillager-loadtests",
+	"disk-size": "20",
 	"profile": "dev",
 	"inbound": [
 		"innsending-system-tests",
