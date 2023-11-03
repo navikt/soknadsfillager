@@ -40,16 +40,6 @@ paths:
           required: false
           schema:
             type: string
-        - in: header
-          name: X-dryRun
-          description: >
-            If this value is passed in, the service will only log the requests sent, nothing will be
-            stored in the database. Omit setting this header to store properly in the database.
-          example: enabled
-          required: false
-          schema:
-            type: string
-            default: null
 
       responses:
         200:

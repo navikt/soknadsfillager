@@ -10,5 +10,6 @@
 	"inbound": [
 		"innsending-system-tests",
 		"soknadsarkiverer-loadtests"
-	]
+	],
+	"status_log_url": "https://logs.adeo.no/app/discover#/view/d8bc6c40-e8c2-11ed-be11-d159f65225af"
 }
