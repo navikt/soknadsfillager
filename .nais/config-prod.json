@@ -8,5 +8,10 @@
 	"disk-size": "20",
 	"tier": "db-custom-1-3840",
 	"profile": "prod",
-	"inbound":["sendsoknad","innsending-api","soknadsarkiverer"]
+	"inbound": [
+		"sendsoknad",
+		"innsending-api",
+		"soknadsarkiverer"
+	],
+	"status_log_url": "https://logs.adeo.no/app/discover#/view/448b9050-e8c2-11ed-be11-d159f65225af"
 }

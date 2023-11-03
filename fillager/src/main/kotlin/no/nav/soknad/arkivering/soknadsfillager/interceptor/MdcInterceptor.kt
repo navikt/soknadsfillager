@@ -13,7 +13,8 @@ import java.util.*
 class MdcInterceptor : HandlerInterceptor {
 	// Legg til innsendingsId i MDC fra header eller pathvariabel
 	override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-		val pathVariables = request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE) as Map<*, *>
+		val pathVariables = request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE)
+			?.let { it as Map<*, *> } ?: return true
 		val headerNames = Collections.list(request.headerNames)
 
 		val variations = arrayOf("x-innsendingid", "x-innsendingsid", "innsendingid", "innsendingsid")
