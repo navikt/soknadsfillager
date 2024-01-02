@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.0</version>
+		<version>3.2.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -18,8 +18,8 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<spring-boot.version>3.2.0</spring-boot.version>
-		<kotlin.version>1.9.21</kotlin.version>
+		<spring-boot.version>3.2.1</spring-boot.version>
+		<kotlin.version>1.9.22</kotlin.version>
 		<maven.version>3.8.8</maven.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -44,20 +44,20 @@
 
 		<!--Spring-->
 		<springdoc-openapi.version>1.7.0</springdoc-openapi.version>
-		<spring-web.version>6.1.1</spring-web.version>
+		<spring-web.version>6.1.2</spring-web.version>
 
 		<!--Serialization-->
 		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
 		<kotlin-serialization.version>1.6.2</kotlin-serialization.version>
 
 		<!--Other-->
-		<swagger-annotations.version>2.2.19</swagger-annotations.version>
+		<swagger-annotations.version>2.2.20</swagger-annotations.version>
 		<snakeyaml.version>2.2</snakeyaml.version>
 
 		<!--Plugins-->
 		<versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
-		<maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-		<openapi-generator-maven-plugin.version>7.1.0</openapi-generator-maven-plugin.version>
+		<maven-surefire-plugin.version>3.2.3</maven-surefire-plugin.version>
+		<openapi-generator-maven-plugin.version>7.2.0</openapi-generator-maven-plugin.version>
 		<cyclonedx-maven-plugin.version>2.7.10</cyclonedx-maven-plugin.version>
 		<maven-enforcer.version>3.4.1</maven-enforcer.version>
 	</properties>
