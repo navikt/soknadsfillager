@@ -14,6 +14,10 @@ metadata:
 spec:
   image: {{image}}
   port: 9042
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
   liveness:
     path: /health/isAlive
     initialDelay: 20
